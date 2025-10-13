@@ -1,0 +1,93 @@
+/* ------
+
+  color foundation
+
+------ */
+
+$primary-color-dim: #f4f4f4;
+$primary-color-light: #242424;
+$primary-color-normal: #121212;
+$primary-color-dark: #0c0c0c;
+
+$red-color-normal: #ff3647;
+$yellow-color-normal: #ffc300;
+$blue-color-light: #3a87d9;
+$blue-color-normal: #3355ff;
+
+$white-color: #ffffff;
+$white-color-dim: #fafafa;
+$white-color-light: #f8f8f8;
+$white-color-normal: #f6f6f6;
+$white-color-dark: #f4f4f4;
+
+$gray-color-dim: #e4e4e4;
+$gray-color-light: #ccc;
+$gray-color-normal: #b3b3b3;
+$gray-color-dark: #9e9e9e;
+
+$black-color: #000;
+$black-color-dim: #2f2f2f;
+$black-color-light: #242424;
+$black-color-normal: #121212;
+$black-color-dark: #0c0c0c;
+
+$gradient-black-transparent: linear-gradient(
+	180deg,
+	rgba(41, 41, 41, 0) 0%,
+	rgba(41, 41, 41, 0.5) 100%
+);
+
+// style
+$drop-shadow-lg: drop-shadow(8px 16px 16px rgba(0, 0, 0, 0.25));
+$drop-shadow-md: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.38));
+$drop-shadow-sm: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+$drop-shadow-xs: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.1));
+
+$drop-shadow-lg-top: drop-shadow(8px 16px 16px rgba(0, 0, 0, 0.25));
+$drop-shadow-md-top: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.38));
+$drop-shadow-sm-top: drop-shadow(-1.5px -1.5px 3px rgba(0, 0, 0, 0.1));
+
+$drop-shadow-sm-bottom: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.07));
+
+$box-shadow-sm:
+	0 0 #0000,
+	0 0 #0000,
+	0 4px 6px -1px rgb(0 0 0 / 10%),
+	0 2px 4px -2px rgb(0 0 0 / 10%);
+
+$border-radius-sm: 0.3rem;
+$border-radius-md: 0.6rem;
+$border-radius-lg: 1.2rem;
+
+/* ------
+
+	layout
+
+------ */
+$inner: 1.4rem;
+$mobile-layout-min-width: 320px;
+$mobile-layout-max-width: 600px;
+
+$pc-layout-min-width: 800px;
+$pc-layout-max-width: 1600px;
+
+$section-layout-sm: 1.2rem;
+$section-layout-md: 1.4rem;
+$section-layout-lg: 1.6rem;
+
+$header-layout-sm: 1.2rem;
+$header-layout-md: 1.4rem;
+$header-layout-lg: 1.8rem;
+
+/* ------
+
+  z-index
+
+------ */
+
+$z-index-alert: 90;
+$tool-tip: 90;
+$z-sheet: 80;
+$nav-bar: 60;
+$app-bar: 60;
+$z-index-fab: 50;

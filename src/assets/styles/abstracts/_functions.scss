@@ -1,0 +1,3 @@
+@function ios-safe-area($side) {
+	@return env(safe-area-inset-#{$side});
+}

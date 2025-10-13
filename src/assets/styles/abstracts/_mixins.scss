@@ -1,0 +1,395 @@
+@use '@/public/styles/abstracts/variables' as *;
+
+/* ======
+
+  mixins
+
+====== */
+
+/* ------
+
+  media query
+
+------ */
+
+@mixin tablet {
+	/* tablet device : 768px ~ */
+	@media (width >=768px) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	/* desktop device : 1025px ~ */
+	@media (width >=1025px) {
+		@content;
+	}
+}
+
+/* ------
+
+  ios safe area
+
+------ */
+
+@mixin ios-safe-area($css, $side) {
+	/* iOS 11.0 버전 */
+	#{$css}: constant(safe-area-inset-#{$side});
+
+	/* iOS 11.2 이상 */
+	#{$css}: env(safe-area-inset-#{$side});
+}
+
+@mixin ios-safe-area-calc($css, $side, $val) {
+	/* iOS 11.0 버전 */
+	#{$css}: calc(constant(safe-area-inset-#{$side}) + #{$val});
+
+	/* iOS 11.2 이상 */
+	#{$css}: calc(env(safe-area-inset-#{$side}) + #{$val});
+}
+
+@mixin ios-safe-area-inner($side: false) {
+	@if $side == false {
+		/* iOS 11.0 버전 */
+		padding-right: calc(var(--inner) + constant(safe-area-inset-right));
+		padding-left: calc(var(--inner) + constant(safe-area-inset-left));
+
+		/* iOS 11.2 이상 */
+		padding-right: calc(var(--inner) + env(safe-area-inset-right));
+		padding-left: calc(var(--inner) + env(safe-area-inset-left));
+	} @else {
+		/* iOS 11.0 버전 */
+		padding-#{$side}: calc(var(--inner) + constant(safe-area-inset-#{$side}));
+
+		/* iOS 11.2 이상 */
+		padding-#{$side}: calc(var(--inner) + env(safe-area-inset-#{$side}));
+	}
+}
+
+/* ------
+
+  typography
+
+------ */
+
+@mixin hidden {
+	position: absolute;
+	overflow: hidden;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	clip: rect(0, 0, 0, 0);
+}
+
+@mixin letter-spacing025 {
+	letter-spacing: -0.025em;
+	word-spacing: -0.025em;
+}
+
+@mixin text-wrap($value) {
+	@if $value == 'nowrap' {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	} @else {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		white-space: unset;
+		-webkit-line-clamp: $value;
+	}
+}
+
+@mixin headline-1 {
+	font-size: 2.4rem;
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+@mixin headline-2 {
+	font-size: 2.2rem;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+@mixin headline-3 {
+	font-size: 1.8rem;
+	font-weight: 600;
+	line-height: 1.35;
+}
+@mixin headline-4 {
+	font-size: 1.6rem;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+@mixin title-1 {
+	font-size: 1.6rem;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+@mixin title-2 {
+	font-size: 1.4rem;
+	font-weight: 500;
+	line-height: 1.35;
+}
+
+@mixin title-3 {
+	font-size: 1.3rem;
+	font-weight: 500;
+	line-height: 1.3;
+}
+@mixin title-4 {
+	font-size: 1.25rem;
+	font-weight: 500;
+	line-height: 1.35;
+}
+
+@mixin body-1 {
+	font-size: 1.6rem;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+@mixin body-2 {
+	font-size: 1.5rem;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+@mixin body-3 {
+	font-size: 1.4rem;
+	font-weight: 400;
+	line-height: 1.45;
+}
+@mixin body-4 {
+	font-size: 1.3rem;
+	font-weight: 400;
+	line-height: 1.45;
+}
+
+@mixin label-1 {
+	font-size: 1.4rem;
+	font-weight: 500;
+	line-height: 1.3;
+}
+@mixin label-2 {
+	font-size: 1.3rem;
+	font-weight: 500;
+	line-height: 1;
+}
+@mixin label-3 {
+	font-size: 1.2rem;
+	font-weight: 500;
+	line-height: 1.25;
+}
+@mixin label-4 {
+	font-size: 1.1rem;
+	font-weight: 500;
+	line-height: 1.25;
+}
+
+/* ------
+
+  material
+
+------ */
+
+@mixin white-glass-normal {
+	background-color: rgba(211, 211, 211, 0.7);
+	backdrop-filter: blur(40px) saturate(2);
+}
+
+@mixin gray-glass-normal {
+	background-color: rgba(150, 150, 150, 0.7);
+	backdrop-filter: blur(40px) saturate(2);
+}
+
+@mixin black-glass-normal {
+	background-color: rgba(32, 32, 32, 0.8);
+	backdrop-filter: blur(40px) saturate(2);
+}
+
+@mixin glass-container-light-lg() {
+	-webkit-backdrop-filter: blur(60px);
+	backdrop-filter: blur(60px);
+	background: rgb(224 224 255 / 40%);
+}
+
+@mixin glass-container-light-md() {
+	background: var(
+		rgb(37 37 37 / 82%),
+		linear-gradient(0deg, #8c8c8c 0%, #8c8c8c 100%),
+		rgb(37 37 37 / 82%)
+	);
+	background-blend-mode: overlay, normal;
+	-webkit-backdrop-filter: blur(40px);
+	backdrop-filter: blur(40px);
+}
+
+@mixin glass-container-normal-lg() {
+	background: rgb(88 84 97 / 25%);
+	-webkit-backdrop-filter: blur(100px);
+	backdrop-filter: blur(100px);
+}
+
+/* ------
+
+  layout
+
+------ */
+
+@mixin layout-width {
+	min-width: var(--layout-min-width);
+	max-width: var(--layout-max-width);
+	margin: 0 auto;
+}
+
+@mixin flex-ctmd {
+	display: flex;
+	justify-self: center;
+	align-items: center;
+}
+
+@mixin absolute-ctmd {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin absolute-ct {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+@mixin absolute-md {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+@mixin absolute-bottom {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+@mixin full-fixed {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+@mixin fixed-center {
+	position: fixed;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+}
+
+@mixin fixed-bottom {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+@mixin ratio($value) {
+	height: 0;
+	padding-top: $value;
+	position: relative;
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+}
+
+@mixin bg-full {
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+@mixin bg-100 {
+	background-size: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+// styling
+@mixin box-shadow-bottom-md {
+	box-shadow:
+		0 0 rgb(0 0 0 / 0%),
+		0 0 rgb(0 0 0 / 0%),
+		0 4px 6px -1px rgb(0 0 0 / 8%),
+		0 2px 4px -2px rgb(0 0 0 / 8%);
+}
+
+@mixin box-shadow-top-md {
+	box-shadow:
+		0 0 rgb(0 0 0 / 0%),
+		0 0 rgb(0 0 0 / 0%),
+		0 -4px 6px -1px rgb(0 0 0 / 8%),
+		0 -2px 4px -2px rgb(0 0 0 / 8%);
+}
+
+@mixin overlay {
+	pointer-events: painted;
+	&[class*='enter'] {
+		background: transparent;
+		&[class*='Active'],
+		&[class*='Done'] {
+			background-color: rgba(32, 32, 32, 0.6);
+			backdrop-filter: blur(10px) saturate(2);
+			transition:
+				background 0.4s ease,
+				backdrop-filter 0.4s ease;
+		}
+	}
+	&[class*='exit'] {
+		background-color: rgba(32, 32, 32, 0.6);
+		backdrop-filter: blur(10px) saturate(2);
+		&[class*='Active'],
+		&[class*='Done'] {
+			background: transparent;
+			backdrop-filter: blur(0px) saturate(1);
+			transition:
+				background 0.4s ease,
+				backdrop-filter 0.4s ease;
+		}
+	}
+}
+
+// styling
+@mixin divider($size: 'md') {
+	&:not(:first-child) {
+		border-top: 1px solid var(--gray-color-dim);
+	}
+
+	@if ($size == 'md') {
+		padding-top: 1.2rem;
+		padding-bottom: 1.2rem;
+	}
+	@if ($size == 'lg') {
+		padding-top: 1.6rem;
+		padding-bottom: 1.6rem;
+	}
+}
+
+@mixin dot-divider($margin: 0.3rem) {
+	&:not(:last-child)::after {
+		content: '·';
+		margin: 0 $margin;
+	}
+}

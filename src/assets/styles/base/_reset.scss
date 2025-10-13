@@ -1,0 +1,110 @@
+/* ======
+
+  style reset
+
+====== */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	overflow-wrap: break-word;
+}
+
+a {
+	background-color: transparent;
+	text-decoration: none;
+	vertical-align: top;
+	color: inherit;
+}
+
+a,
+button,
+.clickTg {
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+
+	/* ios가 클릭과 스와이프 동작을 구분하기 위해 의도적으로 click event를 지연시키기 때문에, 핀치 줌을 비활성화하지 않고 특정 요소나 전체 문서의 지연을 제거 */
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	vertical-align: top;
+	object-fit: cover;
+}
+
+form {
+	width: 100%;
+}
+input {
+	outline-style: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+button {
+	display: block;
+	appearance: none;
+	-o-appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	outline-style: none;
+	border: none;
+	box-sizing: border-box;
+	padding: 0;
+	text-align: center;
+	background: inherit;
+	box-shadow: none;
+	border-radius: 0;
+	cursor: pointer;
+	color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+canvas,
+img,
+picture,
+svg,
+video {
+	display: block;
+	max-width: 100%;
+}
+
+/* IE10 이상에서 input box 에 추가된 지우기 버튼 제거 */
+// input::-ms-clear { display: none; }
+
+// input number
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+input[type='number'] {
+	appearance: textfield;
+	-moz-appearance: textfield; // firefox
+}

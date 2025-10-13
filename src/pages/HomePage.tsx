@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h1>홈페이지</h1>
       <p>파일 시스템 기반 라우팅 테스트</p>
       <nav>

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
-export default function UserPage() {
+export default function UsersPage() {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h1>User 페이지</h1>
       <p>사용자 목록 페이지입니다.</p>
       <ul>

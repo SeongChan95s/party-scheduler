@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconTriangleFilled: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M5.60518 3.60599L19.0952 11.394C19.2015 11.4555 19.2898 11.5438 19.3511 11.6502C19.4125 11.7565 19.4448 11.8772 19.4448 12C19.4448 12.1228 19.4125 12.2434 19.3511 12.3498C19.2898 12.4562 19.2015 12.5445 19.0952 12.606L5.60518 20.394C5.49878 20.4554 5.37809 20.4878 5.25523 20.4878C5.13237 20.4878 5.01168 20.4555 4.90527 20.394C4.79886 20.3326 4.71049 20.2443 4.64904 20.1379C4.58759 20.0315 4.55521 19.9108 4.55518 19.788V4.21199C4.55521 4.08913 4.58759 3.96845 4.64904 3.86207C4.71049 3.75568 4.79886 3.66735 4.90527 3.60593C5.01168 3.54452 5.13237 3.5122 5.25523 3.51221C5.37809 3.51222 5.49878 3.54456 5.60518 3.60599Z" fill="currentColor" /></svg>;
+export default IconTriangleFilled;

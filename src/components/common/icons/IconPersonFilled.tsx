@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconPersonFilled: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M4.5 20.6826C4.5 20.6826 3 20.6826 3 19.1826C3 17.6826 4.5 13.1826 12 13.1826C19.5 13.1826 21 17.6826 21 19.1826C21 20.6826 19.5 20.6826 19.5 20.6826H4.5ZM12 11.6826C13.1935 11.6826 14.3381 11.2085 15.182 10.3646C16.0259 9.52068 16.5 8.37609 16.5 7.18262C16.5 5.98914 16.0259 4.84455 15.182 4.00064C14.3381 3.15672 13.1935 2.68262 12 2.68262C10.8065 2.68262 9.66193 3.15672 8.81802 4.00064C7.97411 4.84455 7.5 5.98914 7.5 7.18262C7.5 8.37609 7.97411 9.52068 8.81802 10.3646C9.66193 11.2085 10.8065 11.6826 12 11.6826Z" fill="currentColor" /></svg>;
+export default IconPersonFilled;

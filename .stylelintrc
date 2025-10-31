@@ -2,7 +2,7 @@
 	"extends": ["stylelint-config-recommended", "stylelint-config-recommended-scss"],
 	"rules": {
 		"color-no-invalid-hex": true,
-		"number-max-precision": 3,
+		"number-max-precision": 4,
 		"max-nesting-depth": 4,
 		"property-no-vendor-prefix": null,
 		"selector-no-vendor-prefix": null,
@@ -14,7 +14,8 @@
 		"comment-empty-line-before": null,
 		"custom-property-empty-line-before": null,
 		"no-descending-specificity": null,
-		"selector-pseudo-class-no-unknown": null
+		"selector-pseudo-class-no-unknown": null,
+		"scss/at-rule-no-unknown": null
 	},
 	"ignoreFiles": ["node_modules/**"]
 }

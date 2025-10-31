@@ -1,0 +1,71 @@
+.chip {
+	display: inline-flex;
+	overflow: hidden;
+	line-height: 1.3;
+	letter-spacing: 0;
+	cursor: pointer;
+	border-radius: 3rem;
+	align-items: center;
+	white-space: nowrap;
+}
+
+// size
+.sm {
+	height: 2.8rem;
+	padding: 0 1.2rem;
+	@include label-4;
+	line-height: 2.8rem;
+}
+.md {
+	height: 3.2rem;
+	padding: 0 1.6rem;
+	gap: 0.3rem;
+	@include label-3;
+	line-height: 3.2rem;
+
+	:global(.icon) {
+		width: 1.4rem;
+		height: 1.4rem;
+	}
+}
+.lg {
+	height: 3.6rem;
+	gap: 0.6rem;
+	padding: 0 1.8rem;
+	@include label-1;
+	line-height: 3.6rem;
+}
+
+// color
+.standard {
+	--chip-color-01: var(--white-color-dark); // surface
+	--chip-color-02: var(--black-color-normal); // basic
+}
+.primary {
+	--chip-color-01: var(--primary-color-dim);
+	--chip-color-02: var(--primary-color-normal);
+}
+
+// variant
+.filled {
+	color: var(--chip-color-01);
+	background: var(--chip-color-02);
+	border: 1px solid var(--chip-color-02);
+}
+.outlined {
+	color: var(--chip-color-02);
+	background: var(--white-color-normal);
+	border: 1px solid color-mix(in srgb, var(--chip-color-02) 10%, transparent);
+}
+.depth {
+	color: var(--chip-color-02);
+	background: var(--chip-color-01);
+	border: 1px solid var(--chip-color-01);
+}
+
+// skeleton
+.skeleton {
+	--chip-color-01: transparent;
+	--chip-color-02: transparent;
+	position: relative;
+}

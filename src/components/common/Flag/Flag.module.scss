@@ -1,0 +1,65 @@
+.flag {
+	display: inline-flex;
+	height: 1.8em;
+	overflow: hidden;
+	font-size: 0.75em;
+	line-height: 1.4rem;
+	letter-spacing: 0;
+	cursor: pointer;
+	border-radius: 3rem;
+	align-items: center;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+// size
+.sm {
+	padding: 0 0.6em;
+}
+.md {
+	padding: 0 0.6em;
+	gap: 0.3rem;
+
+	:global(.icon) {
+		width: 1em;
+		height: 1em;
+	}
+}
+.lg {
+	gap: 0.6rem;
+	padding: 0 1.8em;
+}
+
+// color
+.standard {
+	--chip-color-01: var(--black-color-dim); // basic
+	--chip-color-02: var(--white-color-dark); // surface
+}
+.primary {
+	--chip-color-01: var(--primary-color-dim);
+	--chip-color-02: var(--primary-color-normal);
+}
+
+// variant
+.filled {
+	color: var(--chip-color-01);
+	background: var(--chip-color-02);
+	border: 1px solid var(--chip-color-02);
+}
+.outlined {
+	color: var(--chip-color-02);
+	background: var(--white-color-normal);
+	border: 1px solid color-mix(in srgb, var(--chip-color-02) 10%, transparent);
+}
+.depth {
+	color: var(--chip-color-02);
+	background: var(--chip-color-01);
+	border: 1px solid var(--chip-color-01);
+}
+
+// skeleton
+.skeleton {
+	--chip-color-01: transparent;
+	--chip-color-02: transparent;
+	position: relative;
+}

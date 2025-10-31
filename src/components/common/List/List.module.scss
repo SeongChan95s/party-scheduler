@@ -1,0 +1,44 @@
+.list {
+	text-align: left;
+}
+
+.item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+	text-align: left;
+
+	:global(.icon) {
+		color: var(--gray-color-dark);
+	}
+
+	span {
+		display: block;
+		margin-top: 0.2rem;
+		font-size: 1.3rem;
+		font-weight: 300;
+		color: var(--gray-color-normal);
+	}
+}
+
+// size
+.md {
+	.item {
+		padding: 1.2rem 0rem;
+		@include label-1;
+		line-height: 2rem;
+	}
+	:global(.icon) {
+		width: 1.6rem;
+		height: 1.6rem;
+		margin-left: auto;
+	}
+}
+
+// variant
+.divider {
+	.item {
+		@include divider;
+	}
+}

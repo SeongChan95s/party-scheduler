@@ -1,0 +1,61 @@
+.counter {
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	overflow: hidden;
+	background: var(--white-color-normal);
+
+	.count {
+		@include label-1;
+	}
+
+	.button {
+		cursor: pointer;
+	}
+
+	&.block {
+		border: 0.05rem solid var(--gray-color-dim);
+		border-radius: 0.8rem;
+
+		.count {
+			border-left: 1px solid var(--gray-color-dim);
+			border-right: 1px solid var(--gray-color-dim);
+			line-height: 1;
+		}
+
+		.button svg {
+			color: var(--gray-color-dark);
+		}
+	}
+}
+
+// size
+.sm {
+	&.block {
+		.count {
+			padding: 0 1rem;
+		}
+		.button {
+			padding: 0.4rem;
+			svg {
+				width: 1.6rem;
+				height: 1.6rem;
+			}
+		}
+	}
+}
+
+.md {
+	&.block {
+		.count {
+			padding: 0 1.1rem;
+		}
+		.button {
+			padding: 0.6rem;
+			svg {
+				width: 1.8rem;
+				height: 1.8rem;
+			}
+		}
+	}
+}

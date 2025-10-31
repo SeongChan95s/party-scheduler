@@ -1,0 +1,85 @@
+.textarea {
+	.container {
+		position: relative;
+		height: 100%;
+	}
+
+	textarea {
+		display: block;
+		width: 100%;
+		height: 100%;
+		padding: 1rem 1.2rem;
+
+		border: none;
+		resize: none;
+		outline: none;
+		font-size: 1.4rem;
+		font-weight: 400;
+		background: transparent;
+
+		&::placeholder {
+			font-size: 1.4rem;
+			font-weight: 400;
+			color: var(--gray-color-light);
+		}
+	}
+
+	.state {
+		display: flex;
+		justify-content: space-between;
+		padding-right: 0.3rem;
+		margin-top: 0.6rem;
+		font-size: 1.2rem;
+		font-weight: 400;
+		color: var(--gray-color-dark);
+
+		.validate {
+			display: flex;
+			gap: 0.3rem;
+			> span ~ span::before {
+				content: '·';
+				margin-right: 0.3rem;
+			}
+		}
+		.count {
+			margin-left: auto;
+		}
+	}
+
+	&:global(.validate-warn) {
+		.validate {
+			color: var(--red-color-normal);
+		}
+	}
+	&:global(.validate-pass) {
+		.validate {
+			color: green;
+		}
+	}
+}
+
+// .textarea:not(.dynamic) {
+// 	.container {
+// 		border-radius: 0.6rem;
+// 		border: 1px solid var(--gray-color-normal);
+// 	}
+
+// 	&.focused {
+// 		.container {
+// 			border: 1px solid transparent;
+// 			&::after {
+// 				content: '';
+// 				position: absolute;
+// 				inset: 0;
+// 				border: 2px solid var(--black-color-normal);
+// 				border-radius: 0.6rem;
+// 				pointer-events: none;
+// 			}
+// 		}
+// 	}
+// }
+
+// optional
+.fill {
+	width: 100%;
+}

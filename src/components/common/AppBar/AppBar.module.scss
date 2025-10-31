@@ -1,0 +1,20 @@
+.appBar {
+	position: relative;
+	box-sizing: content-box;
+	padding-bottom: ios-safe-area(bottom);
+	z-index: var(--z-app-bar);
+}
+
+.container {
+	@include layout-width;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: inherit;
+	padding-left: ios-safe-area(left);
+	padding-right: ios-safe-area(right);
+	padding-bottom: ios-safe-area(bottom);
+	box-sizing: content-box;
+	background: var(--white-color-light);
+}

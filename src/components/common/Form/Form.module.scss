@@ -1,0 +1,22 @@
+.formValidation {
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+	margin-top: 0.6rem;
+	color: var(--gray-color-normal);
+
+	.checkIcon {
+		width: 1.6rem;
+		height: 1.6rem;
+	}
+
+	.label {
+		@include label-2;
+		font-weight: 500;
+		line-height: 1;
+	}
+
+	&.isValidated {
+		color: var(--black-color-normal);
+	}
+}

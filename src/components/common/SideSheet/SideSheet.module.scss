@@ -1,0 +1,40 @@
+.sideSheet {
+	@include full-fixed;
+	@include layout-width;
+	overflow: clip;
+	z-index: $sheet;
+	@include overlay;
+
+	.container {
+		width: 80%;
+		min-width: 260px;
+		max-width: 380px;
+		height: 100%;
+		padding-top: ios-safe-area(top);
+		padding-bottom: ios-safe-area(bottom);
+		background: var(--white-color-light);
+		transition: transform 0.4s ease;
+		transform: translateX(-100%);
+	}
+}
+
+.closeButton {
+	position: absolute;
+	top: 1.2rem;
+	left: calc(100% + 1.2rem);
+	padding: 0.6rem;
+	border-radius: 50px;
+	background: $white-color-dark;
+	opacity: 0;
+	transition: opacity 0.2s 0s;
+}
+
+:global(.enterDone) {
+	.container {
+		transform: translateX(0%);
+	}
+	.closeButton {
+		opacity: 1;
+		transition: opacity 0.4s 0.4s;
+	}
+}

@@ -1,0 +1,235 @@
+.placeholder {
+	--label-color: var(--black-color-dim);
+	--focus-color: var(--black-color-dark);
+
+	width: 100%;
+	height: 100%;
+	@include label-1;
+
+	.wrap {
+		display: flex;
+	}
+
+	.container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		border-radius: 0.6rem;
+		background: var(--white-color-light);
+	}
+
+	label {
+		display: block;
+		font-weight: 400;
+		white-space: nowrap;
+		color: var(--label-color);
+		z-index: 2;
+		pointer-events: none;
+	}
+}
+
+// size
+.sm {
+	.wrap {
+		gap: 0.4rem;
+	}
+	label {
+		font-size: 1.3rem;
+	}
+}
+.md {
+	.wrap {
+		gap: 0.6rem;
+	}
+	label {
+		font-size: 1.4rem;
+	}
+}
+.lg {
+	label {
+		font-size: 1.5rem;
+	}
+}
+
+// variant
+/*
+	dynamic
+	enter : 상단
+	focus : 강조, 상단
+*/
+
+.filled {
+	.container {
+		background-color: var(--white-color-dark);
+	}
+}
+
+.outlined {
+	.container {
+		border: 1px solid var(--gray-color-normal);
+	}
+
+	&.focus {
+		.container {
+			border: 1px solid transparent;
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border: 2px solid var(--focus-color);
+				border-radius: 0.6rem;
+				pointer-events: none;
+			}
+		}
+
+		label {
+			color: var(--focus-color);
+		}
+	}
+}
+.filled,
+.outlined {
+	&.sm {
+		label {
+			margin-bottom: 0.4rem;
+		}
+	}
+	&.md {
+		label {
+			margin-bottom: 0.6rem;
+		}
+	}
+	&.lg {
+		label {
+			margin-bottom: 0.6rem;
+		}
+	}
+}
+
+.dynamic {
+	position: relative;
+	margin-top: 0.65rem;
+
+	.container {
+		border: 1px solid var(--gray-color-normal);
+	}
+	label {
+		position: absolute;
+		top: -0.7rem;
+		right: 0;
+		display: flex;
+		box-sizing: content-box;
+		gap: 0.6rem;
+		width: 100%;
+		height: 100%;
+		transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&::after,
+		&::before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 6px;
+			margin-top: 0.65rem;
+			opacity: 0;
+			z-index: 1;
+			box-sizing: border-box;
+			border-top-width: 2px;
+			border-top-style: solid;
+			opacity: 0;
+		}
+		&::before {
+			width: 1rem;
+			border-left-width: 2px;
+			border-top-left-radius: 3rem;
+			border-left-style: solid;
+		}
+		&::after {
+			border-right-width: 2px;
+			border-right-style: solid;
+			border-top-right-radius: 3rem;
+		}
+	}
+	&.sm {
+		label {
+			line-height: 4;
+		}
+	}
+	&.md {
+		label {
+			line-height: 4;
+		}
+	}
+	&.lg {
+		label {
+			line-height: 4.2;
+		}
+	}
+
+	&.enter {
+		.container {
+			border-top: 1px solid transparent;
+		}
+
+		label {
+			font-size: 1.2rem;
+			line-height: 1.2;
+			color: var(--gray-color-dark);
+
+			&::before,
+			&::after {
+				border-width: 1px;
+				border-color: var(--gray-color-normal);
+				opacity: 1;
+			}
+		}
+	}
+	&.focus {
+		.container {
+			border-top: 1px solid transparent;
+			&::after {
+				content: '';
+				position: absolute;
+				inset: -1px;
+				border: 2px solid var(--black-color-normal);
+				border-top: 2px solid transparent;
+				border-radius: 0.6rem;
+				pointer-events: none;
+				box-sizing: content-box;
+				z-index: 2;
+			}
+		}
+		label {
+			font-size: 1.2rem;
+			line-height: 1.2;
+			color: var(--black-color-normal);
+
+			&::before,
+			&::after {
+				border-width: 2px;
+				border-color: var(--black-color-normal);
+				opacity: 1;
+			}
+		}
+	}
+
+	&.disable {
+		border-radius: 0.6rem;
+		background: var(--gray-color-dim);
+
+		.container {
+			border-top: none;
+			border-left: 1px solid var(--gray-color-dim);
+			border-bottom: 1px solid var(--gray-color-dim);
+			border-right: 1px solid var(--gray-color-dim);
+		}
+		label {
+			&::before,
+			&::after {
+				border-color: var(--gray-color-dim);
+				opacity: 1;
+			}
+		}
+	}
+}

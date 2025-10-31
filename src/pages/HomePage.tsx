@@ -24,6 +24,9 @@ export default function HomePage() {
 							<Link to="/user">User 페이지</Link>
 						</li>
 						<li>
+							<Link to="/guide">Guide 페이지</Link>
+						</li>
+						<li>
 							<Link to="/user/123">User Detail (123)</Link>
 						</li>
 					</ul>

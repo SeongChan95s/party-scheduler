@@ -1,0 +1,77 @@
+.tabHeader {
+	position: relative;
+}
+
+.tabPane {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--gray-color-normal);
+	cursor: pointer;
+
+	&:global(.active) {
+		color: var(--black-cololr-normal);
+	}
+}
+
+.tabBody {
+	position: relative;
+	overflow-x: clip;
+	height: auto;
+}
+
+.tabItem {
+	width: 100%;
+	&:global([class*='Enter']) {
+		position: absolute;
+	}
+	&:global([class*='EnterActive']) {
+		position: absolute;
+	}
+	&:global([class*='EnterDone']) {
+		position: relative;
+	}
+}
+
+.tabIndicator {
+	position: absolute;
+	left: var(--left);
+	width: var(--width);
+	bottom: 0;
+	display: block;
+	height: 2px;
+	background: black;
+	border-radius: 2px;
+	transition: left 0.3s ease;
+}
+
+// direction
+.horizontal {
+	.tabHeader {
+		display: flex;
+		height: 3.6rem;
+	}
+	.tabPane {
+		padding: 0 1.2rem;
+	}
+}
+.vertical {
+	display: flex;
+	.tabHeader {
+		display: block;
+		height: auto;
+		background-color: var(--gray-color-dim);
+	}
+	.tabPane {
+		padding: 0 1.8rem;
+		height: 4rem;
+		&:global(.active) {
+			background-color: var(--white-color-dim);
+		}
+	}
+	.tabBody {
+		flex: 1;
+	}
+}

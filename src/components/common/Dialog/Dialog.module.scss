@@ -1,0 +1,52 @@
+.dialog {
+	@include full-fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--black-color-normal);
+	z-index: $z-index-alert;
+	&.overlay {
+		@include overlay;
+	}
+
+	:global(.dialogContainer) {
+		width: 80%;
+		min-width: 33rem;
+		max-width: 70rem;
+		background: var(--white-color-dim);
+		@include box-shadow-bottom-md;
+	}
+
+	&:global(.enter) {
+		:global(.dialogContainer) {
+			opacity: 0;
+			transform: translateY(-25%);
+		}
+	}
+	&:global(.enterActive),
+	&:global(.enterDone) {
+		:global(.dialogContainer) {
+			opacity: 1;
+			transform: translateY(0%);
+			transition:
+				transform 0.25s,
+				opacity 0.25s;
+		}
+	}
+	&:global(.exit) {
+		:global(.dialogContainer) {
+			opacity: 1;
+			transform: translateY(0%);
+		}
+	}
+	&:global(.exitActive),
+	&:global(.exitDone) {
+		:global(.dialogContainer) {
+			opacity: 0;
+			transform: translateY(-25%);
+			transition:
+				transform 0.25s,
+				opacity 0.25s;
+		}
+	}
+}

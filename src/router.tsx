@@ -4,6 +4,9 @@ import UsersPage from './pages/user/UsersPage';
 import UserDetailPage from './pages/user/UserDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import GuideBasicPage from './pages/guide/GuideBasicPage';
+import PopupGuidePage from './pages/guide/PopupGuidePage';
+import GuideLayout from './layouts/GuideLayout';
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +20,19 @@ const router = createBrowserRouter([
 	{
 		path: '/user',
 		element: <UsersPage />
+	},
+	{
+		element: <GuideLayout />,
+		children: [
+			{
+				path: '/guide/basic',
+				element: <GuideBasicPage />
+			},
+			{
+				path: '/guide/popup',
+				element: <PopupGuidePage />
+			}
+		]
 	},
 	{
 		path: '/user/:id',

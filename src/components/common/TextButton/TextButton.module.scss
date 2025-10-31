@@ -1,0 +1,114 @@
+.button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	white-space: nowrap;
+	line-height: 1.25;
+}
+
+// size
+.xxs {
+	height: 2.6rem;
+	padding: 0 0.8rem;
+	gap: 0.2rem;
+	@include label-3;
+
+	:global(.icon) {
+		width: 2rem;
+		height: 2rem;
+	}
+}
+.xs {
+	height: 3rem;
+	padding: 0 0.8rem;
+	gap: 0.2rem;
+	@include label-2;
+
+	:global(.icon) {
+		width: 2rem;
+		height: 2rem;
+	}
+}
+.sm {
+	height: 3.8rem;
+	padding: 0 1.3rem;
+	gap: 0.2rem;
+	@include label-2;
+
+	:global(.icon) {
+		width: 2rem;
+		height: 2rem;
+	}
+}
+.md {
+	height: 4.2rem;
+	padding: 0 1.6rem;
+	gap: 0.4rem;
+	@include label-1;
+	:global(.icon) {
+		width: 2.2rem;
+		height: 2.2rem;
+	}
+}
+.lg {
+	height: 4.6rem;
+	padding: 0 1.8rem;
+	gap: 0.6rem;
+	@include label-1;
+
+	:global(.icon) {
+		width: 2.4rem;
+		height: 2.4rem;
+	}
+}
+
+// color
+.normal {
+	--button-color-01: var(--white-color-normal);
+	--button-color-02: var(--black-color-normal);
+}
+.primary {
+	--button-color-01: var(--primary-color-dim);
+	--button-color-02: var(--primary-color-normal);
+}
+
+// variant
+.filled {
+	color: var(--button-color-01);
+	background: var(--button-color-02);
+	border: 1px solid var(--button-color-02);
+}
+.outlined {
+	color: var(--button-color-02);
+	background: var(--white-color-normal);
+	border: 1px solid color-mix(in srgb, var(--button-color-02) 20%, transparent);
+}
+.depth {
+	color: var(--button-color-02);
+	background: var(--button-color-01);
+	border: 1px solid var(--button-color-01);
+	filter: $drop-shadow-xs;
+}
+
+// shape
+.rect {
+	border-radius: 0;
+}
+.rounded {
+	border-radius: 0.3em;
+}
+.round {
+	border-radius: 9rem;
+}
+
+// option
+.disabled {
+	border: 1px solid var(--gray-color-dark);
+	color: $white-color-light;
+	background: var(--gray-color-dark);
+	pointer-events: none;
+}
+.fill {
+	width: 100%;
+}

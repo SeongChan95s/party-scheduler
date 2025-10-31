@@ -1,0 +1,32 @@
+.icon {
+	max-width: none;
+}
+
+// size
+.sm {
+	width: 1.125rem;
+	height: 1.125rem;
+}
+.md {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+.lg {
+	width: 1.625rem;
+	height: 1.625rem;
+}
+.fill {
+	width: 100%;
+	height: 100%;
+}
+
+// color
+.auto {
+	color: inherit;
+}
+.white {
+	color: var(--white-color-normal);
+}
+.black {
+	color: var(--black-color-normal);
+}

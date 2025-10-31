@@ -1,0 +1,52 @@
+.stackField {
+	h5 {
+		display: flex;
+		align-items: center;
+		margin-bottom: 0.6rem;
+		font-size: 1.5rem;
+		font-weight: 500;
+	}
+
+	.itemWrap {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+
+		.item {
+			display: flex;
+			align-items: center;
+			padding: 0.6rem 0.7rem;
+			border-radius: 0.8rem;
+			border: 1px solid var(--gray-color-dim);
+			background-color: var(--white-color-dark);
+
+			span {
+				font-size: 1.5rem;
+				line-height: 1.8rem;
+				font-weight: 500;
+				user-select: text;
+			}
+
+			:global(.icon) {
+				cursor: pointer;
+				color: var(--gray-color-darker);
+			}
+
+			&.itemToAdd {
+				&:global(.addMode) {
+					border: 1px solid var(--black-color-normal);
+				}
+			}
+		}
+	}
+
+	.inputField {
+		background-color: transparent;
+		border: none;
+		width: 8rem;
+		height: 1.8rem;
+		font-size: 1.5rem;
+		line-height: 1.8rem;
+		outline: none;
+	}
+}

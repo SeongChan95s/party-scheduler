@@ -1,0 +1,50 @@
+.toast {
+	position: fixed;
+	right: 0;
+	bottom: calc(ios-safe-area(bottom) + 8.5rem);
+	left: 0;
+	@include layout-width;
+	z-index: $z-index-alert;
+
+	.container {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.2rem;
+		border-radius: 0.8rem;
+		font-size: 1.5rem;
+		color: var(--white-color-light);
+		background: var(--black-color-normal);
+
+		@include ios-safe-area-calc('margin-left', 'left', '1.2rem');
+		@include ios-safe-area-calc('margin-right', 'right', '1.2rem');
+	}
+
+	:global(.icon) {
+		flex: none;
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.contents {
+		flex: 1;
+		line-height: 1.25;
+	}
+
+	.buttonWrap {
+		display: flex;
+		gap: 0.6rem;
+		white-space: nowrap;
+		margin-left: auto;
+
+		button {
+			font-size: 1.4rem;
+			white-space: nowrap;
+			line-height: 1;
+			color: var(--white-color-light);
+		}
+		.closeButton {
+			color: var(--white-color-light);
+		}
+	}
+}

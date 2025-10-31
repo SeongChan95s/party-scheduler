@@ -4,7 +4,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import svgr from 'vite-plugin-svgr';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const svgrConfig = require('./.svgrrc.cjs');
 
 // https://vite.dev/config/
@@ -18,6 +17,9 @@ export default defineConfig(({ mode }) => {
 			}
 		},
 		css: {
+			modules: {
+				localsConvention: 'camelCase'
+			},
 			preprocessorOptions: {
 				scss: {
 					additionalData: `

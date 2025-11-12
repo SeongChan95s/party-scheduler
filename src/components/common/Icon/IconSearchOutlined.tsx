@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconSearchOutlined: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M2.59601 10.7352C2.59601 6.3026 6.24038 2.73239 10.7083 2.73239C15.1754 2.73239 18.8206 6.3026 18.8206 10.7352C18.8224 12.564 18.1893 14.3367 17.0295 15.7507L20.7756 19.4969C20.9327 19.6595 21.0196 19.8773 21.0177 20.1035C21.0157 20.3296 20.925 20.5459 20.7651 20.7057C20.6052 20.8656 20.3889 20.9563 20.1628 20.9583C19.9367 20.9603 19.7189 20.8733 19.5562 20.7163L15.8023 16.9624C14.3549 18.1148 12.5585 18.7407 10.7083 18.7371C6.24125 18.7371 2.59601 15.1678 2.59601 10.7352ZM10.7083 4.45713C7.16829 4.45713 4.32075 7.28053 4.32075 10.7352C4.32075 14.1898 7.16829 17.0124 10.7083 17.0124C14.2483 17.0124 17.0959 14.1898 17.0959 10.7343C17.0959 7.28053 14.2483 4.45713 10.7083 4.45713Z" fill="currentColor" /></svg>;
+export default IconSearchOutlined;

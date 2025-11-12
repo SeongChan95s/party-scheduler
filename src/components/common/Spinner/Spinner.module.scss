@@ -1,0 +1,32 @@
+.spinner {
+	color: var(--color-primary-50);
+	animation: spin 1s linear infinite;
+
+	.stick {
+		color: var(--color-primary-500);
+	}
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(1turn);
+	}
+}
+
+// size
+.xs {
+	width: 1.5rem;
+	height: 24px;
+}
+.sm {
+	width: 1.875rem;
+	height: 1.875rem;
+}
+.md {
+	width: 2.5rem;
+	height: 2.5rem;
+}
+.lg {
+	width: 2.875rem;
+	height: 2.875rem;
+}

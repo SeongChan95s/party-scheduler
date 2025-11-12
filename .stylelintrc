@@ -1,0 +1,21 @@
+{
+	"extends": ["stylelint-config-recommended", "stylelint-config-recommended-scss"],
+	"rules": {
+		"color-no-invalid-hex": true,
+		"number-max-precision": 4,
+		"max-nesting-depth": 4,
+		"property-no-vendor-prefix": null,
+		"selector-no-vendor-prefix": null,
+		"value-no-vendor-prefix": null,
+		"no-duplicate-selectors": null,
+		"declaration-block-no-duplicate-custom-properties": null,
+		"declaration-block-no-duplicate-properties": null,
+		"declaration-empty-line-before": null,
+		"comment-empty-line-before": null,
+		"custom-property-empty-line-before": null,
+		"no-descending-specificity": null,
+		"selector-pseudo-class-no-unknown": null,
+		"scss/at-rule-no-unknown": null
+	},
+	"ignoreFiles": ["node_modules/**"]
+}

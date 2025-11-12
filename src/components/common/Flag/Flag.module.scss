@@ -1,0 +1,49 @@
+.flag {
+	display: inline-flex;
+	height: 1.125rem;
+	overflow: hidden;
+	padding: 0 0.6em;
+	gap: 0.1875rem;
+	font-size: 0.75em;
+	line-height: 0.875rem;
+	letter-spacing: 0;
+	border-radius: 1.875rem;
+	align-items: center;
+	vertical-align: middle;
+	white-space: nowrap;
+
+	:global(.icon) {
+		width: 1em;
+		height: 1em;
+	}
+}
+
+// color
+.normal {
+	--color-flag-01: var(--color-gray-50);
+	--color-flag-02: var(--color-gray-700);
+	--color-flag-03: var(--color-gray-900);
+}
+.primary {
+	--color-flag-01: var(--color-primary-50);
+	--color-flag-02: var(--color-primary-500);
+	--color-flag-03: var(--color-primary-800);
+}
+
+// variant
+.filled {
+	color: var(--color-white);
+	background: var(--color-flag-02);
+	border: 1px solid var(--color-flag-02);
+}
+.outlined {
+	color: var(--color-flag-03);
+	background: var(--color-surface-01);
+	border: 1px solid color-mix(in srgb, var(--color-flag-02) 20%, transparent);
+}
+.depth {
+	color: var(--color-flag-03);
+	background: var(--color-flag-01);
+	border: 1px solid var(--color-flag-01);
+	filter: $drop-shadow-xs;
+}

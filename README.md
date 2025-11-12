@@ -1,69 +1,130 @@
-# React + TypeScript + Vite
+# 파티 스케줄러(Party Scheduler)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 바쁜 현대인을 위한 스마트한 약속 관리 솔루션
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-19.2-61dafb?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178c6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-7.1.0-646cff?logo=vite)
+![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?logo=pwa)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 프로젝트 소개
 
-## Expanding the ESLint configuration
+**파티 스케줄러(Party Scheduler)**는 친구들과의 약속을 더 쉽고 빠르게 잡을 수 있도록 돕는 PWA 기반 웹 어플리케이션입니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 개요
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+바쁜 일상 속에서 친구들과 시간을 맞추는 것은 여간 번거로운 일이 아닙니다.
+- "이번 주말 언제 시간 돼?"
+- "나는 토요일 오후 2시 이후만 가능해"
+- "그럼 일요일은 어때?"
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+이런 대화가 반복되면서 약속 하나 잡는 데 며칠이 걸리기도 합니다.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**파티 스케줄러(Party Scheduler)**는 MBTI J인 계획형 사람들을 위한 최적의 서비스로, 친구들의 약속 가능한 시간을 한눈에 확인하고 최적의 시간을 찾아줍니다. 약속이 결정된 후에도 실시간으로 계획을 공유하고 관리하여 약속을 성공적으로 성사시킬 수 있습니다.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 주요 기능
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 1. 다양한 약속 유형 지원
+액티비티, 핫플 탐방, 게임, 식사 등 다양한 종류의 약속을 생성하고 관리할 수 있습니다.
+
+### 2. 스마트 일정 매칭
+- **30분 단위** 시간 선택으로 정밀한 일정 조율
+- 참가자 모두의 가능한 시간대를 **시각적으로 표시**
+- 공통 가능 시간대를 **자동으로 하이라이트**
+- 최적의 약속 시간을 빠르게 결정
+
+### 3. 실시간 계획 공유
+- 확정된 약속의 **일정, 장소, 세부 내용** 실시간 공유
+- 공지 혹은 계획 변경 시 참가자 전원에게 **즉시 알림**
+- 약속 당일까지 **리마인드 알림** 
+- 모바일 푸시 알림 지원 (PWA)
+
+### 4. 의사결정 도구
+- 일정, 장소, 계획에 대한 **투표 기능**
+- 약속을 간단하게 **공유**
+- 참가자 응답 현황 **실시간 트래킹**
+
+---
+
+## 기술 스택
+
+### Frontend
+- **React** 19.1.1 - UI 라이브러리
+- **TypeScript** 5.8.3 - 타입 안정성
+- **React Router** 7.8.0 - 클라이언트 라우팅
+- **Vite** 7.1.0 - 빠른 개발 환경 및 빌드 도구
+
+### PWA
+- **Service Worker**
+- **Web App Manifest**
+- **Push Notifications**
+
+---
+
+## 프로젝트 구조
+
+
+## 개발 로드맵
+
+### Phase 1: 기본 UI/UX 구축 (진행 중)
+- [x] 프로젝트 초기 설정
+- [ ] 디자인 시스템 구축
+- [ ] 공통 컴포넌트 개발
+- [x] 라우팅 구조 설계
+- [ ] PWA 기본 설정
+
+### Phase 2: 핵심 기능 개발
+- [ ] 약속 생성 및 관리 기능
+- [ ] 일정 매칭 알고리즘 구현
+- [ ] 참가자 시간대 선택 UI
+- [ ] 공통 가능 시간 시각화
+
+### Phase 3: 실시간 기능
+- [ ] 실시간 데이터 동기화
+- [ ] 푸시 알림 시스템
+- [ ] 채팅 또는 댓글 기능
+- [ ] 투표 시스템
+
+### Phase 4: 최적화 및 배포
+- [ ] 성능 최적화
+- [ ] 오프라인 지원 강화
+- [ ] SEO 최적화
+- [ ] 앱 스토어 등록 (Android/iOS)
+
+### Future Features
+- [ ] 소셜 로그인 연동
+- [ ] 캘린더 앱 연동 (Google, Apple Calendar)
+- [ ] 위치 기반 장소 추천
+- [ ] AI 기반 최적 시간 추천
+- [ ] 그룹 채팅 기능
+
+---
+
+## 디자인 철학
+
+- **Simple**: 복잡하지 않고 직관적인 사용자 경험
+- **Fast**: 빠른 로딩과 부드러운 인터랙션
+- **Accessible**: 모든 사용자가 접근 가능한 디자인
+- **Mobile-First**: 모바일 환경 우선 최적화
+
+---
+
+## 라이센스
+
+이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+
+---
+
+## 문의
+
+프로젝트에 대한 질문이나 제안이 있으시면 Issue를 생성해주세요.
+
+---
+
+<div align="center">
+
+[Back to Top](#party-scheduler)
+
+</div>

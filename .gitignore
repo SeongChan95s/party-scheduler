@@ -7,8 +7,12 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+sw.js*
+workbox-*.js*
+worker-*
 node_modules
 dist
+dev-dist
 dist-ssr
 *.local
 

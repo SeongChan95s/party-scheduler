@@ -1,0 +1,66 @@
+.bottom-sheet {
+	position: fixed;
+	inset: 0;
+	@include layout-width;
+	top: initial;
+	z-index: var(--z-sheet);
+
+	.container {
+		@include layout-width;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+		background: var(--color-surface-01);
+		border-top-left-radius: 1.6rem;
+		border-top-right-radius: 1.6rem;
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+		transition: transform 0.2s ease-out;
+		transform: translateY(100%);
+
+		&:global(.dragging) {
+			transition: none;
+		}
+
+		&:global(.closed) {
+			transform: translateY(0%);
+			transition: height 0.2s ease-out;
+		}
+	}
+
+	&:global(.enter-done) .container {
+		transform: translateY(0%);
+	}
+}
+
+.bottom-sheet-header {
+	flex-shrink: 0;
+	padding: 0.75rem;
+	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: none;
+
+	&.dragging {
+		cursor: grabbing;
+	}
+}
+
+.drag-handle {
+	width: 40px;
+	height: 4px;
+	background: #e0e0e0;
+	border-radius: 2px;
+	margin: 0 auto;
+}
+
+.bottom-sheet-body {
+	padding: 0 var(--inner) calc(ios-safe-area(bottom) + var(--inner));
+}
+
+.overlay {
+	top: 0;
+	@include overlay;
+}

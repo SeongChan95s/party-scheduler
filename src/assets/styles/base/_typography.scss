@@ -13,7 +13,7 @@
 /* 한글, 숫자, 특수문자 */
 @font-face {
 	font-family: 'Pretendard-variable';
-	src: url('./../../fonts/PretendardVariable.woff2') format('woff');
+	src: url('./../../fonts/PretendardVariable.woff2') format('woff2');
 }
 
 /* ------
@@ -22,12 +22,12 @@
 
 ------ */
 html {
-	font-size: 62.5%;
-	font-weight: 400;
 	font-family: 'Pretendard-variable', sans-serif;
 	line-height: 1.45;
-	@include letter-spacing025;
+	letter-spacing: -0.025em;
+	word-spacing: -0.025em;
 	overflow-wrap: break-word;
+	color: var(--black-color-normal);
 
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -35,11 +35,6 @@ html {
 	-ms-text-size-adjust: 100%; // IE
 	-moz-text-size-adjust: 100%; // firefox
 	-o-text-size-adjust: 100%; // opera 구버전
-}
-
-body {
-	font-size: 1.6rem;
-	color: var(--black-color-normal);
 }
 
 a {
@@ -55,15 +50,3 @@ a {
 .hidden {
 	@include hidden;
 }
-
-/* 
-@media (max-width: 1300px){
-  html{font-size:58%;}
-}
-@media (max-width: 900px){
-  html{font-size:clamp(54%,1vw,58%);}
-}
-@media (max-width: 600px){
-  html{font-size:52%;}
-} 
-*/

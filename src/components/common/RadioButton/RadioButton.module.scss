@@ -1,0 +1,90 @@
+.radioButton {
+	display: flex;
+	align-items: center;
+	width: fit-content;
+	cursor: pointer;
+}
+
+// color
+.normal {
+	--color-radio-button: var(--color-gray-900);
+}
+
+.primary {
+	--color-radio-button: var(--color-primary-500);
+}
+
+// variant
+.standard {
+	transition: background 0.2s;
+	gap: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+	color: var(--color-gray-500);
+
+	.icon-wrap {
+		width: 20px;
+		height: 20px;
+		position: relative;
+		border: 1px solid var(--color-gray-600);
+		border-radius: inherit;
+		background: var(--color-white);
+
+		:global(.icon) {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: calc(100% - 2px);
+			height: calc(100% - 2px);
+			transform: translate(-50%, -50%);
+			transition: clip-path 0.2s ease-out;
+			color: var(--color-white);
+			opacity: 0;
+			clip-path: inset(0 100% 0 0);
+		}
+	}
+	&:has(input:checked) {
+		color: var(--color-gray-800);
+		.icon-wrap {
+			color: var(--white-color-dim);
+			border: 1px solid var(--color-radio-button);
+			background: var(--color-radio-button);
+			:global(.icon) {
+				opacity: 1;
+				clip-path: inset(0 0 0 0);
+			}
+		}
+	}
+}
+
+.box {
+	position: relative;
+	width: fit-content;
+	height: 3rem;
+	padding: 0 0.75rem;
+	justify-content: center;
+	border: 1px solid var(--color-gray-200);
+	border-radius: 0.3rem;
+	color: var(--color-gray-400);
+	@include label-1;
+
+	&:has(input:checked) {
+		color: var(--color-white);
+		background-color: var(--color-radio-button);
+		border: 1px solid var(--color-radio-button);
+	}
+}
+
+// icon
+.rounded .icon-wrap {
+	border-radius: 0.3rem;
+}
+.round .icon-wrap {
+	border-radius: 6.1875rem;
+}
+
+// optional
+.fill {
+	width: 100%;
+}

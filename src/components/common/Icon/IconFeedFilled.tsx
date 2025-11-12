@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconFeedFilled: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M9.49999 5.80001C7.89999 6.10001 6.69999 7.30001 6.49999 8.80001V9.90001L6.29999 8.80001C6.19999 7.30001 4.89999 6.00001 3.39999 5.80001C4.99999 5.50001 6.19999 4.30001 6.39999 2.80001L6.49999 1.70001L6.59999 2.80001C6.69999 4.30001 7.89999 5.50001 9.49999 5.80001Z" fill="#202020" /><path d="M18.2 18.8H11.1H5.79999C5.29999 18.8 4.79999 19.2 4.79999 19.7C4.89999 20.3 5.29999 20.6 5.69999 20.6H11H18.1C18.6 20.6 19 20.2 19 19.7C19 19.2 18.7 18.8 18.2 18.8Z" fill="#202020" /><path d="M18.2 13.9H11.1H5.79999C5.29999 13.9 4.79999 14.3 4.79999 14.8C4.89999 15.3 5.29999 15.7 5.69999 15.7H11H18.1C18.6 15.7 19 15.3 19 14.8C19 14.3 18.7 13.9 18.2 13.9Z" fill="#202020" /><path d="M17.6 4.60001H12.8H11.1V6.30001H12.8H17.6C18.3 6.30001 18.9 6.90001 18.9 7.60001C18.9 8.30001 18.3 8.90001 17.6 8.90001H12.8H11.1H8.60001V10.6H11.1H12.8H17.6C19.3 10.6 20.6 9.20001 20.6 7.60001C20.6 6.00001 19.2 4.60001 17.6 4.60001Z" fill="currentColor" /></svg>;
+export default IconFeedFilled;

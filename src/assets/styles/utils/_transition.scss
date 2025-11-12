@@ -20,28 +20,26 @@
 }
 
 // appear-up
-.appearUp {
-	&Enter {
+.appear-up {
+	&-enter {
 		transform: translateY(100%);
 		opacity: 0;
-		&Active,
-		&Done {
+		&-active,
+		&-done {
 			opacity: 1;
 			transform: translateY(0%);
-			transition:
-				opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+			transition: opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
 				transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
 		}
 	}
-	&Exit {
+	&-exit {
 		opacity: 1;
 		transform: translateY(0%);
-		&Active,
-		&Done {
+		&-active,
+		&-done {
 			transform: translateY(100%);
 			opacity: 0;
-			transition:
-				opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+			transition: opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
 				transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
 		}
 	}

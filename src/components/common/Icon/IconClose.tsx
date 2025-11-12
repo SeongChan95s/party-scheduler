@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconClose: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path fillRule="evenodd" clipRule="evenodd" d="M4.81146 4.81143C5.17571 4.44718 5.76627 4.44718 6.13052 4.81143L12 10.6809L17.8695 4.81143C18.2338 4.44718 18.8244 4.44718 19.1886 4.81143C19.5529 5.17568 19.5529 5.76624 19.1886 6.13049L13.3191 12L19.1886 17.8695C19.5529 18.2338 19.5529 18.8243 19.1886 19.1886C18.8244 19.5528 18.2338 19.5528 17.8695 19.1886L12 13.3191L6.13052 19.1886C5.76627 19.5528 5.17571 19.5528 4.81146 19.1886C4.44721 18.8243 4.44721 18.2338 4.81146 17.8695L10.681 12L4.81146 6.13049C4.44721 5.76624 4.44721 5.17568 4.81146 4.81143Z" fill="currentColor" /></svg>;
+export default IconClose;

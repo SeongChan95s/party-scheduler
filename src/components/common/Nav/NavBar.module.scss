@@ -1,0 +1,157 @@
+.navBar {
+	position: relative;
+	box-sizing: content-box;
+	width: 100%;
+	height: 4.8rem;
+	padding-top: ios-safe-area(top);
+	z-index: var(--z-nav-bar);
+
+	svg {
+		color: var(--nav-bar-text-color);
+	}
+	.container {
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		@include layout-width;
+		box-sizing: content-box;
+		height: inherit;
+		padding-top: ios-safe-area(top);
+		margin: 0 auto;
+		color: var(--nav-bar-text-color);
+		background-color: var(--nav-bar-surface-color);
+	}
+
+	.gnb {
+		width: 100%;
+		padding: 1.1rem var(--inner);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1.2rem;
+	}
+
+	.navLeft {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		gap: 0.6rem;
+
+		.titleBox {
+			flex: 1;
+			overflow: hidden;
+
+			h2 {
+				font-size: 1.45rem;
+				font-weight: 500;
+				line-height: 1;
+				white-space: nowrap;
+				cursor: pointer;
+				text-overflow: unset;
+			}
+
+			&.marquee {
+				h2 {
+					animation: marquee 6s linear infinite;
+				}
+			}
+		}
+
+		@keyframes marquee {
+			0% {
+				transform: translateX(0);
+			}
+			100% {
+				transform: translateX(-100%);
+			}
+		}
+
+		.backButton {
+			flex: none;
+			color: var(--nav-bar-text-color);
+			svg {
+				transform: rotate(180deg);
+			}
+		}
+
+		.logo {
+			font-size: 2.1rem;
+			line-height: 2.6rem;
+			text-transform: uppercase;
+			font-weight: 500;
+		}
+	}
+
+	.quickMenu {
+		.quickMenuContainer {
+			display: flex;
+			align-items: center;
+			gap: 1.2rem;
+
+			.button {
+				width: 2.6rem;
+				height: 2.6rem;
+			}
+		}
+	}
+}
+
+// color
+.light {
+	--nav-bar-surface-color: var(--white-color-light);
+	--nav-bar-text-color: var(--black-color-normal);
+}
+.dark {
+	--nav-bar-surface-color: var(--black-color-normal);
+	--nav-bar-text-color: var(--white-color-normal);
+}
+.glass {
+	--nav-bar-surface-color: rgba(150, 150, 150, calc(var(--scroll-progress) * 0.7));
+	--nav-bar-text-color: var(--white-color-normal);
+
+	.container {
+		backdrop-filter: blur(calc(var(--scroll-progress) * 20px));
+	}
+}
+:global(.darkMode) .glass {
+	--nav-bar-surface-color: var(--white-color-dim);
+	--nav-bar-text-color: var(--black-color-normal);
+	--nav-bar-surface-color: rgba(32, 32, 32, calc(var(--scroll-progress) * 0.8));
+}
+
+// scroll type
+.transform {
+	.container {
+		transition: transform 0.3s ease, backdrop-filter 0.2s ease;
+
+		.gnb {
+			transition: opacity 0.3s ease;
+			opacity: 1;
+		}
+	}
+	&.top,
+	&.up {
+		.container {
+			transform: translateY(0px);
+		}
+	}
+	&.down,
+	&.bottom {
+		.container {
+			transform: translateY(-3.7rem);
+			.gnb {
+				opacity: 0;
+			}
+		}
+	}
+}
+.reverse {
+	&.dark {
+		&:not(.top) {
+			--nav-bar-surface-color: var(--white-color-light);
+			--nav-bar-text-color: var(--black-color-normal);
+		}
+	}
+}

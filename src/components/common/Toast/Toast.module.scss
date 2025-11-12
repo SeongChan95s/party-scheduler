@@ -1,0 +1,52 @@
+.toast {
+	position: fixed;
+	right: 0;
+	bottom: calc(ios-safe-area(bottom) + 65px);
+	left: 0;
+	@include layout-width;
+	padding: 0 var(--inner);
+	margin: 0 auto;
+	z-index: var(--z-alert);
+
+	.container {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 8px 12px;
+		border-radius: 8px;
+		font-size: 15px;
+		color: var(--color-white);
+		background: var(--color-primary-600);
+	}
+
+	:global(.icon) {
+		flex: none;
+		width: 20px;
+		height: 20px;
+	}
+
+	.contents {
+		flex: 1;
+		line-height: 1.25;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.button-wrap {
+		display: flex;
+		gap: 0.6rem;
+		white-space: nowrap;
+		margin-left: auto;
+
+		.close-button {
+			font-size: 1.4rem;
+			white-space: nowrap;
+			line-height: 1;
+			color: var(--color-surface-01);
+		}
+		.close-button {
+			color: var(--color-surface-01);
+		}
+	}
+}

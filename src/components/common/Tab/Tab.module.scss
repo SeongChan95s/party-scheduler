@@ -1,0 +1,77 @@
+.tabHeader {
+	position: relative;
+}
+
+.tabPane {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.9375rem;
+	font-weight: 500;
+	color: var(--color-gray-300);
+	cursor: pointer;
+
+	&:global(.active) {
+		color: var(--color-gray-900);
+	}
+}
+
+.tabBody {
+	position: relative;
+	overflow-x: clip;
+	height: auto;
+}
+
+.tabItem {
+	width: 100%;
+	&:global([class*='enter']) {
+		position: absolute;
+	}
+	&:global([class*='enter-active']) {
+		position: absolute;
+	}
+	&:global([class*='enter-done']) {
+		position: relative;
+	}
+}
+
+.tab-indicator {
+	position: absolute;
+	left: var(--left);
+	width: var(--width);
+	bottom: 0;
+	display: block;
+	height: 2px;
+	background: var(--color-primary-500);
+	border-radius: 2px;
+	transition: left 0.3s ease;
+}
+
+// direction
+.horizontal {
+	.tabHeader {
+		display: flex;
+		height: 2.25rem;
+	}
+	.tabPane {
+		padding: 0 0.75rem;
+	}
+}
+.vertical {
+	display: flex;
+	.tabHeader {
+		display: block;
+		height: auto;
+		background-color: var(--gray-color-dim);
+	}
+	.tabPane {
+		padding: 0 1.125rem;
+		height: 2.5rem;
+		&:global(.active) {
+			background-color: var(--white-color-dim);
+		}
+	}
+	.tabBody {
+		flex: 1;
+	}
+}

@@ -1,0 +1,15 @@
+{
+	"useTabs": true,
+	"tabWidth": 2,
+	"printWidth": 90,
+	"trailingComma": "none",
+	"arrowParens": "avoid",
+	"endOfLine": "auto",
+	"semi": true,
+	"singleQuote": true,
+	"bracketSpacing": true,
+	"jsxBracketSameLine": true,
+	"htmlWhitespaceSensitivity": "css",
+	"embeddedLanguageFormatting": "auto",
+	"disableLanguages": ["vue"]
+}

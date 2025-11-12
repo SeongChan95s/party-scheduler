@@ -1,0 +1,54 @@
+.guide-basic-page {
+	.major-section {
+		h3 {
+			padding: 4px 8px;
+			@include headline-2;
+			color: var(--color-gray-800);
+			background-color: var(--color-primary-200);
+		}
+	}
+
+	.divider {
+		margin: 32px 0;
+	}
+
+	article {
+		~ article {
+			margin-top: 32px;
+		}
+
+		h4 {
+			position: sticky;
+			top: calc(3rem + ios-safe-area(top));
+			padding: 4px 8px;
+			@include title-1;
+			color: var(--color-gray-800);
+			background-color: var(--color-primary-100);
+			z-index: 9;
+		}
+
+		h5 {
+			@include title-2;
+			margin-bottom: 8px;
+		}
+	}
+
+	.article-content {
+		.depth01-list {
+			> li ~ li {
+				margin-top: 12px;
+			}
+		}
+
+		.depth02-list {
+			display: flex;
+			align-items: flex-end;
+			flex-wrap: wrap;
+			gap: 0 6px;
+		}
+
+		.component-block {
+			width: 100%;
+		}
+	}
+}

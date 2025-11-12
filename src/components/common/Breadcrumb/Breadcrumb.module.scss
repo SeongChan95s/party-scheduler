@@ -1,0 +1,14 @@
+.breadcrumb {
+	display: flex;
+	align-items: center;
+	gap: 0.125rem;
+	color: var(--color-gray-700);
+	@include label-2;
+	font-weight: 400;
+
+	.arrow {
+		width: 0.75rem;
+		height: 0.75rem;
+		color: var(--color-gray-700);
+	}
+}

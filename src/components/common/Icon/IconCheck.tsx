@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconCheck: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M20.6234 6.3808C21.1255 6.88853 21.1255 7.71309 20.6234 8.22082L10.3388 18.6192C9.83663 19.1269 9.02109 19.1269 8.51892 18.6192L3.37663 13.42C2.87446 12.9123 2.87446 12.0877 3.37663 11.58C3.87881 11.0723 4.69434 11.0723 5.19652 11.58L9.43087 15.8571L18.8075 6.3808C19.3097 5.87307 20.1252 5.87307 20.6274 6.3808H20.6234Z" fill="currentColor" /></svg>;
+export default IconCheck;

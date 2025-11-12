@@ -1,0 +1,12 @@
+import React from 'react';
+import styles from './Icon.module.scss';
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: 'sm' | 'md' | 'lg' | 'fill';
+  className?: string;
+}
+const IconFeedOutlined: React.FC<IconProps> = ({
+  size = 'md',
+  className = '',
+  ...props
+}) => <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" className={styles.icon + ' ' + styles[size] + ' ' + 'icon' + ' ' + className} {...props}><path d="M17.6 4.60001H12.8H11.1H6.29999C4.69999 4.60001 3.29999 6.00001 3.29999 7.60001C3.29999 9.20001 4.59999 10.6 6.29999 10.6H11.1H12.8H17.6C19.3 10.6 20.6 9.20001 20.6 7.60001C20.6 6.00001 19.2 4.60001 17.6 4.60001ZM17.6 8.90001H12.8H11.1H6.29999C5.59999 8.90001 4.99999 8.30001 4.99999 7.60001C4.99999 6.90001 5.59999 6.30001 6.29999 6.30001H11.1H12.8H17.6C18.3 6.30001 18.9 6.90001 18.9 7.60001C18.9 8.30001 18.3 8.90001 17.6 8.90001Z" fill="currentColor" /><path d="M18.2 18.8H11.1H5.90002C5.40002 18.8 4.90002 19.2 4.90002 19.7C5.00002 20.3 5.40002 20.6 5.80002 20.6H11.1H18.2C18.7 20.6 19.1 20.2 19.1 19.7C19.1 19.2 18.7 18.8 18.2 18.8Z" fill="currentColor" /><path d="M18.2 13.9H11.1H5.90002C5.40002 13.9 4.90002 14.3 4.90002 14.8C5.00002 15.3 5.40002 15.7 5.80002 15.7H11.1H18.2C18.7 15.7 19.1 15.3 19.1 14.8C19.1 14.3 18.7 13.9 18.2 13.9Z" fill="currentColor" /></svg>;
+export default IconFeedOutlined;

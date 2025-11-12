@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+@theme static {
+	/* color */
+	--color-primary-50: #f2f2ff;
+	--color-primary-100: #e8e7ff;
+	--color-primary-200: #d4d3ff;
+	--color-primary-300: #b4afff;
+	--color-primary-400: #8e82ff;
+	--color-primary-500: #6a4fff;
+	--color-primary-600: #572bfc;
+	--color-primary-700: #4919e8;
+	--color-primary-800: #3e15c6;
+	--color-primary-900: #34139f;
+	--color-primary-950: #1c096c;
+
+	--color-gray-50: oklch(0.985 0.002 247.839);
+	--color-gray-100: oklch(0.967 0.003 264.542);
+	--color-gray-200: oklch(0.928 0.006 264.531);
+	--color-gray-300: oklch(0.872 0.01 258.338);
+	--color-gray-400: oklch(0.707 0.022 261.325);
+	--color-gray-500: oklch(0.551 0.027 264.364);
+	--color-gray-600: oklch(0.446 0.03 256.802);
+	--color-gray-700: oklch(0.373 0.034 259.733);
+	--color-gray-800: oklch(0.278 0.033 256.848);
+	--color-gray-900: oklch(0.21 0.034 264.665);
+	--color-gray-950: oklch(0.13 0.028 261.692);
+
+	--color-surface-01: oklch(0.985 0 0);
+	--color-surface-02: oklch(0.97 0 0);
+	--color-neutral-200: oklch(0.922 0 0);
+	--color-neutral-300: oklch(0.87 0 0);
+	--color-neutral-400: oklch(0.708 0 0);
+	--color-surface-010: oklch(0.556 0 0);
+	--color-neutral-600: oklch(0.439 0 0);
+	--color-neutral-700: oklch(0.371 0 0);
+	--color-neutral-800: oklch(0.269 0 0);
+	--color-neutral-900: oklch(0.205 0 0);
+	--color-neutral-950: oklch(0.145 0 0);
+
+	--color-surface-01: #fafafa;
+	--color-surface-02: #f8f8f8;
+	--color-surface-03: #f6f6f6;
+	--color-surface-04: #f4f4f4;
+
+	--color-black: #000;
+	--color-white: #fff;
+
+	/* z-index */
+	--z-alert: 90;
+	--z-tooltip: 90;
+	--z-sheet: 80;
+	--z-nav-bar: 60;
+	--z-app-bar: 60;
+	--z-fab: 50;
+
+	/* layout */
+	--spacing: 1px;
+
+	--layout-min-width: 350px;
+	--layout-max-width: 750px;
+	--inner: 0.875rem;
+
+	--section-layout-sm: 0.75rem;
+	--section-layout-md: 0.875rem;
+	--section-layout-lg: 1rem;
+
+	--header-layout-sm: 0.75rem;
+	--header-layout-md: 0.875rem;
+	--header-layout-lg: 1.125rem;
+
+	/* typography */
+	--text-headline-1: 1.5rem;
+	--text-headline-1--font-weight: 700;
+	--text-headline-1--line-height: 1.35;
+
+	--text-headline-2: 1.375rem;
+	--text-headline-2--font-weight: 600;
+	--text-headline-2--line-height: 1.35;
+
+	--text-headline-3: 1.125rem;
+	--text-headline-3--font-weight: 600;
+	--text-headline-3--line-height: 1.35;
+
+	--text-headline-4: 1rem;
+	--text-headline-4--font-weight: 600;
+	--text-headline-4--line-height: 1.35;
+
+	--text-title-1: 1rem;
+	--text-title-1--font-weight: 600;
+	--text-title-1--line-height: 1.35;
+
+	--text-title-2: 0.875rem;
+	--text-title-2--font-weight: 500;
+	--text-title-2--line-height: 1.35;
+
+	--text-title-3: 0.8125rem;
+	--text-title-3--font-weight: 500;
+	--text-title-3--line-height: 1.3;
+
+	--text-title-4: 0.7812rem;
+	--text-title-4--font-weight: 500;
+	--text-title-4--line-height: 1.35;
+
+	--text-body-1: 1rem;
+	--text-body-1--font-weight: 400;
+	--text-body-1--line-height: 1.5;
+
+	--text-body-2: 0.9375rem;
+	--text-body-2--font-weight: 400;
+	--text-body-2--line-height: 1.5;
+
+	--text-body-3: 0.875rem;
+	--text-body-3--font-weight: 400;
+	--text-body-3--line-height: 1.45;
+
+	--text-body-4: 0.8125rem;
+	--text-body-4--font-weight: 400;
+	--text-body-4--line-height: 1.45;
+
+	--text-label-1: 0.875rem;
+	--text-label-1--font-weight: 500;
+	--text-label-1--line-height: 1.3;
+
+	--text-label-2: 0.8125rem;
+	--text-label-2--font-weight: 500;
+	--text-label-2--line-height: 1;
+
+	--text-label-3: 0.75rem;
+	--text-label-3--font-weight: 500;
+	--text-label-3--line-height: 1.25;
+
+	--text-label-4: 0.6875rem;
+	--text-label-4--font-weight: 500;
+	--text-label-4--line-height: 1.25;
+}

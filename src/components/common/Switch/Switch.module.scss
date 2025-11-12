@@ -1,0 +1,78 @@
+.switch {
+	width: fit-content;
+	label {
+		cursor: pointer;
+	}
+
+	.button {
+		position: relative;
+		flex: none;
+		border-radius: 12px;
+	}
+
+	.circle {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		width: 50%;
+		height: 100%;
+		border-radius: 22px;
+		background: var(--color-surface-01);
+		transition: transform 0.2s cubic-bezier(0.08, 0.82, 0.17, 1);
+	}
+
+	.input:checked + .button .circle {
+		transform: translateX(100%);
+	}
+}
+
+// color
+.normal {
+	.button {
+		border: 2px solid var(--color-gray-300);
+		background-color: var(--color-gray-300);
+	}
+	.label {
+		color: var(--color-gray-600);
+	}
+	.input:checked {
+		+ .button {
+			border: 2px solid var(--color-primary-500);
+			background: var(--color-primary-500);
+		}
+
+		~ .label {
+			color: var(--color-primary-500);
+		}
+	}
+}
+
+// size
+.sm {
+	label {
+		gap: 0.5rem;
+	}
+	.label {
+		@include label-2;
+	}
+
+	.button {
+		width: 28px;
+		height: 16px;
+	}
+}
+
+.md {
+	label {
+		gap: 8px;
+	}
+
+	.label {
+		@include label-2;
+	}
+	.button {
+		width: 44px;
+		height: 24px;
+	}
+}

@@ -1,12 +1,14 @@
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { registerSW } from 'virtual:pwa-register';
+import Router from './router';
+import './lib/firebase/config';
 import '@/assets/styles/base/_reset.scss';
 import '@/assets/styles/base/_typography.scss';
 import '@/assets/styles/base/_layout.scss';
 import '@/assets/styles/utils/_transition.scss';
 import '@/assets/styles/base/tailwind.css';
-import Router from './router';
+import ReactQueryProvider from './providers/ReactQueryProvider';
 
 // Service Worker 등록
 const updateSW = registerSW({
@@ -23,7 +25,9 @@ const updateSW = registerSW({
 });
 
 createRoot(document.getElementById('root')!).render(
-	<HelmetProvider>
-		<Router />
-	</HelmetProvider>
+	<ReactQueryProvider>
+		<HelmetProvider>
+			<Router />
+		</HelmetProvider>
+	</ReactQueryProvider>
 );

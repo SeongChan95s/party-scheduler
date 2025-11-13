@@ -137,7 +137,7 @@ export default function NavBar() {
 
 						{navBarProps.logo && (
 							<h1 className={styles.logo} onClick={() => navigate('/')}>
-								<img src="/public/favicon.png" />
+								<img src="/favicon.png" />
 							</h1>
 						)}
 

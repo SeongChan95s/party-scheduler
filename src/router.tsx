@@ -1,7 +1,5 @@
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import UsersPage from './pages/user/UsersPage';
-import UserDetailPage from './pages/user/UserDetailPage';
+import HomePage from './pages/main/HomePage';
+import AboutPage from './pages/main/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GuideLayout from './layouts/GuideLayout';
@@ -11,6 +9,8 @@ import ComponentGuidePage from './pages/guide/common/ComponentGuidePage';
 import PopupGuidePage from './pages/guide/common/PopupGuidePage';
 import GlobalPopupGuidePage from './pages/guide/global/GlobalPopupGuidePage';
 import SheetGuidePage from './pages/guide/common/SheetGuidePage';
+import DetailPage from './pages/detail/DetailPage';
+import SubLayout from './layouts/SubLayout';
 
 const router = createBrowserRouter([
 	{
@@ -22,16 +22,21 @@ const router = createBrowserRouter([
 					{
 						path: '/',
 						element: <HomePage />
+					},
+					{
+						path: '/about',
+						element: <AboutPage />
 					}
 				]
 			},
 			{
-				path: '/about',
-				element: <AboutPage />
-			},
-			{
-				path: '/user',
-				element: <UsersPage />
+				element: <SubLayout />,
+				children: [
+					{
+						path: '/detail/:id',
+						element: <DetailPage />
+					}
+				]
 			},
 			{
 				element: <GuideLayout />,
@@ -53,10 +58,6 @@ const router = createBrowserRouter([
 						element: <GlobalPopupGuidePage />
 					}
 				]
-			},
-			{
-				path: '/user/:id',
-				element: <UserDetailPage />
 			},
 			{
 				path: '*',

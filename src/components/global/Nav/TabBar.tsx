@@ -9,14 +9,15 @@ import {
 	IconPersonOutlined,
 	IconSearchFilled,
 	IconSearchOutlined
-} from '../Icon';
+} from '../../common/Icon';
 
 import AppBar from '../../common/AppBar/AppBar';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './TabBar.module.scss';
-import { Link, useLocation } from 'react-router-dom';
 
 export default function TabBar() {
 	const { pathname } = useLocation();
+
 	const TabBarProps = [
 		{
 			label: 'explorer',
@@ -27,8 +28,8 @@ export default function TabBar() {
 			}
 		},
 		{
-			label: 'feed',
-			href: '/feed',
+			label: 'about',
+			href: '/about',
 			icons: {
 				normal: <IconFeedOutlined size="fill" />,
 				activated: <IconFeedFilled size="fill" />
@@ -36,7 +37,7 @@ export default function TabBar() {
 		},
 		{
 			label: 'home',
-			href: '/home',
+			href: '/',
 			end: true,
 			icons: {
 				normal: <IconHomeOutlined size="fill" />,
@@ -44,16 +45,16 @@ export default function TabBar() {
 			}
 		},
 		{
-			label: 'like',
-			href: '/wish',
+			label: 'detail',
+			href: '/detail/1',
 			icons: {
 				normal: <IconHeartOutlined size="fill" />,
 				activated: <IconHeartFilled size="fill" />
 			}
 		},
 		{
-			label: 'my',
-			href: '/my',
+			label: 'guide',
+			href: '/guide/common/component',
 			icons: {
 				normal: <IconPersonOutlined size="fill" />,
 				activated: <IconPersonFilled size="fill" />
@@ -64,17 +65,17 @@ export default function TabBar() {
 	return (
 		<AppBar id={styles.tabBar}>
 			<nav>
-				<ul>
+				<ul className={styles.container}>
 					{TabBarProps.map((prop, i) => (
 						<li key={i}>
-							<Link className={styles.link} to={prop.href}>
+							<NavLink className={styles.link} to={prop.href}>
 								<div className={styles.iconButton}>
 									{pathname.includes(prop.href)
 										? prop.icons.activated
 										: prop.icons.normal}
 								</div>
 								<span className={styles.label}>{prop.label.toUpperCase()}</span>
-							</Link>
+							</NavLink>
 						</li>
 					))}
 				</ul>

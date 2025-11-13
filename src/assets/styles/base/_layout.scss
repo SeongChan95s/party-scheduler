@@ -5,7 +5,22 @@ body {
 	background-color: var(--white-color);
 }
 
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100svh;
+	@include layout-width;
+}
+
 main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+[class$='page'] {
+	display: flex;
+	flex-direction: column;
 	flex: 1;
 }
 
@@ -15,7 +30,5 @@ main {
 }
 
 .layout-width {
-	min-width: var(--layout-min-width);
-	max-width: var(--layout-max-width);
-	margin: 0 auto;
+	@include layout-width;
 }

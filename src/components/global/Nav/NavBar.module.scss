@@ -1,8 +1,8 @@
-.navBar {
+.nav-bar {
 	position: relative;
 	box-sizing: content-box;
 	width: 100%;
-	height: 4.8rem;
+	height: 3rem;
 	padding-top: ios-safe-area(top);
 	z-index: var(--z-nav-bar);
 
@@ -25,26 +25,27 @@
 
 	.gnb {
 		width: 100%;
-		padding: 1.1rem var(--inner);
+		height: 100%;
+		padding: 0.6875rem var(--inner);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: 1.2rem;
 	}
 
-	.navLeft {
+	.nav-left {
 		flex: 1;
 		display: flex;
 		align-items: center;
 		overflow: hidden;
-		gap: 0.6rem;
+		gap: 0.75rem;
 
-		.titleBox {
+		.title-box {
 			flex: 1;
 			overflow: hidden;
 
 			h2 {
-				font-size: 1.45rem;
+				font-size: 0.9063rem;
 				font-weight: 500;
 				line-height: 1;
 				white-space: nowrap;
@@ -68,7 +69,7 @@
 			}
 		}
 
-		.backButton {
+		.back-button {
 			flex: none;
 			color: var(--nav-bar-text-color);
 			svg {
@@ -77,47 +78,41 @@
 		}
 
 		.logo {
-			font-size: 2.1rem;
-			line-height: 2.6rem;
+			font-size: 1.3125rem;
+			line-height: 1.625rem;
 			text-transform: uppercase;
 			font-weight: 500;
+			cursor: pointer;
 		}
 	}
 
-	.quickMenu {
-		.quickMenuContainer {
-			display: flex;
-			align-items: center;
-			gap: 1.2rem;
-
-			.button {
-				width: 2.6rem;
-				height: 2.6rem;
-			}
-		}
+	.quick-menu {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
 	}
 }
 
 // color
 .light {
-	--nav-bar-surface-color: var(--white-color-light);
-	--nav-bar-text-color: var(--black-color-normal);
+	--nav-bar-surface-color: var(--color-surface-01);
+	--nav-bar-text-color: var(--color-gray-900);
 }
 .dark {
-	--nav-bar-surface-color: var(--black-color-normal);
-	--nav-bar-text-color: var(--white-color-normal);
+	--nav-bar-surface-color: var(--color-gray-900);
+	--nav-bar-text-color: var(--color-white);
 }
 .glass {
 	--nav-bar-surface-color: rgba(150, 150, 150, calc(var(--scroll-progress) * 0.7));
-	--nav-bar-text-color: var(--white-color-normal);
+	--nav-bar-text-color: var(--color-white);
 
 	.container {
 		backdrop-filter: blur(calc(var(--scroll-progress) * 20px));
 	}
 }
-:global(.darkMode) .glass {
-	--nav-bar-surface-color: var(--white-color-dim);
-	--nav-bar-text-color: var(--black-color-normal);
+:global(.dark-mode) .glass {
+	--nav-bar-surface-color: var(--color-surface-01);
+	--nav-bar-text-color: var(--color-gray-900);
 	--nav-bar-surface-color: rgba(32, 32, 32, calc(var(--scroll-progress) * 0.8));
 }
 
@@ -140,7 +135,7 @@
 	&.down,
 	&.bottom {
 		.container {
-			transform: translateY(-3.7rem);
+			transform: translateY(-2.3125rem);
 			.gnb {
 				opacity: 0;
 			}
@@ -150,8 +145,8 @@
 .reverse {
 	&.dark {
 		&:not(.top) {
-			--nav-bar-surface-color: var(--white-color-light);
-			--nav-bar-text-color: var(--black-color-normal);
+			--nav-bar-surface-color: var(--color-surface-01);
+			--nav-bar-text-color: var(--color-gray-900);
 		}
 	}
 }

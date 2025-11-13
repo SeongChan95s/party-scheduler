@@ -1,13 +1,18 @@
-import { IconArrowStick, IconHomeFilled } from '../../common/Icon';
+import {
+	IconArrowStick,
+	IconDarkMode,
+	IconHomeFilled,
+	IconNotifyOutlined
+} from '../../common/Icon';
 import { IconButton } from '../../common/IconButton';
-import { useMemo, useRef, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useRef, useEffect, useState, startTransition } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useScrollDirection from '../../../hooks/useScrollDirection';
 import { classNames } from '../../../utils/classNames';
 import styles from './NavBar.module.scss';
 
 interface NavBarProps {
-	title?: string;
+	title?: string | boolean;
 	subText?: string;
 	back?: boolean;
 	logo?: boolean;
@@ -15,12 +20,10 @@ interface NavBarProps {
 	search?: boolean;
 	darkMode?: boolean;
 	notify?: boolean;
-	cart?: boolean;
-	lnb?: boolean;
 	action?: React.ReactNode;
 }
 
-interface pathMap {
+interface PathMap {
 	path: string;
 	exact?: boolean;
 	color?: 'light' | 'dark' | 'glass' | 'transparent';
@@ -39,50 +42,70 @@ const initialNavBarProps: NavBarProps = {
 	search: false,
 	darkMode: false,
 	notify: false,
-	cart: false,
-	lnb: false,
 	action: undefined
 };
+
+const pathMap: PathMap[] = [
+	{
+		path: '/',
+		props: { logo: true, darkMode: true, notify: true },
+		exact: true
+	},
+	{
+		path: '/about',
+		props: { title: true, back: true }
+	},
+	{
+		path: '/detail',
+		props: { title: true, back: true }
+	}
+];
 
 /**
  * url에 따라 미리 저장된 객체를 반환하는 훅
  */
 function useNavPath() {
-	const location = useLocation();
-	const pathMap: pathMap[] = useMemo(
-		() => [
-			{
-				path: '/home',
-				color: 'glass',
-				scroll: { type: 'transform', maxScroll: 90 },
-				props: { logo: true, darkMode: true, notify: true, cart: true, lnb: true }
-			}
-		],
-		[]
-	);
+	const { pathname } = useLocation();
+	const [matchedPath, setMatchedPath] = useState<PathMap | undefined>();
 
-	const matchedPath = pathMap.find(({ path, exact = false }) =>
-		exact ? location.pathname === path : location.pathname.startsWith(path)
-	);
+	useEffect(() => {
+		const requestTitle = requestAnimationFrame(() => {
+			startTransition(() => {
+				setMatchedPath(() => {
+					let result = pathMap.find(({ path, exact = false }) =>
+						exact ? pathname == path : pathname.startsWith(path)
+					);
+					const currentTitle = document.title;
+					if (result?.props?.title) result.props.title = currentTitle;
 
-	return matchedPath;
+					return result ? { ...result } : undefined;
+				});
+			});
+		});
+
+		return () => {
+			cancelAnimationFrame(requestTitle);
+		};
+	}, [pathname]);
+
+	return { ...matchedPath };
 }
 
 export default function NavBar() {
+	const navigate = useNavigate();
 	const matchedPath = useNavPath();
 	const scrollFlag = useScrollDirection();
 	const titleRef = useRef<HTMLHeadingElement>(null);
 	const [titleIsOverflowing, setTitleIsOverflowing] = useState(false);
 	let navBarProps = { ...initialNavBarProps, ...matchedPath?.props };
-	navBarProps.title = navBarProps?.title ?? '';
 
 	useEffect(() => {
-		if (titleRef.current && matchedPath?.props?.title) {
+		if (titleRef.current && navBarProps.title) {
 			const element = titleRef.current;
 			const isOverflow = element.scrollWidth > element.clientWidth;
 			setTitleIsOverflowing(isOverflow);
 		}
-	}, [matchedPath?.props?.title]);
+	}, [navBarProps.title]);
 
 	const handleClickTitle = () => {
 		window.scrollTo({
@@ -108,7 +131,14 @@ export default function NavBar() {
 								className={styles.backButton}
 								icon={<IconArrowStick />}
 								size="lg"
+								onClick={() => navigate(-1)}
 							/>
+						)}
+
+						{navBarProps.logo && (
+							<h1 className={styles.logo} onClick={() => navigate('/')}>
+								<img src="/public/favicon.png" />
+							</h1>
 						)}
 
 						{navBarProps.action && navBarProps.action}
@@ -126,13 +156,11 @@ export default function NavBar() {
 					</div>
 
 					<div className={styles.quickMenu}>
-						<div className={styles.quickMenuContainer}>
-							{navBarProps.home && (
-								<Link to="/home">
-									<IconHomeFilled />
-								</Link>
-							)}
-						</div>
+						{navBarProps.home && <IconButton size="lg" icon={<IconHomeFilled />} />}
+						{navBarProps.notify && <IconButton size="lg" icon={<IconDarkMode />} />}
+						{navBarProps.darkMode && (
+							<IconButton size="lg" icon={<IconNotifyOutlined />} />
+						)}
 					</div>
 				</nav>
 			</div>

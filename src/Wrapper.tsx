@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Outlet } from 'react-router-dom';
 import { create } from 'zustand';
 import GlobalToast from './components/global/popup/GlobalToast';
 import GlobalDialog from './components/global/popup/GlobalDialog';
@@ -34,15 +34,8 @@ export default function Wrapper() {
 		return () => window.removeEventListener('resize', handleLayoutWidth);
 	}, []);
 
-	const { pathname } = useLocation();
-
-	const layoutId = useMemo(() => {
-		if (pathname.includes('admin')) return 'desktopLayout';
-		return 'mobileLayout';
-	}, [pathname.includes('admin')]);
-
 	return (
-		<div id={layoutId} className="commonContainer" ref={layoutRef}>
+		<div className="wrapper" ref={layoutRef}>
 			<Outlet />
 			<GlobalDialog />
 			<GlobalToast />

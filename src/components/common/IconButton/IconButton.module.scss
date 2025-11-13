@@ -1,4 +1,4 @@
-.iconButton :global(.icon) {
+.icon-button :global(.icon) {
 	width: 100%;
 	height: 100%;
 }
@@ -21,7 +21,7 @@
 .feedback {
 	transition: transform 0.2s ease;
 	transform: scale(1);
-	&.isClick {
+	&.is-click {
 		transform: scale(0.85);
 	}
 }

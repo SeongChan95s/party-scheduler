@@ -2,8 +2,6 @@ import { IconClose } from '../Icon';
 import { useSideSheet } from './SideSheet.hooks';
 import styles from './SideSheet.module.scss';
 
-console.log('styles', styles);
-
 interface SideSheetCloseButtonProps {
 	className?: string;
 	as?: React.ReactNode;

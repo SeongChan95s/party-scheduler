@@ -1,5 +1,18 @@
-import { collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, query, where, orderBy, limit, QueryConstraint } from 'firebase/firestore';
-import { db } from './config';
+import {
+	collection,
+	getDocs,
+	addDoc,
+	doc,
+	getDoc,
+	updateDoc,
+	deleteDoc,
+	query,
+	where,
+	orderBy,
+	limit,
+	QueryConstraint
+} from 'firebase/firestore';
+import { db } from '../../lib/firebase/config';
 
 /**
  * 컬렉션의 모든 문서 가져오기
@@ -46,7 +59,12 @@ export const getDocument = async <T = unknown>(collectionName: string, docId: st
 /**
  * 문서 추가
  */
-export const addDocument = async <T extends Record<string, unknown> = Record<string, unknown>>(collectionName: string, data: T) => {
+export const addDocument = async <
+	T extends Record<string, unknown> = Record<string, unknown>
+>(
+	collectionName: string,
+	data: T
+) => {
 	const docRef = await addDoc(collection(db, collectionName), data);
 	return docRef.id;
 };
@@ -54,7 +72,11 @@ export const addDocument = async <T extends Record<string, unknown> = Record<str
 /**
  * 문서 업데이트
  */
-export const updateDocument = async (collectionName: string, docId: string, data: Partial<unknown>) => {
+export const updateDocument = async (
+	collectionName: string,
+	docId: string,
+	data: Partial<unknown>
+) => {
 	const docRef = doc(db, collectionName, docId);
 	await updateDoc(docRef, data);
 };

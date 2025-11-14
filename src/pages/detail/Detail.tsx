@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
-export default function DetailPage() {
+export default function Detail() {
 	const { id } = useParams<{ id: string }>();
 
 	return (

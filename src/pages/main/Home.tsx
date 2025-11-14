@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
-export default function HomePage() {
+export default function Home() {
 	return (
 		<>
 			<Helmet>
@@ -12,6 +13,7 @@ export default function HomePage() {
 					<div className="flex items-center">
 						<h2 className="text-headline-1">홈 페이지</h2>
 					</div>
+					<Link to="/training">연습장</Link>
 				</main>
 			</div>
 		</>

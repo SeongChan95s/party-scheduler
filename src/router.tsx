@@ -1,5 +1,5 @@
-import HomePage from './pages/main/HomePage';
-import AboutPage from './pages/main/AboutPage';
+import Home from './pages/main/Home';
+import About from './pages/main/About';
 import NotFoundPage from './pages/NotFoundPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GuideLayout from './layouts/GuideLayout';
@@ -9,8 +9,12 @@ import ComponentGuidePage from './pages/guide/common/ComponentGuidePage';
 import PopupGuidePage from './pages/guide/common/PopupGuidePage';
 import GlobalPopupGuidePage from './pages/guide/global/GlobalPopupGuidePage';
 import SheetGuidePage from './pages/guide/common/SheetGuidePage';
-import DetailPage from './pages/detail/DetailPage';
+import Detail from './pages/detail/Detail';
 import SubLayout from './layouts/SubLayout';
+import Training from './pages/main/Training';
+import Login from './pages/auth/Login';
+import RegisterJoin from './pages/auth/register/Join';
+import RegisterAgree from './pages/auth/register/Agree';
 
 const router = createBrowserRouter([
 	{
@@ -21,11 +25,15 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: '/',
-						element: <HomePage />
+						element: <Home />
 					},
 					{
 						path: '/about',
-						element: <AboutPage />
+						element: <About />
+					},
+					{
+						path: '/training',
+						element: <Training />
 					}
 				]
 			},
@@ -34,7 +42,19 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: '/detail/:id',
-						element: <DetailPage />
+						element: <Detail />
+					},
+					{
+						path: '/auth/login',
+						element: <Login />
+					},
+					{
+						path: '/auth/register/agree',
+						element: <RegisterAgree />
+					},
+					{
+						path: '/auth/register/join',
+						element: <RegisterJoin />
 					}
 				]
 			},

@@ -56,6 +56,14 @@ const pathMap: PathMap[] = [
 		props: { title: true, back: true }
 	},
 	{
+		path: '/auth/login',
+		props: { title: true, back: true }
+	},
+	{
+		path: '/auth/register',
+		props: { title: true, back: true }
+	},
+	{
 		path: '/detail',
 		props: { title: true, back: true }
 	}
@@ -76,7 +84,8 @@ function useNavPath() {
 						exact ? pathname == path : pathname.startsWith(path)
 					);
 					const currentTitle = document.title;
-					if (result?.props?.title) result.props.title = currentTitle;
+					if (result?.props?.title)
+						result.props.title = currentTitle.replace('파티 스케줄러 :', '');
 
 					return result ? { ...result } : undefined;
 				});
@@ -84,6 +93,7 @@ function useNavPath() {
 		});
 
 		return () => {
+			setMatchedPath(undefined);
 			cancelAnimationFrame(requestTitle);
 		};
 	}, [pathname]);

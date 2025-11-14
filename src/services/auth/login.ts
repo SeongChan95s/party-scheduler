@@ -8,8 +8,6 @@ export const loginAuth = async (email: string, password: string) => {
 		await signInWithEmailAndPassword(auth, email, password);
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.error(error);
-
 			switch (error.code) {
 				case 'auth/user-not-found':
 					return { success: false, message: '등록되지 않은 이메일입니다.' };

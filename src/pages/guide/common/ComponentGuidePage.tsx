@@ -461,17 +461,22 @@ export default function ComponentGuidePage() {
 											label="error"
 											value="value"
 										/>
+										<TextField
+											variant="dynamic"
+											error="에러 문구가 노출됩니다."
+											label="error"
+											value="value"
+										/>
 									</div>
 								</li>
 								<li>
 									<h5>etc</h5>
-									<div className="flex flex-col gap-8">
+									<div className="flex flex-col gap-8 w-210">
 										<TextField
 											label="with button"
 											placeholder="placeholder"
-											size="lg"
 											element={
-												<button className="h-32 pr-12 pl-12 border border-solid border-gray-300 rounded-sm text-label-2 text-gray-800">
+												<button className="h-30 pr-12 pl-12 border border-solid border-gray-300 rounded-sm text-label-2 text-gray-800">
 													확인
 												</button>
 											}
@@ -479,7 +484,6 @@ export default function ComponentGuidePage() {
 										<TextField
 											label="with Icon button"
 											placeholder="placeholder"
-											size="lg"
 											element={
 												<IconButton
 													className="h-32 text-gray-700"
@@ -490,9 +494,13 @@ export default function ComponentGuidePage() {
 										<TextField
 											className="text-right group"
 											label="fixed text"
+											type="number"
 											placeholder="0"
-											size="lg"
-											element={<span className="text-label-1 text-[15px]">원</span>}
+											element={
+												<span className="text-label-2 text-[15px] text-gray-500 group-has-[.focused]:text-gray-900 group-has-[.entered]:text-gray-900">
+													원
+												</span>
+											}
 										/>
 									</div>
 								</li>
@@ -515,20 +523,29 @@ export default function ComponentGuidePage() {
 								</li>
 								<li>
 									<h5>State</h5>
-									<Textarea
-										rows={3}
-										count
-										label="disabled"
-										placeholder="placeholder"
-										value="value"
-										disabled
-									/>
-									<Textarea
-										count
-										label="error"
-										error="에러 문구가 노출됩니다."
-										value="value"
-									/>
+									<div className="flex flex-col gap-12">
+										<Textarea
+											rows={3}
+											count
+											label="disabled"
+											placeholder="placeholder"
+											value="value"
+											disabled
+										/>
+										<Textarea
+											count
+											label="error"
+											error="에러 문구가 노출됩니다."
+											value="value"
+										/>
+										<Textarea
+											variant="dynamic"
+											count
+											label="error"
+											error="에러 문구가 노출됩니다."
+											value="value"
+										/>
+									</div>
 								</li>
 							</ul>
 						</article>

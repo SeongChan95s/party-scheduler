@@ -44,9 +44,7 @@
 		white-space: nowrap;
 		display: flex;
 		align-items: center;
-		height: calc(100% + 22px);
-		margin-top: -11px;
-		margin-bottom: -11px;
+		height: 100%;
 		margin-left: 6px;
 	}
 }
@@ -149,7 +147,7 @@
 		gap: 6px;
 		width: 100%;
 		height: 100%;
-		transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+		transition: line-height 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
 		&::after,
 		&::before {
@@ -262,8 +260,26 @@
 // optional
 .placeholder {
 	&:global(.error) {
-		.container {
-			border: 1px solid var(--color-red-500);
+		&.outlined {
+			.container {
+				border-color: var(--color-red-500);
+			}
+		}
+
+		&.dynamic:not(:global(.focused)) {
+			.container {
+				border-bottom-color: var(--color-red-500);
+				border-left-color: var(--color-red-500);
+				border-right-color: var(--color-red-500);
+			}
+
+			label {
+				color: var(--color-red-500);
+				&::before,
+				&::after {
+					border-color: var(--color-red-500);
+				}
+			}
 		}
 	}
 

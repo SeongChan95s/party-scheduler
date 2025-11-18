@@ -31,6 +31,7 @@
 		container-type: inline-size;
 	}
 	.item {
+		position: relative;
 		aspect-ratio: 1/1;
 		background-color: var(--color-surface-02);
 		width: calc((100% - (0.25rem * (var(--columns) - 1))) / var(--columns));

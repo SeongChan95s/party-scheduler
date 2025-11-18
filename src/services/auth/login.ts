@@ -34,6 +34,6 @@ export const loginAuth = async (email: string, password: string) => {
 			throw new HTTPError(`${error.name} ${error.message}`);
 		}
 
-		throw new HTTPError('알 수 없는 오류가 발생했습니다.');
+		throw new HTTPError('알 수 없는 오류가 발생했습니다.', 400);
 	}
 };

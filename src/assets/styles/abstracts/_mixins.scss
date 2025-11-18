@@ -51,12 +51,6 @@
 	line-height: var(--text-headline-3--line-height);
 }
 
-@mixin headline-4 {
-	font-size: var(--text-headline-4);
-	font-weight: var(--text-headline-4--font-weight);
-	line-height: var(--text-headline-4--line-height);
-}
-
 // title
 @mixin title-1 {
 	font-size: var(--text-title-1);

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/common/Button';
 import { TextField } from '../../components/common/TextField';
 import { Helmet } from 'react-helmet-async';
@@ -8,26 +8,10 @@ import { loginInputSchema } from '../../schemas/auth';
 import type { LoginInput } from '../../types/auth';
 import { loginAuth } from '../../services/auth/login';
 import { useGlobalToastStore } from '../../components/global/popup/GlobalToast';
-import { checkAuth } from '../../utils/auth';
-import { useEffect } from 'react';
 
 export default function Login() {
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const checkLoginStatus = async () => {
-			const user = await checkAuth();
-
-			if (user) {
-				useGlobalToastStore.getState().push({
-					message: '이미 로그인 중입니다.'
-				});
-				navigate(-1);
-			}
-		};
-
-		checkLoginStatus();
-	}, []);
+	const [searchParams] = useSearchParams();
 
 	const {
 		register,
@@ -39,11 +23,16 @@ export default function Login() {
 
 	const onSubmit = async (data: LoginInput) => {
 		const result = await loginAuth(data.email, data.password);
-
-		if (result)
+		if (result) {
 			useGlobalToastStore.getState().push({
 				message: result.message
 			});
+		}
+
+		if (result.success) {
+			const callbackUrl = searchParams.get('callbackUrl');
+			navigate(callbackUrl ?? '/');
+		}
 	};
 
 	return (

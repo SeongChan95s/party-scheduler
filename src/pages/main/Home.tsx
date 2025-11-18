@@ -14,6 +14,7 @@ export default function Home() {
 						<h2 className="text-headline-1">홈 페이지</h2>
 					</div>
 					<Link to="/training">연습장</Link>
+					<Link to="/guide/common/component">가이드</Link>
 				</main>
 			</div>
 		</>

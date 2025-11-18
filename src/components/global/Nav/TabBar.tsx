@@ -12,7 +12,7 @@ import {
 } from '../../common/Icon';
 
 import AppBar from '../../common/AppBar/AppBar';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './TabBar.module.scss';
 
 export default function TabBar() {
@@ -38,7 +38,7 @@ export default function TabBar() {
 		{
 			label: 'home',
 			href: '/',
-			end: true,
+			exact: true,
 			icons: {
 				normal: <IconHomeOutlined size="fill" />,
 				activated: <IconHomeFilled size="fill" />
@@ -53,8 +53,8 @@ export default function TabBar() {
 			}
 		},
 		{
-			label: 'guide',
-			href: '/guide/common/component',
+			label: 'My',
+			href: '/my',
 			icons: {
 				normal: <IconPersonOutlined size="fill" />,
 				activated: <IconPersonFilled size="fill" />
@@ -68,14 +68,18 @@ export default function TabBar() {
 				<ul className={styles.container}>
 					{TabBarProps.map((prop, i) => (
 						<li key={i}>
-							<NavLink className={styles.link} to={prop.href}>
-								<div className={styles.iconButton}>
-									{pathname.includes(prop.href)
+							<Link className={styles.link} to={prop.href}>
+								<div className={styles.iconWrap}>
+									{prop.exact
+										? pathname == prop.href
+											? prop.icons.activated
+											: prop.icons.normal
+										: pathname.startsWith(prop.href)
 										? prop.icons.activated
 										: prop.icons.normal}
 								</div>
 								<span className={styles.label}>{prop.label.toUpperCase()}</span>
-							</NavLink>
+							</Link>
 						</li>
 					))}
 				</ul>

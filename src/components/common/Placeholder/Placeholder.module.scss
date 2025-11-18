@@ -140,7 +140,7 @@
 	}
 	label {
 		position: absolute;
-		top: -6px;
+		top: -7px;
 		right: 0;
 		display: flex;
 		box-sizing: content-box;
@@ -266,18 +266,27 @@
 			}
 		}
 
-		&.dynamic:not(:global(.focused)) {
-			.container {
-				border-bottom-color: var(--color-red-500);
-				border-left-color: var(--color-red-500);
-				border-right-color: var(--color-red-500);
+		&.dynamic {
+			&:not(:global(.focused), :global(.entered)) {
+				.container {
+					border-color: var(--color-red-500);
+				}
 			}
 
-			label {
-				color: var(--color-red-500);
-				&::before,
-				&::after {
-					border-color: var(--color-red-500);
+			&:global(.entered):not(:global(.focused)) {
+				.container {
+					border-bottom-color: var(--color-red-500);
+					border-left-color: var(--color-red-500);
+					border-right-color: var(--color-red-500);
+				}
+
+				label {
+					color: var(--color-red-500);
+					/* stylelint-disable-next-line max-nesting-depth */
+					&::before,
+					&::after {
+						border-color: var(--color-red-500);
+					}
 				}
 			}
 		}

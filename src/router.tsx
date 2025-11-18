@@ -15,6 +15,8 @@ import Training from './pages/main/Training';
 import Login from './pages/auth/Login';
 import RegisterJoin from './pages/auth/register/Join';
 import RegisterAgree from './pages/auth/register/Agree';
+import My from './pages/main/My';
+import { useUserStateChanged } from './hooks/auth/useUserStateChanged';
 
 const router = createBrowserRouter([
 	{
@@ -32,14 +34,18 @@ const router = createBrowserRouter([
 						element: <About />
 					},
 					{
-						path: '/training',
-						element: <Training />
+						path: '/my',
+						element: <My />
 					}
 				]
 			},
 			{
 				element: <SubLayout />,
 				children: [
+					{
+						path: '/training',
+						element: <Training />
+					},
 					{
 						path: '/detail/:id',
 						element: <Detail />
@@ -88,5 +94,7 @@ const router = createBrowserRouter([
 ]);
 
 export default function Router() {
+	useUserStateChanged();
+
 	return <RouterProvider router={router} />;
 }

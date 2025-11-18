@@ -29,7 +29,7 @@ export default function Login() {
 			});
 		}
 
-		if (result.success) {
+		if (result?.success) {
 			const callbackUrl = searchParams.get('callbackUrl');
 			navigate(callbackUrl ?? '/');
 		}

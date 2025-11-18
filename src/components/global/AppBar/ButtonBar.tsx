@@ -17,7 +17,9 @@ export default function ButtonBar({
 	children
 }: ButtonBarProps) {
 	return (
-		<AppBar className={`h-48 ${disabled ? 'disabled' : ''} group`} containerClassName="">
+		<AppBar
+			className={`h-48 ${disabled ? 'disabled' : ''} group ${className}`}
+			containerClassName="">
 			<button
 				className="w-full h-full text-label-1 text-white bg-primary-500 group-[.disabled]:bg-primary-300"
 				disabled={disabled}

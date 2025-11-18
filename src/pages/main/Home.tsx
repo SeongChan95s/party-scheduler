@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import MyCalendar from '../../components/party/MyCalendar';
 
 export default function Home() {
 	return (
@@ -15,6 +16,7 @@ export default function Home() {
 					</div>
 					<Link to="/training">연습장</Link>
 					<Link to="/guide/common/component">가이드</Link>
+					<MyCalendar />
 				</main>
 			</div>
 		</>

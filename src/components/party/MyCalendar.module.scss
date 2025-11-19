@@ -1,0 +1,121 @@
+.calendar-container {
+	height: 70vh;
+	user-select: all;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	:global {
+		.rbc-calendar {
+			flex: 1;
+		}
+
+		// 이벤트 기본 스타일
+		.rbc-event {
+			border-radius: 4px;
+			padding: 2px 5px;
+			font-size: 12px;
+		}
+
+		// 주간/일간 뷰의 이벤트
+		.rbc-time-slot {
+			min-height: 20px;
+		}
+
+		// 종일 이벤트 영역
+		.rbc-allday-cell {
+			max-height: 100px;
+			overflow-y: auto;
+		}
+
+		// 드래그 중인 이벤트
+		.rbc-addons-dnd-drag-preview {
+			opacity: 0.8;
+		}
+
+		// 선택 중인 슬롯
+		.rbc-slot-selection {
+			background-color: rgba(74, 144, 226, 0.3);
+			border: 1px dashed #4a90e2;
+		}
+	}
+}
+
+// 범례 영역
+.legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	padding: 8px 12px;
+	background-color: var(--color-surface-04);
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.legend-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	@include label-2;
+}
+
+.legend-color {
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+	flex-shrink: 0;
+}
+
+// 로딩 상태
+.loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 80vh;
+	@include body-1;
+	color: var(--color-primary-500);
+}
+
+// 겹치는 시간대 이벤트
+.overlapping-event {
+	animation: pulse 2s infinite;
+	box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+
+	&:hover {
+		transform: scale(1.02);
+	}
+}
+
+// 내 이벤트
+.my-event {
+	cursor: pointer;
+	transition: transform 0.2s ease;
+
+	&:hover {
+		transform: scale(1.02);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	}
+}
+
+// 다른 사용자 이벤트
+.other-event {
+	cursor: default;
+	pointer-events: auto;
+
+	&:hover {
+		opacity: 0.8 !important;
+	}
+}
+
+// 펄스 애니메이션
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+	}
+	70% {
+		box-shadow: 0 0 0 6px rgba(255, 215, 0, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+	}
+}

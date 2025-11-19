@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npx tsc:*)",
       "WebSearch",
-      "WebFetch(domain:firebase.google.com)"
+      "WebFetch(domain:firebase.google.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
     ],
     "deny": [],
     "ask": []

@@ -19,6 +19,7 @@ import type { CalendarEvent, TimeSlot } from '@/types/party';
 import styles from './MyCalendar.module.scss';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Skeleton } from '../common/Skeleton';
 
 interface MyCalendarProps {
 	partyId: string;
@@ -40,7 +41,9 @@ const USER_COLORS = [
 	'#9C27B0' // 자주
 ];
 
-// 겹치는 인원수에 따른 색상 (연한 노랑 -> 진한 녹색)
+/**
+ * 인원수에 따른 색상 전환
+ */
 const getOverlapColor = (count: number, totalParticipants: number): string => {
 	if (totalParticipants <= 1) return '#FFF3B0'; // 기본 연한 노랑
 
@@ -55,7 +58,9 @@ const getOverlapColor = (count: number, totalParticipants: number): string => {
 	return `rgb(${r}, ${g}, ${b})`;
 };
 
-// 시간대가 겹치는지 확인하는 헬퍼 함수
+/**
+ * 시간대가 겹치는지 확인하는 헬퍼 함수
+ */
 const hasTimeConflict = (
 	start: Date,
 	end: Date,
@@ -121,7 +126,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 			const { start, end } = timeSlotToDate(overlap.slot);
 			events.push({
 				id: `overlap-${index}`,
-				title: `${overlap.count}명 가능`,
+				title: `${overlap.count}명`,
 				start,
 				end,
 				isOverlapping: true,
@@ -380,7 +385,20 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 	}, []);
 
 	if (isLoading) {
-		return <div className={styles.loading}>로딩 중...</div>;
+		return (
+			<div>
+				<div className="flex justify-between gap-32 mb-32">
+					<Skeleton className="flex-1" />
+					<Skeleton className="flex-2" />
+					<Skeleton className="flex-1" />
+				</div>
+				<div className="grid grid-cols-7 gap-x-21 gap-y-16">
+					{Array.from({ length: 35 }).map((_el, i) => (
+						<Skeleton key={`skeleton_${i}`} />
+					))}
+				</div>
+			</div>
+		);
 	}
 
 	return (
@@ -390,7 +408,10 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 					<span
 						className={styles.legendColor}
 						style={{
-							background: `linear-gradient(to right, ${getOverlapColor(2, totalParticipants)}, ${getOverlapColor(totalParticipants, totalParticipants)})`
+							background: `linear-gradient(to right, ${getOverlapColor(
+								2,
+								totalParticipants
+							)}, ${getOverlapColor(totalParticipants, totalParticipants)})`
 						}}
 					/>
 					<span>겹치는 시간대 (2명~{totalParticipants}명)</span>
@@ -417,7 +438,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 				events={calendarEvents}
 				eventPropGetter={eventPropGetter}
 				draggableAccessor={draggableAccessor}
-				dayLayoutAlgorithm="no-overlap"
+				// dayLayoutAlgorithm={'no-overlap'}
 				allDayMaxRows={2}
 				onView={setView}
 				onNavigate={setDate}

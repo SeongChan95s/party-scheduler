@@ -10,7 +10,7 @@ import {
 	updateParty,
 	deleteParty
 } from '@/services/party';
-import type { CreatePartyInput, PartyStatus, TimeSlot } from '@/types/party';
+import type { CreatePartyInput, PartyStatus, TimeSlotStamp } from '@/types/party';
 
 // Query Keys
 export const partyKeys = {
@@ -56,13 +56,8 @@ export const useAddParticipant = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({
-			partyId,
-			userId
-		}: {
-			partyId: string;
-			userId: string;
-		}) => addParticipant(partyId, userId),
+		mutationFn: ({ partyId, userId }: { partyId: string; userId: string }) =>
+			addParticipant(partyId, userId),
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: partyKeys.detail(variables.partyId)
@@ -79,13 +74,8 @@ export const useRemoveParticipant = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({
-			partyId,
-			userId
-		}: {
-			partyId: string;
-			userId: string;
-		}) => removeParticipant(partyId, userId),
+		mutationFn: ({ partyId, userId }: { partyId: string; userId: string }) =>
+			removeParticipant(partyId, userId),
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: partyKeys.detail(variables.partyId)
@@ -102,13 +92,8 @@ export const useUpdatePartyStatus = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({
-			partyId,
-			status
-		}: {
-			partyId: string;
-			status: PartyStatus;
-		}) => updatePartyStatus(partyId, status),
+		mutationFn: ({ partyId, status }: { partyId: string; status: PartyStatus }) =>
+			updatePartyStatus(partyId, status),
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: partyKeys.detail(variables.partyId)
@@ -122,7 +107,7 @@ export const useConfirmPartySlot = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ partyId, slot }: { partyId: string; slot: TimeSlot }) =>
+		mutationFn: ({ partyId, slot }: { partyId: string; slot: TimeSlotStamp }) =>
 			confirmPartySlot(partyId, slot),
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({

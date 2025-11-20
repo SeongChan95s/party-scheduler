@@ -12,15 +12,13 @@ import type {
 	PartyInput,
 	CreatePartyInput,
 	PartyStatus,
-	TimeSlot
+	TimeSlotStamp
 } from '@/types/party';
 
 const COLLECTION_NAME = 'parties';
 
 // 파티 생성
-export const createParty = async (
-	input: CreatePartyInput
-): Promise<string> => {
+export const createParty = async (input: CreatePartyInput): Promise<string> => {
 	const now = Timestamp.now();
 
 	const partyData: PartyInput = {
@@ -51,20 +49,12 @@ export const getPartiesByUser = async (userId: string): Promise<Party[]> => {
 };
 
 // 사용자가 생성한 파티 목록 조회
-export const getPartiesCreatedByUser = async (
-	userId: string
-): Promise<Party[]> => {
-	return queryCollection<Party>(
-		COLLECTION_NAME,
-		where('creatorId', '==', userId)
-	);
+export const getPartiesCreatedByUser = async (userId: string): Promise<Party[]> => {
+	return queryCollection<Party>(COLLECTION_NAME, where('creatorId', '==', userId));
 };
 
 // 파티 참가자 추가
-export const addParticipant = async (
-	partyId: string,
-	userId: string
-): Promise<void> => {
+export const addParticipant = async (partyId: string, userId: string): Promise<void> => {
 	const party = await getParty(partyId);
 	if (!party) {
 		throw new Error('파티를 찾을 수 없습니다.');
@@ -114,7 +104,7 @@ export const updatePartyStatus = async (
 // 파티 확정 시간 설정
 export const confirmPartySlot = async (
 	partyId: string,
-	slot: TimeSlot
+	slot: TimeSlotStamp
 ): Promise<void> => {
 	await updateDocument(COLLECTION_NAME, partyId, {
 		status: 'confirmed' as PartyStatus,

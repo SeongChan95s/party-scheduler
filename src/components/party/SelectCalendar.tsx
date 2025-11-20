@@ -16,8 +16,8 @@ import { useGlobalToastStore } from '../global/popup/GlobalToast';
 import { useUserState } from '@/hooks/auth/useUserStateChanged';
 import { usePartyAvailabilities, useAvailabilityMutations } from '@/hooks/party';
 import { timeSlotToDate } from '@/services/party';
-import type { CalendarEvent, TimeSlot } from '@/types/party';
-import styles from './MyCalendar.module.scss';
+import type { CalendarEvent, TimeSlotStamp } from '@/types/party';
+import styles from './SelectCalendar.module.scss';
 import { Skeleton } from '../common/Skeleton';
 
 interface MyCalendarProps {
@@ -58,7 +58,7 @@ const getOverlapColor = (count: number, totalParticipants: number): string => {
 const hasTimeConflict = (
 	start: Date,
 	end: Date,
-	slots: TimeSlot[],
+	slots: TimeSlotStamp[],
 	excludeIndex?: number
 ): boolean => {
 	return slots.some((slot, index) => {
@@ -69,10 +69,11 @@ const hasTimeConflict = (
 	});
 };
 
-export default function MyCalendar({ partyId }: MyCalendarProps) {
+export default function SelectCalendar({ partyId }: MyCalendarProps) {
 	const user = useUserState(state => state.user);
 	const calendarRef = useRef<FullCalendar>(null);
 	const [currentView, setCurrentView] = useState<string>('timeGridWeek');
+	const mouseDownTime = useRef<number>(0);
 
 	const { availabilities, isLoading, overlappingSlots } = usePartyAvailabilities(partyId);
 
@@ -104,7 +105,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 
 				events.push({
 					id: `${availability.userId}-${slotIndex}`,
-					title: isMyEvent ? '내 가용 시간' : availability.userName,
+					title: availability.userName,
 					start,
 					end,
 					userId: availability.userId,
@@ -114,7 +115,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 			});
 		});
 
-		// 겹치는 시간대를 별도 이벤트로 추가
+		// 겹치는 시간대를 표시하기 위하 별도 이벤트로 추가
 		overlappingSlots.forEach((overlap, index) => {
 			const { start, end } = timeSlotToDate(overlap.slot);
 			events.push({
@@ -140,16 +141,19 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 
 		overlappingSlots.forEach(overlap => {
 			const dateKey = overlap.slot.start.toDate().toISOString().split('T')[0];
+
 			const currentMax = dailyMap.get(dateKey) || 0;
 			if (overlap.count > currentMax) {
 				dailyMap.set(dateKey, overlap.count);
 			}
 		});
 
+		console.log('dailyMap', dailyMap);
+
 		return dailyMap;
 	}, [overlappingSlots]);
 
-	// FullCalendar용 이벤트 데이터로 변환
+	// FullCalendar 이벤트 데이터로 변환
 	const fullCalendarEvents = useMemo((): EventInput[] => {
 		return calendarEvents.map(event => {
 			let backgroundColor: string;
@@ -200,17 +204,22 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 		});
 	}, [calendarEvents, userColorMap, totalParticipants]);
 
+	const handleMouseDown = useCallback(() => {
+		mouseDownTime.current = Date.now();
+	}, []);
+
 	// 새 가용 시간 추가
 	const handleSelect = useCallback(
 		(selectInfo: DateSelectArg) => {
+			const clickDuration = Date.now() - mouseDownTime.current;
+
 			if (!user) {
 				useGlobalToastStore.getState().push({ message: '로그인이 필요합니다.' });
 				return;
 			}
 
-			console.log('selectInfo', selectInfo);
 			// 월간 뷰에서는 주간 뷰로 전환
-			if (currentView === 'dayGridMonth') {
+			if (currentView === 'dayGridMonth' && clickDuration <= 300) {
 				const calendarApi = calendarRef.current?.getApi();
 				if (calendarApi) {
 					calendarApi.changeView('timeGridWeek', selectInfo.start);
@@ -220,7 +229,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 
 			// 현재 사용자의 기존 가용 시간 가져오기
 			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			const existingSlots: TimeSlot[] = myAvailability?.slots || [];
+			const existingSlots: TimeSlotStamp[] = myAvailability?.slots || [];
 
 			// 기존 가용 시간과 겹치는지 확인
 			if (hasTimeConflict(selectInfo.start, selectInfo.end, existingSlots)) {
@@ -231,7 +240,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 			}
 
 			// 새 시간대 추가
-			const newSlot: TimeSlot = {
+			const newSlot: TimeSlotStamp = {
 				start: Timestamp.fromDate(selectInfo.start),
 				end: Timestamp.fromDate(selectInfo.end)
 			};
@@ -442,7 +451,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 	}
 
 	return (
-		<div className={styles.calendarContainer}>
+		<div className={styles.calendarContainer} onMouseDown={handleMouseDown}>
 			<div className={styles.legend}>
 				<div className={styles.legendItem}>
 					<span
@@ -471,69 +480,62 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 				))}
 			</div>
 
-			<FullCalendar
-				ref={calendarRef}
-				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-				initialView="timeGridWeek"
-				headerToolbar={{
-					left: 'prev,next today',
-					center: 'title',
-					right: 'dayGridMonth,timeGridWeek, timeGridDay'
-				}}
-				locale="ko"
-				events={fullCalendarEvents}
-				selectable={true}
-				editable={true}
-				selectMirror={true}
-				dayMaxEvents={true}
-				weekends={true}
-				select={handleSelect}
-				eventClick={handleEventClick}
-				eventDrop={handleEventDrop}
-				eventResize={handleEventResize}
-				datesSet={handleDatesSet}
-				allDaySlot={false}
-				slotMinTime="06:00:00"
-				slotMaxTime="24:00:00"
-				height="auto"
-				expandRows={true}
-				stickyHeaderDates={true}
-				nowIndicator={true}
-				dayCellContent={arg => {
-					// 월별 뷰에서만 최대 겹치는 인원수 표시
-					if (arg.view.type === 'dayGridMonth') {
-						const dateKey = arg.date.toISOString().split('T')[0];
-						const maxOverlap = dailyMaxOverlap.get(dateKey);
+			<div className="h-[calc(100vh-79px)]">
+				<FullCalendar
+					ref={calendarRef}
+					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+					initialView="timeGridWeek"
+					headerToolbar={{
+						left: 'prev,next today',
+						center: 'title',
+						right: 'dayGridMonth,timeGridWeek, timeGridDay'
+					}}
+					locale="ko"
+					height="100%"
+					events={fullCalendarEvents}
+					selectable={true}
+					editable={true}
+					selectMirror={true}
+					dayMaxEvents={true}
+					weekends={true}
+					select={handleSelect}
+					eventClick={handleEventClick}
+					eventDrop={handleEventDrop}
+					eventResize={handleEventResize}
+					datesSet={handleDatesSet}
+					allDaySlot={false}
+					expandRows={true}
+					stickyHeaderDates={true}
+					nowIndicator={true}
+					slotEventOverlap={false}
+					dayCellContent={arg => {
+						// 월별 뷰에서만 최대 겹치는 인원수 표시
+						if (arg.view.type === 'dayGridMonth') {
+							const newDay = new Date();
+							newDay.setDate(arg.date.getDate());
+							const dateKey = newDay.toISOString().split('T')[0];
+							const maxOverlap = dailyMaxOverlap.get(dateKey);
 
-						// 겹치는 인원수에 따른 opacity 계산
-						const getMonthViewOpacity = (count: number, total: number): number => {
-							if (total <= 1) return 0.2;
-							const ratio = Math.min((count - 1) / (total - 1), 1);
-							return 0.2 + ratio * 0.8; // 0.2 ~ 1.0
-						};
-
-						return (
-							<div className={styles.dayCell}>
-								<div className={styles.dayNumber}>{arg.dayNumberText}</div>
-								{maxOverlap && maxOverlap >= 2 && (
-									<div
-										className={styles.overlapBadge}
-										style={{
-											backgroundColor: `rgba(255, 0, 0, ${getMonthViewOpacity(
-												maxOverlap,
-												totalParticipants
-											)})`,
-											color: maxOverlap >= totalParticipants * 0.7 ? '#fff' : '#000'
-										}}>
-										{maxOverlap}
-									</div>
-								)}
-							</div>
-						);
-					}
-					return arg.dayNumberText;
-				}}
-			/>
+							return (
+								<div className={styles.dayCell}>
+									<div className={styles.dayNumber}>{arg.dayNumberText}</div>
+									{maxOverlap && maxOverlap >= 2 && (
+										<div
+											className={styles.overlapBadge}
+											style={{
+												backgroundColor: `red`,
+												color: '#fff'
+											}}>
+											{maxOverlap}
+										</div>
+									)}
+								</div>
+							);
+						}
+						return arg.dayNumberText;
+					}}
+				/>
+			</div>
 		</div>
 	);
 }

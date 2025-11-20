@@ -1,7 +1,7 @@
 import type { Timestamp } from 'firebase/firestore';
 
 // 시간 슬롯 타입
-export interface TimeSlot {
+export interface TimeSlotStamp {
 	start: Timestamp;
 	end: Timestamp;
 }
@@ -17,8 +17,8 @@ export interface Party {
 	creatorId: string;
 	participantIds: string[];
 	status: PartyStatus;
-	availablePeriod: TimeSlot; // 사용자들이 가용 시간을 선택할 수 있는 기간
-	confirmedSlot?: TimeSlot;
+	availablePeriod: TimeSlotStamp;
+	confirmedSlot?: TimeSlotStamp;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 }
@@ -38,7 +38,7 @@ export interface Availability {
 	partyId: string;
 	userId: string;
 	userName: string;
-	slots: TimeSlot[];
+	slots: TimeSlotStamp[];
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 }
@@ -68,7 +68,7 @@ export interface CalendarEvent {
 
 // 겹치는 시간대 계산 결과
 export interface OverlapResult {
-	slot: TimeSlot;
+	slot: TimeSlotStamp;
 	count: number;
 	userIds: string[];
 	userNames: string[];

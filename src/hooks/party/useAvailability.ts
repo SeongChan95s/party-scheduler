@@ -45,7 +45,7 @@ export const useAvailabilityMutations = (partyId: string) => {
 		mutationFn: (input: SaveAvailabilityInput) => saveAvailability(input),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['availabilities', partyId]
+				queryKey: ['availabilities', 'party', partyId]
 			});
 		}
 	});
@@ -54,7 +54,7 @@ export const useAvailabilityMutations = (partyId: string) => {
 		mutationFn: (userId: string) => deleteAvailabilityByUserAndParty(userId, partyId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['availabilities', partyId]
+				queryKey: ['availabilities', 'party', partyId]
 			});
 		}
 	});

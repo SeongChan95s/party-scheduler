@@ -1,14 +1,15 @@
-import {
-	Calendar,
-	momentLocalizer,
-	type EventPropGetter,
-	type SlotInfo,
-	type View
-} from 'react-big-calendar';
-import withDragAndDrop, {
-	type EventInteractionArgs
-} from 'react-big-calendar/lib/addons/dragAndDrop';
-import moment from 'moment';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import type {
+	EventClickArg,
+	EventDropArg,
+	DateSelectArg,
+	EventInput,
+	DatesSetArg
+} from '@fullcalendar/core';
+import type { EventResizeDoneArg } from '@fullcalendar/interaction';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import { useGlobalToastStore } from '../global/popup/GlobalToast';
@@ -17,18 +18,11 @@ import { usePartyAvailabilities, useAvailabilityMutations } from '@/hooks/party'
 import { timeSlotToDate } from '@/services/party';
 import type { CalendarEvent, TimeSlot } from '@/types/party';
 import styles from './MyCalendar.module.scss';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Skeleton } from '../common/Skeleton';
 
 interface MyCalendarProps {
 	partyId: string;
 }
-
-const DnDCalendar = withDragAndDrop<CalendarEvent>(Calendar);
-const localizer = momentLocalizer(moment);
-
-const LONG_PRESS_THRESHOLD = 300;
 
 const USER_COLORS = [
 	'#4A90E2', // 파랑
@@ -77,9 +71,8 @@ const hasTimeConflict = (
 
 export default function MyCalendar({ partyId }: MyCalendarProps) {
 	const user = useUserState(state => state.user);
-	const [view, setView] = useState<View>('week');
-	const [date, setDate] = useState(new Date());
-	const mouseDownTime = useRef<number>(0);
+	const calendarRef = useRef<FullCalendar>(null);
+	const [currentView, setCurrentView] = useState<string>('timeGridWeek');
 
 	const { availabilities, isLoading, overlappingSlots } = usePartyAvailabilities(partyId);
 
@@ -141,66 +134,87 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 	// 총 참가자 수
 	const totalParticipants = availabilities?.length || 0;
 
-	// 이벤트 스타일 지정
-	const eventPropGetter = useCallback<EventPropGetter<CalendarEvent>>(
-		event => {
+	// 날짜별 최대 겹치는 인원수 계산
+	const dailyMaxOverlap = useMemo(() => {
+		const dailyMap = new Map<string, number>();
+
+		overlappingSlots.forEach(overlap => {
+			const dateKey = overlap.slot.start.toDate().toISOString().split('T')[0];
+			const currentMax = dailyMap.get(dateKey) || 0;
+			if (overlap.count > currentMax) {
+				dailyMap.set(dateKey, overlap.count);
+			}
+		});
+
+		return dailyMap;
+	}, [overlappingSlots]);
+
+	// FullCalendar용 이벤트 데이터로 변환
+	const fullCalendarEvents = useMemo((): EventInput[] => {
+		return calendarEvents.map(event => {
+			let backgroundColor: string;
+			let borderColor: string;
+			let textColor = '#fff';
+			let classNames: string[] = [];
+			let display: 'auto' | 'background' = 'auto';
+
 			if (event.isOverlapping && event.overlapCount) {
-				const bgColor = getOverlapColor(event.overlapCount, totalParticipants);
+				// 겹치는 시간대도 background로 표시
+				backgroundColor = getOverlapColor(event.overlapCount, totalParticipants);
 				const isFullOverlap = event.overlapCount === totalParticipants;
-
-				return {
-					className: styles.overlappingEvent,
-					style: {
-						backgroundColor: bgColor,
-						borderColor: isFullOverlap ? '#1B5E20' : '#8BC34A',
-						color: event.overlapCount >= totalParticipants * 0.7 ? '#fff' : '#000',
-						fontWeight: 'bold',
-						zIndex: 10
-					}
-				};
+				borderColor = isFullOverlap ? '#1B5E20' : '#8BC34A';
+				textColor = event.overlapCount >= totalParticipants * 0.7 ? '#fff' : '#000';
+				classNames = [styles.overlappingEvent];
+				display = 'background';
+			} else if (event.isMyEvent) {
+				backgroundColor = userColorMap.get(event.userId!) || '#4A90E2';
+				borderColor = '#2E6BB0';
+				classNames = [styles.myEvent];
+			} else {
+				// 다른 사람의 이벤트는 background로 표시
+				backgroundColor = userColorMap.get(event.userId!) || '#888';
+				borderColor = 'transparent';
+				classNames = [styles.otherEvent];
+				display = 'background';
 			}
 
-			if (event.isMyEvent) {
-				return {
-					className: styles.myEvent,
-					style: {
-						backgroundColor: userColorMap.get(event.userId!) || '#4A90E2',
-						borderColor: '#2E6BB0'
-					}
-				};
-			}
-
-			// 다른 사용자의 이벤트
 			return {
-				className: styles.otherEvent,
-				style: {
-					backgroundColor: userColorMap.get(event.userId!) || '#888',
-					opacity: 0.6,
-					borderColor: 'transparent'
+				id: event.id,
+				title: event.title,
+				start: event.start,
+				end: event.end,
+				backgroundColor,
+				borderColor,
+				textColor,
+				classNames,
+				display,
+				editable: event.isMyEvent === true,
+				extendedProps: {
+					userId: event.userId,
+					userName: event.userName,
+					isMyEvent: event.isMyEvent,
+					isOverlapping: event.isOverlapping,
+					overlapCount: event.overlapCount
 				}
 			};
-		},
-		[userColorMap, totalParticipants]
-	);
-
-	const handleMouseDown = useCallback(() => {
-		mouseDownTime.current = Date.now();
-	}, []);
+		});
+	}, [calendarEvents, userColorMap, totalParticipants]);
 
 	// 새 가용 시간 추가
-	const createEvent = useCallback(
-		(slotInfo: SlotInfo) => {
+	const handleSelect = useCallback(
+		(selectInfo: DateSelectArg) => {
 			if (!user) {
 				useGlobalToastStore.getState().push({ message: '로그인이 필요합니다.' });
 				return;
 			}
 
-			const clickDuration = Date.now() - mouseDownTime.current;
-
-			// 월간 뷰에서 짧은 클릭은 주간 뷰로 전환
-			if (view === 'month' && clickDuration < LONG_PRESS_THRESHOLD) {
-				setDate(slotInfo.start);
-				setView('week');
+			console.log('selectInfo', selectInfo);
+			// 월간 뷰에서는 주간 뷰로 전환
+			if (currentView === 'dayGridMonth') {
+				const calendarApi = calendarRef.current?.getApi();
+				if (calendarApi) {
+					calendarApi.changeView('timeGridWeek', selectInfo.start);
+				}
 				return;
 			}
 
@@ -209,7 +223,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 			const existingSlots: TimeSlot[] = myAvailability?.slots || [];
 
 			// 기존 가용 시간과 겹치는지 확인
-			if (hasTimeConflict(slotInfo.start, slotInfo.end, existingSlots)) {
+			if (hasTimeConflict(selectInfo.start, selectInfo.end, existingSlots)) {
 				useGlobalToastStore
 					.getState()
 					.push({ message: '해당 시간에 이미 가용 시간이 있습니다.' });
@@ -218,8 +232,8 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 
 			// 새 시간대 추가
 			const newSlot: TimeSlot = {
-				start: Timestamp.fromDate(slotInfo.start),
-				end: Timestamp.fromDate(slotInfo.end)
+				start: Timestamp.fromDate(selectInfo.start),
+				end: Timestamp.fromDate(selectInfo.end)
 			};
 
 			const updatedSlots = [...existingSlots, newSlot];
@@ -244,34 +258,89 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 				}
 			);
 		},
-		[user, view, availabilities, partyId, saveAvailability]
+		[user, currentView, availabilities, partyId, saveAvailability]
 	);
 
-	// 이벤트 이동 (내 이벤트만 가능)
-	const moveEvent = useCallback(
-		({ event, start, end }: EventInteractionArgs<CalendarEvent>) => {
-			if (!user || !event.isMyEvent) {
-				useGlobalToastStore
-					.getState()
-					.push({ message: '본인의 가용 시간만 수정할 수 있습니다.' });
+	// 이벤트 클릭 (삭제 기능)
+	const handleEventClick = useCallback(
+		(clickInfo: EventClickArg) => {
+			const { extendedProps } = clickInfo.event;
+
+			if (!user || !extendedProps.isMyEvent) {
+				// 겹치는 시간대 정보 표시
+				if (extendedProps.isOverlapping) {
+					useGlobalToastStore
+						.getState()
+						.push({ message: `가능한 참가자: ${extendedProps.userName}` });
+				}
 				return;
 			}
 
-			const newStart = new Date(start);
-			const newEnd = new Date(end);
+			const confirmed = window.confirm('이 가용 시간을 삭제하시겠습니까?');
+			if (!confirmed) return;
 
-			// 현재 사용자의 가용 시간 업데이트
 			const myAvailability = availabilities?.find(a => a.userId === user.uid);
 			if (!myAvailability) return;
 
+			const slotIndex = parseInt(clickInfo.event.id.split('-')[1], 10);
+			const updatedSlots = myAvailability.slots.filter((_, index) => index !== slotIndex);
+
+			saveAvailability(
+				{
+					partyId,
+					userId: user.uid,
+					userName: user.displayName || '익명',
+					slots: updatedSlots
+				},
+				{
+					onSuccess: () => {
+						useGlobalToastStore
+							.getState()
+							.push({ message: '가용 시간이 삭제되었습니다.' });
+					}
+				}
+			);
+		},
+		[user, availabilities, partyId, saveAvailability]
+	);
+
+	// 이벤트 이동 (내 이벤트만 가능)
+	const handleEventDrop = useCallback(
+		(dropInfo: EventDropArg) => {
+			const { extendedProps } = dropInfo.event;
+
+			if (!user || !extendedProps.isMyEvent) {
+				useGlobalToastStore
+					.getState()
+					.push({ message: '본인의 가용 시간만 수정할 수 있습니다.' });
+				dropInfo.revert();
+				return;
+			}
+
+			const newStart = dropInfo.event.start;
+			const newEnd = dropInfo.event.end;
+
+			if (!newStart || !newEnd) {
+				dropInfo.revert();
+				return;
+			}
+
+			// 현재 사용자의 가용 시간 업데이트
+			const myAvailability = availabilities?.find(a => a.userId === user.uid);
+			if (!myAvailability) {
+				dropInfo.revert();
+				return;
+			}
+
 			// 이벤트 ID에서 슬롯 인덱스 추출
-			const slotIndex = parseInt(event.id.split('-')[1], 10);
+			const slotIndex = parseInt(dropInfo.event.id.split('-')[1], 10);
 
 			// 다른 가용 시간과 겹치는지 확인 (자기 자신 제외)
 			if (hasTimeConflict(newStart, newEnd, myAvailability.slots, slotIndex)) {
 				useGlobalToastStore
 					.getState()
 					.push({ message: '해당 시간에 이미 가용 시간이 있습니다.' });
+				dropInfo.revert();
 				return;
 			}
 
@@ -296,25 +365,37 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 	);
 
 	// 이벤트 리사이즈 (내 이벤트만 가능)
-	const resizeEvent = useCallback(
-		({ event, start, end }: EventInteractionArgs<CalendarEvent>) => {
-			if (!user || !event.isMyEvent) {
+	const handleEventResize = useCallback(
+		(resizeInfo: EventResizeDoneArg) => {
+			const { extendedProps } = resizeInfo.event;
+
+			if (!user || !extendedProps.isMyEvent) {
+				resizeInfo.revert();
 				return;
 			}
 
-			const newStart = new Date(start);
-			const newEnd = new Date(end);
+			const newStart = resizeInfo.event.start;
+			const newEnd = resizeInfo.event.end;
+
+			if (!newStart || !newEnd) {
+				resizeInfo.revert();
+				return;
+			}
 
 			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			if (!myAvailability) return;
+			if (!myAvailability) {
+				resizeInfo.revert();
+				return;
+			}
 
-			const slotIndex = parseInt(event.id.split('-')[1], 10);
+			const slotIndex = parseInt(resizeInfo.event.id.split('-')[1], 10);
 
 			// 다른 가용 시간과 겹치는지 확인 (자기 자신 제외)
 			if (hasTimeConflict(newStart, newEnd, myAvailability.slots, slotIndex)) {
 				useGlobalToastStore
 					.getState()
 					.push({ message: '해당 시간에 이미 가용 시간이 있습니다.' });
+				resizeInfo.revert();
 				return;
 			}
 
@@ -338,50 +419,9 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 		[user, availabilities, partyId, saveAvailability]
 	);
 
-	// 이벤트 클릭 (삭제 기능)
-	const handleSelectEvent = useCallback(
-		(event: CalendarEvent) => {
-			if (!user || !event.isMyEvent) {
-				// 겹치는 시간대 정보 표시
-				if (event.isOverlapping) {
-					useGlobalToastStore
-						.getState()
-						.push({ message: `가능한 참가자: ${event.userName}` });
-				}
-				return;
-			}
-
-			const confirmed = window.confirm('이 가용 시간을 삭제하시겠습니까?');
-			if (!confirmed) return;
-
-			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			if (!myAvailability) return;
-
-			const slotIndex = parseInt(event.id.split('-')[1], 10);
-			const updatedSlots = myAvailability.slots.filter((_, index) => index !== slotIndex);
-
-			saveAvailability(
-				{
-					partyId,
-					userId: user.uid,
-					userName: user.displayName || '익명',
-					slots: updatedSlots
-				},
-				{
-					onSuccess: () => {
-						useGlobalToastStore
-							.getState()
-							.push({ message: '가용 시간이 삭제되었습니다.' });
-					}
-				}
-			);
-		},
-		[user, availabilities, partyId, saveAvailability]
-	);
-
-	// 드래그 가능 여부 체크
-	const draggableAccessor = useCallback((event: CalendarEvent) => {
-		return event.isMyEvent === true;
+	// 뷰/날짜 변경 추적
+	const handleDatesSet = useCallback((dateInfo: DatesSetArg) => {
+		setCurrentView(dateInfo.view.type);
 	}, []);
 
 	if (isLoading) {
@@ -402,7 +442,7 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 	}
 
 	return (
-		<div className={styles.calendarContainer} onMouseDown={handleMouseDown}>
+		<div className={styles.calendarContainer}>
 			<div className={styles.legend}>
 				<div className={styles.legendItem}>
 					<span
@@ -431,23 +471,68 @@ export default function MyCalendar({ partyId }: MyCalendarProps) {
 				))}
 			</div>
 
-			<DnDCalendar
-				localizer={localizer}
-				view={view}
-				date={date}
-				events={calendarEvents}
-				eventPropGetter={eventPropGetter}
-				draggableAccessor={draggableAccessor}
-				// dayLayoutAlgorithm={'no-overlap'}
-				allDayMaxRows={2}
-				onView={setView}
-				onNavigate={setDate}
-				onSelectSlot={createEvent}
-				onSelectEvent={handleSelectEvent}
-				onEventDrop={moveEvent}
-				onEventResize={resizeEvent}
-				resizable={true}
+			<FullCalendar
+				ref={calendarRef}
+				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+				initialView="timeGridWeek"
+				headerToolbar={{
+					left: 'prev,next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek, timeGridDay'
+				}}
+				locale="ko"
+				events={fullCalendarEvents}
 				selectable={true}
+				editable={true}
+				selectMirror={true}
+				dayMaxEvents={true}
+				weekends={true}
+				select={handleSelect}
+				eventClick={handleEventClick}
+				eventDrop={handleEventDrop}
+				eventResize={handleEventResize}
+				datesSet={handleDatesSet}
+				allDaySlot={false}
+				slotMinTime="06:00:00"
+				slotMaxTime="24:00:00"
+				height="auto"
+				expandRows={true}
+				stickyHeaderDates={true}
+				nowIndicator={true}
+				dayCellContent={arg => {
+					// 월별 뷰에서만 최대 겹치는 인원수 표시
+					if (arg.view.type === 'dayGridMonth') {
+						const dateKey = arg.date.toISOString().split('T')[0];
+						const maxOverlap = dailyMaxOverlap.get(dateKey);
+
+						// 겹치는 인원수에 따른 opacity 계산
+						const getMonthViewOpacity = (count: number, total: number): number => {
+							if (total <= 1) return 0.2;
+							const ratio = Math.min((count - 1) / (total - 1), 1);
+							return 0.2 + ratio * 0.8; // 0.2 ~ 1.0
+						};
+
+						return (
+							<div className={styles.dayCell}>
+								<div className={styles.dayNumber}>{arg.dayNumberText}</div>
+								{maxOverlap && maxOverlap >= 2 && (
+									<div
+										className={styles.overlapBadge}
+										style={{
+											backgroundColor: `rgba(255, 0, 0, ${getMonthViewOpacity(
+												maxOverlap,
+												totalParticipants
+											)})`,
+											color: maxOverlap >= totalParticipants * 0.7 ? '#fff' : '#000'
+										}}>
+										{maxOverlap}
+									</div>
+								)}
+							</div>
+						);
+					}
+					return arg.dayNumberText;
+				}}
 			/>
 		</div>
 	);

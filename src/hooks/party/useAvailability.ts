@@ -7,20 +7,15 @@ import {
 } from '@/services/party';
 import type { SaveAvailabilityInput, OverlapResult } from '@/types/party';
 
-// Query Keys
-const availabilityKeys = {
-	all: ['availabilities'] as const,
-	byParty: (partyId: string) => [...availabilityKeys.all, 'party', partyId] as const
-};
-
 /**
  * 파티 가용 시간 조회 + 겹치는 시간대 계산 (읽기)
+ * @returns `availabilities` 파티 참가자들의 가용 시간 목록
+ * @returns `overlappingSlots` 2명 이상이 겹치는 시간대 목록
  */
 export const usePartyAvailabilities = (partyId: string) => {
 	const { data: availabilities, isLoading } = useQuery({
-		queryKey: availabilityKeys.byParty(partyId),
-		queryFn: () => getAvailabilitiesByParty(partyId),
-		enabled: !!partyId
+		queryKey: ['availabilities', 'party', partyId],
+		queryFn: () => getAvailabilitiesByParty(partyId)
 	});
 
 	// 겹치는 시간대 계산
@@ -38,6 +33,10 @@ export const usePartyAvailabilities = (partyId: string) => {
 
 /**
  * 가용 시간 저장/삭제 (쓰기)
+ * @returns save - 가용 시간 저장 함수
+ * @returns remove - 가용 시간 삭제 함수
+ * @returns isSaving - 저장 진행 중 여부
+ * @returns isDeleting - 삭제 진행 중 여부
  */
 export const useAvailabilityMutations = (partyId: string) => {
 	const queryClient = useQueryClient();
@@ -46,7 +45,7 @@ export const useAvailabilityMutations = (partyId: string) => {
 		mutationFn: (input: SaveAvailabilityInput) => saveAvailability(input),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: availabilityKeys.byParty(partyId)
+				queryKey: ['availabilities', partyId]
 			});
 		}
 	});
@@ -55,7 +54,7 @@ export const useAvailabilityMutations = (partyId: string) => {
 		mutationFn: (userId: string) => deleteAvailabilityByUserAndParty(userId, partyId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: availabilityKeys.byParty(partyId)
+				queryKey: ['availabilities', partyId]
 			});
 		}
 	});

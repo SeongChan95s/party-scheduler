@@ -66,6 +66,10 @@ const pathMap: PathMap[] = [
 	{
 		path: '/detail',
 		props: { title: true, back: true }
+	},
+	{
+		path: '/party',
+		props: { title: true, back: true }
 	}
 ];
 

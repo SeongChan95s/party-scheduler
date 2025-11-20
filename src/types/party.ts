@@ -17,6 +17,7 @@ export interface Party {
 	creatorId: string;
 	participantIds: string[];
 	status: PartyStatus;
+	availablePeriod: TimeSlot; // 사용자들이 가용 시간을 선택할 수 있는 기간
 	confirmedSlot?: TimeSlot;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
@@ -26,7 +27,10 @@ export interface Party {
 export type PartyInput = Omit<Party, 'id'>;
 
 // 파티 생성 시 필요한 최소 입력
-export type CreatePartyInput = Pick<Party, 'title' | 'description' | 'creatorId'>;
+export type CreatePartyInput = Pick<
+	Party,
+	'title' | 'description' | 'creatorId' | 'availablePeriod'
+>;
 
 // 가용 시간대 타입
 export interface Availability {

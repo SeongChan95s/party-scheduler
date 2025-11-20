@@ -17,20 +17,14 @@ import type {
 
 const COLLECTION_NAME = 'availabilities';
 
-// 가용 시간 저장 (새로 생성 또는 업데이트)
-export const saveAvailability = async (
-	input: SaveAvailabilityInput
-): Promise<string> => {
+/**
+ *  가용 시간 저장 (새로 생성 또는 업데이트)
+ */
+export const saveAvailability = async (input: SaveAvailabilityInput): Promise<string> => {
 	const now = Timestamp.now();
-
-	// 기존 가용 시간이 있는지 확인
-	const existing = await getAvailabilityByUserAndParty(
-		input.userId,
-		input.partyId
-	);
+	const existing = await getAvailabilityByUserAndParty(input.userId, input.partyId);
 
 	if (existing) {
-		// 기존 데이터 업데이트
 		await updateDocument(COLLECTION_NAME, existing.id, {
 			slots: input.slots,
 			updatedAt: now
@@ -38,7 +32,6 @@ export const saveAvailability = async (
 		return existing.id;
 	}
 
-	// 새로 생성
 	const availabilityData: AvailabilityInput = {
 		partyId: input.partyId,
 		userId: input.userId,
@@ -51,7 +44,9 @@ export const saveAvailability = async (
 	return addDocument(COLLECTION_NAME, availabilityData);
 };
 
-// 특정 사용자의 특정 파티 가용 시간 조회
+/**
+ *  특정 사용자의 특정 파티 가용 시간 조회
+ */
 export const getAvailabilityByUserAndParty = async (
 	userId: string,
 	partyId: string
@@ -65,20 +60,17 @@ export const getAvailabilityByUserAndParty = async (
 	return results.length > 0 ? results[0] : null;
 };
 
-// 특정 파티의 모든 가용 시간 조회
+/**
+ * 특정 파티의 가용 가능한 모든 시간 조회
+ */
 export const getAvailabilitiesByParty = async (
 	partyId: string
 ): Promise<Availability[]> => {
-	return queryCollection<Availability>(
-		COLLECTION_NAME,
-		where('partyId', '==', partyId)
-	);
+	return queryCollection<Availability>(COLLECTION_NAME, where('partyId', '==', partyId));
 };
 
 // 가용 시간 삭제
-export const deleteAvailability = async (
-	availabilityId: string
-): Promise<void> => {
+export const deleteAvailability = async (availabilityId: string): Promise<void> => {
 	await deleteDocument(COLLECTION_NAME, availabilityId);
 };
 
@@ -105,8 +97,9 @@ export const dateToTimeSlot = (slot: TimeSlotDate): TimeSlot => ({
 	end: Timestamp.fromDate(slot.end)
 });
 
-
-// 여러 가용 시간에서 겹치는 시간대 계산
+/**
+ *   여러 가용 시간에서 겹치는 시간대 계산
+ */
 export const calculateOverlappingSlots = (
 	availabilities: Availability[],
 	minOverlapCount: number = 2
@@ -115,19 +108,18 @@ export const calculateOverlappingSlots = (
 		return [];
 	}
 
-	// 모든 시간대를 Date로 변환하고 사용자 정보와 함께 저장
 	const allSlots: Array<{
 		slot: TimeSlotDate;
 		userId: string;
 		userName: string;
 	}> = [];
 
-	availabilities.forEach(availability => {
-		availability.slots.forEach(slot => {
+	availabilities.forEach(el => {
+		el.slots.forEach(slot => {
 			allSlots.push({
 				slot: timeSlotToDate(slot),
-				userId: availability.userId,
-				userName: availability.userName
+				userId: el.userId,
+				userName: el.userName
 			});
 		});
 	});
@@ -256,8 +248,6 @@ const mergeOverlaps = (overlaps: OverlapResult[]): OverlapResult[] => {
 };
 
 // 전원이 가능한 시간대만 필터링
-export const getFullOverlapSlots = (
-	availabilities: Availability[]
-): OverlapResult[] => {
+export const getFullOverlapSlots = (availabilities: Availability[]): OverlapResult[] => {
 	return calculateOverlappingSlots(availabilities, availabilities.length);
 };

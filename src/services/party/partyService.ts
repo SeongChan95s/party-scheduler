@@ -29,6 +29,7 @@ export const createParty = async (
 		creatorId: input.creatorId,
 		participantIds: [input.creatorId], // 생성자를 첫 참가자로 추가
 		status: 'active',
+		availablePeriod: input.availablePeriod,
 		createdAt: now,
 		updatedAt: now
 	};
@@ -125,7 +126,7 @@ export const confirmPartySlot = async (
 // 파티 정보 수정
 export const updateParty = async (
 	partyId: string,
-	data: Partial<Pick<Party, 'title' | 'description'>>
+	data: Partial<Pick<Party, 'title' | 'description' | 'availablePeriod'>>
 ): Promise<void> => {
 	await updateDocument(COLLECTION_NAME, partyId, {
 		...data,

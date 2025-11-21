@@ -85,19 +85,26 @@ export const deleteAvailabilityByUserAndParty = async (
 	}
 };
 
-// TimeSlot을 Date로 변환
+/**
+ *  TimeSlot을 Date로 변환
+ */
 export const timeSlotToDate = (slot: TimeSlotStamp): TimeSlotDate => ({
 	start: slot.start.toDate(),
 	end: slot.end.toDate()
 });
 
-// Date를 TimeSlot으로 변환
+/**
+ * Date를 TimeSlot으로 변환
+ */
 export const dateToTimeSlot = (slot: TimeSlotDate): TimeSlotStamp => ({
 	start: Timestamp.fromDate(slot.start),
 	end: Timestamp.fromDate(slot.end)
 });
 
-// 여러 가용 시간에서 겹치는 시간대 계산
+/**
+ * 여러 가용 시간에서 겹치는 시간 계산
+ * @param `minOverlapCount` 최소 겹치는 횟수
+ */
 export const calculateOverlappingSlots = (
 	availabilities: Availability[],
 	minOverlapCount: number = 2
@@ -106,7 +113,6 @@ export const calculateOverlappingSlots = (
 		return [];
 	}
 
-	// 모든 시간대를 Date로 변환하고 사용자 정보와 함께 저장
 	const allSlots: Array<{
 		slot: TimeSlotDate;
 		userId: string;

@@ -15,7 +15,7 @@ export default function Home() {
 					</div>
 					<Link to="/training">연습장</Link>
 					<Link to="/guide/common/component">가이드</Link>
-					<Link to="/party/calendar">캘린더</Link>
+					<Link to="/party/select_schedule">캘린더</Link>
 				</main>
 			</div>
 		</>

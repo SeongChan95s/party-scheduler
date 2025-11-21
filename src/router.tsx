@@ -17,7 +17,7 @@ import RegisterJoin from './pages/auth/register/Join';
 import RegisterAgree from './pages/auth/register/Agree';
 import My from './pages/main/My';
 import { useUserStateChanged } from './hooks/auth/useUserStateChanged';
-import Calendar from './pages/party/Calendar';
+import SelectSchedule from './pages/party/SelectSchedule';
 
 const router = createBrowserRouter([
 	{
@@ -64,8 +64,8 @@ const router = createBrowserRouter([
 						element: <RegisterJoin />
 					},
 					{
-						path: '/party/calendar',
-						element: <Calendar />
+						path: '/party/select_schedule',
+						element: <SelectSchedule />
 					}
 				]
 			},

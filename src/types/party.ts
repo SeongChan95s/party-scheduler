@@ -64,6 +64,7 @@ export interface CalendarEvent {
 	isOverlapping?: boolean;
 	isMyEvent?: boolean;
 	overlapCount?: number;
+	displayAsBackground?: boolean;
 }
 
 // 겹치는 시간대 계산 결과

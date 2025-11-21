@@ -6,7 +6,6 @@ import type { DayCellContentArg } from '@fullcalendar/core';
 import { useMemo, useRef } from 'react';
 import { useUserState } from '@/hooks/auth/useUserStateChanged';
 import { usePartyAvailabilities, useAvailabilityMutations } from '@/hooks/party';
-import styles from './SelectCalendar.module.scss';
 import { Skeleton } from '../common/Skeleton';
 import {
 	useCalendarEvents,
@@ -18,6 +17,7 @@ import {
 	getOverlapColor,
 	calculateDailyMaxOverlap
 } from './SelectCalendar.utils';
+import styles from './SelectCalendar.module.scss';
 
 interface MyCalendarProps {
 	partyId: string;
@@ -40,13 +40,6 @@ export default function SelectCalendar({ partyId }: MyCalendarProps) {
 		user
 	});
 
-	// 날짜별 최대 겹치는 인원수 계산
-	const dailyMaxOverlap = useMemo(
-		() => calculateDailyMaxOverlap(overlappingSlots),
-		[overlappingSlots]
-	);
-
-	// 이벤트 핸들러들
 	const {
 		handleMouseDown,
 		handleSelect,
@@ -64,12 +57,19 @@ export default function SelectCalendar({ partyId }: MyCalendarProps) {
 	});
 
 	// 뷰 변경 핸들러
-	const handleDatesSetWithViewUpdate = (dateInfo: Parameters<typeof handleDatesSet>[0]) => {
+	const handleDatesSetWithViewUpdate = (
+		dateInfo: Parameters<typeof handleDatesSet>[0]
+	) => {
 		const viewType = handleDatesSet(dateInfo);
 		setCurrentView(viewType);
 	};
 
 	// 월별 뷰에서 겹치는 인원수 표시
+	const dailyMaxOverlap = useMemo(
+		() => calculateDailyMaxOverlap(overlappingSlots),
+		[overlappingSlots]
+	);
+
 	const renderDayCellContent = (arg: DayCellContentArg) => {
 		if (arg.view.type === 'dayGridMonth') {
 			const newDay = new Date();

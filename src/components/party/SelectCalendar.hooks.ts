@@ -33,7 +33,6 @@ export const useCalendarEvents = ({
 	overlappingSlots,
 	user
 }: UseCalendarEventsParams) => {
-	// 사용자별 색상 매핑
 	const userColorMap = useMemo(() => {
 		const map = new Map<string, string>();
 		if (availabilities) {
@@ -44,13 +43,16 @@ export const useCalendarEvents = ({
 		return map;
 	}, [availabilities]);
 
-	// 가용 시간을 캘린더 이벤트로 변환
+	/**
+	 * 가용 시간대 slots의 TimeStamp를 Date로 변환,
+	 * 내 이벤트인지 데이터 부여,
+	 * 겹치는 시간대 별도 이벤트로 추가
+	 */
 	const calendarEvents = useMemo((): CalendarEvent[] => {
 		if (!availabilities) return [];
 
 		const events: CalendarEvent[] = [];
 
-		// 각 사용자의 가용 시간대를 이벤트로 변환
 		availabilities.forEach(availability => {
 			availability.slots.forEach((slot, slotIndex) => {
 				const { start, end } = timeSlotToDate(slot);
@@ -85,10 +87,11 @@ export const useCalendarEvents = ({
 		return events;
 	}, [availabilities, overlappingSlots, user?.uid]);
 
-	// 총 참가자 수
 	const totalParticipants = availabilities?.length || 0;
 
-	// FullCalendar 이벤트 데이터로 변환
+	/**
+	 *  FullCalendar 이벤트 타입의 데이터로 변환
+	 */
 	const fullCalendarEvents = useMemo((): EventInput[] => {
 		return calendarEvents.map(event => {
 			let backgroundColor: string;
@@ -98,19 +101,20 @@ export const useCalendarEvents = ({
 			let display: 'auto' | 'background' = 'auto';
 
 			if (event.isOverlapping && event.overlapCount) {
-				// 겹치는 시간대도 background로 표시
+				// 겹치는 시간대 -> background event
 				backgroundColor = getOverlapColor(event.overlapCount, totalParticipants);
 				const isFullOverlap = event.overlapCount === totalParticipants;
 				borderColor = isFullOverlap ? '#1B5E20' : '#8BC34A';
 				textColor = event.overlapCount >= totalParticipants * 0.7 ? '#fff' : '#000';
 				classNames = [styles.overlappingEvent];
 				display = 'background';
+				// 나의 이벤트
 			} else if (event.isMyEvent) {
 				backgroundColor = userColorMap.get(event.userId!) || '#4A90E2';
 				borderColor = '#2E6BB0';
 				classNames = [styles.myEvent];
 			} else {
-				// 다른 사람의 이벤트는 background로 표시
+				// 다른 사람의 이벤트 -> background event
 				backgroundColor = userColorMap.get(event.userId!) || '#888';
 				borderColor = 'transparent';
 				classNames = [styles.otherEvent];

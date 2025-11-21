@@ -1,5 +1,5 @@
 {
-  "projects": {
-    "default": "party-scheduler-90227"
-  }
+	"projects": {
+		"default": "party-scheduler"
+	}
 }

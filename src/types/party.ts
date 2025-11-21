@@ -32,12 +32,11 @@ export type CreatePartyInput = Pick<
 	'title' | 'description' | 'creatorId' | 'availablePeriod'
 >;
 
-// 가용 시간대 타입
+// 가용 시간대 타입 (Firestore에 저장되는 데이터)
 export interface Availability {
 	id: string;
 	partyId: string;
 	userId: string;
-	userName: string;
 	slots: TimeSlotStamp[];
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
@@ -47,10 +46,12 @@ export interface Availability {
 export type AvailabilityInput = Omit<Availability, 'id'>;
 
 // 가용 시간 저장 시 필요한 입력
-export type SaveAvailabilityInput = Pick<
-	Availability,
-	'partyId' | 'userId' | 'userName' | 'slots'
->;
+export type SaveAvailabilityInput = Pick<Availability, 'partyId' | 'userId' | 'slots'>;
+
+// userName이 포함된 Availability (클라이언트 사이드용)
+export interface AvailabilityWithUserName extends Availability {
+	userName: string;
+}
 
 // 캘린더 이벤트 타입 (UI용)
 export interface CalendarEvent {
@@ -64,7 +65,6 @@ export interface CalendarEvent {
 	isOverlapping?: boolean;
 	isMyEvent?: boolean;
 	overlapCount?: number;
-	displayAsBackground?: boolean;
 }
 
 // 겹치는 시간대 계산 결과

@@ -9,6 +9,7 @@ import {
 import type {
 	Availability,
 	AvailabilityInput,
+	AvailabilityWithUserName,
 	SaveAvailabilityInput,
 	TimeSlotStamp,
 	OverlapResult,
@@ -35,7 +36,6 @@ export const saveAvailability = async (input: SaveAvailabilityInput): Promise<st
 	const availabilityData: AvailabilityInput = {
 		partyId: input.partyId,
 		userId: input.userId,
-		userName: input.userName,
 		slots: input.slots,
 		createdAt: now,
 		updatedAt: now
@@ -106,7 +106,7 @@ export const dateToTimeSlot = (slot: TimeSlotDate): TimeSlotStamp => ({
  * @param `minOverlapCount` 최소 겹치는 횟수
  */
 export const calculateOverlappingSlots = (
-	availabilities: Availability[],
+	availabilities: AvailabilityWithUserName[],
 	minOverlapCount: number = 2
 ): OverlapResult[] => {
 	if (availabilities.length < minOverlapCount) {
@@ -253,6 +253,8 @@ const mergeOverlaps = (overlaps: OverlapResult[]): OverlapResult[] => {
 };
 
 // 전원이 가능한 시간대만 필터링
-export const getFullOverlapSlots = (availabilities: Availability[]): OverlapResult[] => {
+export const getFullOverlapSlots = (
+	availabilities: AvailabilityWithUserName[]
+): OverlapResult[] => {
 	return calculateOverlappingSlots(availabilities, availabilities.length);
 };

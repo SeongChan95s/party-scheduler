@@ -11,12 +11,16 @@ import { Timestamp } from 'firebase/firestore';
 import type { User } from 'firebase/auth';
 import { useGlobalToastStore } from '../global/popup/GlobalToast';
 import { timeSlotToDate } from '@/services/party';
-import type { CalendarEvent, TimeSlotStamp, Availability } from '@/types/party';
+import type {
+	CalendarEvent,
+	TimeSlotStamp,
+	AvailabilityWithUserName
+} from '@/types/party';
 import { getOverlapColor, hasTimeConflict, USER_COLORS } from './SelectCalendar.utils';
 import styles from './SelectCalendar.module.scss';
 
 interface UseCalendarEventsParams {
-	availabilities: Availability[] | undefined;
+	availabilities: AvailabilityWithUserName[] | undefined;
 	overlappingSlots: Array<{ slot: TimeSlotStamp; count: number; userNames: string[] }>;
 	user: User | null;
 }
@@ -141,13 +145,12 @@ export const useCalendarEvents = ({
 interface UseCalendarHandlersParams {
 	user: User | null;
 	currentView: string;
-	availabilities: Availability[] | undefined;
+	availabilities: AvailabilityWithUserName[] | undefined;
 	partyId: string;
 	saveAvailability: (
 		data: {
 			partyId: string;
 			userId: string;
-			userName: string;
 			slots: TimeSlotStamp[];
 		},
 		options?: {
@@ -216,7 +219,6 @@ export const useCalendarHandlers = ({
 				{
 					partyId,
 					userId: user.uid,
-					userName: user.displayName || '익명',
 					slots: updatedSlots
 				},
 				{
@@ -262,7 +264,6 @@ export const useCalendarHandlers = ({
 				{
 					partyId,
 					userId: user.uid,
-					userName: user.displayName || '익명',
 					slots: updatedSlots
 				},
 				{
@@ -330,7 +331,6 @@ export const useCalendarHandlers = ({
 			saveAvailability({
 				partyId,
 				userId: user.uid,
-				userName: user.displayName || '익명',
 				slots: updatedSlots
 			});
 		},
@@ -385,7 +385,6 @@ export const useCalendarHandlers = ({
 			saveAvailability({
 				partyId,
 				userId: user.uid,
-				userName: user.displayName || '익명',
 				slots: updatedSlots
 			});
 		},
@@ -394,7 +393,6 @@ export const useCalendarHandlers = ({
 
 	// 뷰/날짜 변경 추적
 	const handleDatesSet = useCallback((dateInfo: DatesSetArg) => {
-		console.log('dateInfo', dateInfo);
 		return dateInfo.view.type;
 	}, []);
 

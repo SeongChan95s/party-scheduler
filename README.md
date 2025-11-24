@@ -142,7 +142,7 @@ party-scheduler/
 
 ```bash
 # 의존성 설치
-npm install
+npm install --legacy-peer
 
 # 개발 서버 실행 (http://localhost:3000)
 npm run dev

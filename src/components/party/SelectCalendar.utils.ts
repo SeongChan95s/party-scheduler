@@ -1,6 +1,4 @@
 import type { TimeSlotStamp } from '@/types/party';
-import styles from './SelectCalendar.module.scss';
-import type { DayCellContentArg } from '@fullcalendar/core/index.js';
 
 export const USER_COLORS = [
 	'#4A90E2', // 파랑

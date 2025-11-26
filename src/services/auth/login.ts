@@ -6,6 +6,11 @@ export const loginAuth = async (email: string, password: string) => {
 	try {
 		const auth = getAuth();
 		await signInWithEmailAndPassword(auth, email, password);
+
+		return {
+			success: true,
+			message: '로그인에 성공했습니다.'
+		};
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			switch (error.code) {

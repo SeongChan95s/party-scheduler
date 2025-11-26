@@ -32,3 +32,18 @@ main {
 .layout-width {
 	@include layout-width;
 }
+
+.ios-safe {
+	&-pb {
+		padding-bottom: ios-safe-area(bottom);
+	}
+	&-pt {
+		padding-top: ios-safe-area(top);
+	}
+	&-pr {
+		padding-right: ios-safe-area(right);
+	}
+	&-pl {
+		padding-left: ios-safe-area(left);
+	}
+}

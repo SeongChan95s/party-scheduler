@@ -9,9 +9,8 @@ type HeightValue = number | `${number}vh` | `${number}px`;
 
 interface BottomSheetProps {
 	className?: string;
-	containerClassName?: string;
 	state: BottomSheetState;
-	onChange: (value: BottomSheetState) => void;
+	onChange?: (value: BottomSheetState) => void;
 	variant?: 'standard' | 'collapsed';
 	maxHeight?: HeightValue;
 	collapsedHeight?: number;
@@ -22,7 +21,6 @@ interface BottomSheetProps {
 
 export default function BottomSheet({
 	className: classNameProp,
-	containerClassName: containerClassNameProp,
 	state,
 	onChange,
 	overlay = false,
@@ -119,20 +117,20 @@ export default function BottomSheet({
 		(dragDistance: number, dragPercentage: number) => {
 			if (variant === 'standard') {
 				if (dragDistance < 0 && dragPercentage >= dragThreshold) {
-					onChange('closed');
+					onChange?.('closed');
 				}
 				return;
 			}
 
 			if (state === 'collapsed') {
 				if (dragDistance > 0 && dragPercentage >= dragThreshold) {
-					onChange('expanded');
+					onChange?.('expanded');
 				} else if (dragDistance < 0 && dragPercentage >= dragThreshold) {
-					onChange('closed');
+					onChange?.('closed');
 				}
 			} else if (state === 'expanded') {
 				if (dragDistance < 0 && dragPercentage >= dragThreshold) {
-					onChange('collapsed');
+					onChange?.('collapsed');
 				}
 			}
 		},
@@ -188,8 +186,7 @@ export default function BottomSheet({
 		container: classNames(
 			styles.container,
 			isDragging && 'dragging',
-			state === 'closed' && temporaryHeight === 0 && 'closed',
-			containerClassNameProp
+			state === 'closed' && temporaryHeight === 0 && 'closed'
 		),
 		header: classNames(styles.bottomSheetHeader, isDragging && 'dragging')
 	};
@@ -209,9 +206,7 @@ export default function BottomSheet({
 						onTouchStart={handleDragStart}>
 						<div className={styles.dragHandle} />
 					</div>
-					<div
-						ref={bottomSheetBodyRef}
-						className={`${styles.bottomSheetBody} bottom-sheet-body`}>
+					<div ref={bottomSheetBodyRef} className={`bottom-sheet-body`}>
 						{children}
 					</div>
 				</div>

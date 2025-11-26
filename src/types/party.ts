@@ -12,10 +12,10 @@ export type PartyStatus = 'active' | 'confirmed' | 'cancelled';
 // 파티/약속 타입
 export interface Party {
 	id: string;
-	title: string;
+	name: string;
 	description?: string;
 	creatorId: string;
-	participantIds: string[];
+	memberIds: string[];
 	status: PartyStatus;
 	availablePeriod: TimeSlotStamp;
 	confirmedSlot?: TimeSlotStamp;
@@ -29,7 +29,7 @@ export type PartyInput = Omit<Party, 'id'>;
 // 파티 생성 시 필요한 최소 입력
 export type CreatePartyInput = Pick<
 	Party,
-	'title' | 'description' | 'creatorId' | 'availablePeriod'
+	'name' | 'description' | 'creatorId' | 'availablePeriod'
 >;
 
 // 가용 시간대 타입 (Firestore에 저장되는 데이터)

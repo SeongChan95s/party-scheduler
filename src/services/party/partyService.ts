@@ -22,7 +22,7 @@ export const createParty = async (input: CreatePartyInput): Promise<string> => {
 	const now = Timestamp.now();
 
 	const partyData: PartyInput = {
-		title: input.title,
+		name: input.name,
 		description: input.description,
 		creatorId: input.creatorId,
 		participantIds: [input.creatorId], // 생성자를 첫 참가자로 추가

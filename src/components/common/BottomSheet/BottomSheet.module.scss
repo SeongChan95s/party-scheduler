@@ -56,10 +56,6 @@
 	margin: 0 auto;
 }
 
-.bottom-sheet-body {
-	padding: 0 var(--inner) calc(ios-safe-area(bottom) + var(--inner));
-}
-
 .overlay {
 	top: 0;
 	@include overlay;

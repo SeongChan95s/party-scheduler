@@ -20,7 +20,7 @@ export default function My() {
 				<title>파티 스케줄러 - MY</title>
 			</Helmet>
 			<div className="my-page">
-				<div>내용</div>
+				<div>{user?.displayName} 님 로그인을 환영합니다.</div>
 				{user ? (
 					<Button onClick={logout}>로그아웃</Button>
 				) : (

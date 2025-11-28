@@ -1,5 +1,4 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { HTTPError } from '../../utils/HTTPError';
 import type { RegisterInput, UsersCollection } from '../../types/auth';
 import {
 	collection,
@@ -23,7 +22,6 @@ export const registerAuth = async ({
 	password,
 	displayName,
 	photoFiles,
-	photoMetadata,
 	birth,
 	tel
 }: RegisterInput) => {
@@ -69,8 +67,6 @@ export const registerAuth = async ({
 			updatedAt: now,
 			lastLoginAt: now
 		};
-
-		console.log(userData);
 
 		await setDoc(doc(db, 'users', result.user.uid), userData);
 

@@ -8,10 +8,11 @@ import { loginInputSchema } from '../../schemas/auth';
 import type { LoginInput } from '../../types/auth';
 import { loginAuth } from '../../services/auth/login';
 import { useGlobalToastStore } from '../../components/global/popup/GlobalToast';
+import { useLocalStorage } from '@/hooks/storage';
 
 export default function Login() {
 	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
+	const callbackStorage = useLocalStorage<string>('callbackURL');
 
 	const {
 		register,
@@ -30,8 +31,7 @@ export default function Login() {
 		}
 
 		if (result?.success) {
-			const callbackUrl = searchParams.get('callbackUrl');
-			navigate(callbackUrl ?? '/');
+			navigate(callbackStorage.get() ?? '/');
 		}
 	};
 
@@ -76,7 +76,7 @@ export default function Login() {
 									<Link to="#none">비밀번호</Link>
 									<span>&nbsp;찾기</span>
 								</div>
-								<Link to="/auth/register/agree?callbackUrl='/auth/login'">회원가입</Link>
+								<Link to="/auth/register/agree">회원가입</Link>
 							</div>
 						</div>
 					</div>

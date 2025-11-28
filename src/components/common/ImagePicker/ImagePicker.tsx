@@ -3,10 +3,10 @@ import { IconButton } from '../IconButton';
 import { useRef, useState, useEffect, forwardRef } from 'react';
 import { IconIncrease } from '../Icon';
 import { classNames } from '../../../utils/classNames';
-import { getFileFormat } from '../../../utils/getFileFormat';
 import 'swiper/swiper-bundle.css';
 import styles from './ImagePicker.module.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { processFiles } from './ImagePicker.utils';
 
 const acceptExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -78,10 +78,15 @@ interface ImagePickerProps {
 	dragdrop?: boolean;
 	form?: string;
 	onInitial?: (value: ImagePickerItem[]) => void;
-	onChange?: (value: ImagePickerItem[]) => void;
-	onFilesChange?: (files: File[]) => void;
+	onChange?: (files: File[]) => void;
+	onStateChange?: (value: ImagePickerItem[]) => void;
 }
 
+/**
+ * 이미지 업로드 관리 컴포넌트
+ * @param maxCount 최대 업로드 수
+ * @param maxSizeMB 이미지당 최대 용량
+ */
 const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function ImagePicker(
 	{
 		className: classNameProp,
@@ -94,8 +99,8 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 		dragdrop = true,
 		form,
 		onInitial,
-		onChange,
-		onFilesChange
+		onStateChange,
+		onChange
 	},
 	ref
 ) {
@@ -108,14 +113,13 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 
 	const setValue = (value: ImagePickerItem[]) => {
 		if (!isControlled) setUncontrolledValue(value);
-		onChange?.(value);
+		onStateChange?.(value);
 
-		// 파일 변경 시 onFilesChange 콜백 호출
 		const uploadFiles = value
 			.filter(img => img.state === 'upload' && img.file)
 			.map(img => img.file!)
 			.filter(Boolean);
-		onFilesChange?.(uploadFiles);
+		onChange?.(uploadFiles);
 	};
 
 	const [dragIdx, setDragIdx] = useState<number | null>(null);
@@ -181,38 +185,10 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 	};
 
 	const handleAddFiles = (files: FileList) => {
-		const arr = Array.from(files);
 		const currentCount = value.filter(img => img.state !== 'delete').length;
-		if (maxCount && currentCount + arr.length > maxCount) return;
+		if (maxCount && currentCount + files.length > maxCount) return;
 
-		// 유효성 검사
-		const validFiles = arr.filter(file => {
-			const ext = getFileFormat(file.name).toLowerCase();
-			const sizeMB = file.size / 1024 / 1024;
-			return acceptExts.includes(ext) && sizeMB <= maxSizeMB;
-		});
-
-		// 중복체크
-		const nonDuplicateFiles = validFiles.filter(file => {
-			const fileIdentifier = `${file.name}_${file.size}`;
-			return !value.some(img => {
-				if (img.state === 'delete') return false;
-				if (img.file) {
-					const existingIdentifier = `${img.file.name}_${img.file.size}`;
-					return existingIdentifier === fileIdentifier;
-				}
-				return false;
-			});
-		});
-
-		const addedImages: ImagePickerItem[] = nonDuplicateFiles.map(file => {
-			return {
-				key: file.name,
-				file,
-				blob: window.URL.createObjectURL(file),
-				state: 'upload'
-			};
-		});
+		const addedImages = processFiles(files, value, acceptExts, maxSizeMB);
 
 		const newImages = [...value, ...addedImages];
 		setValue?.(newImages);

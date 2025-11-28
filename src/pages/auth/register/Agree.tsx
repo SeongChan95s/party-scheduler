@@ -26,7 +26,7 @@ export default function RegisterAgree() {
 	return (
 		<>
 			<Helmet>
-				<title>파티 스케줄러 : 약관동의</title>
+				<title>약관동의</title>
 			</Helmet>
 			<main className="register-agree-page">
 				<form className="flex-1 flex flex-col justify-center items-center">

@@ -1,3 +1,16 @@
+// layout
+$layout-min-width: 350px;
+$layout-max-width: 750px;
+$inner: 0.875rem;
+
+$section-layout-sm: 0.75rem;
+$section-layout-md: 0.9375rem;
+$section-layout-lg: 1.25rem;
+
+$header-layout-sm: 0.75rem;
+$header-layout-md: 0.875rem;
+$header-layout-lg: 1.125rem;
+
 // style
 $drop-shadow-lg: drop-shadow(8px 16px 16px rgba(0, 0, 0, 0.25));
 $drop-shadow-md: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.38));

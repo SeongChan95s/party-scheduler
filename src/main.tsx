@@ -6,6 +6,7 @@ import ReactQueryProvider from './providers/ReactQueryProvider';
 import './lib/firebase/config';
 import '@/assets/styles/base/_reset.scss';
 import '@/assets/styles/base/_typography.scss';
+import '@/assets/styles/base/_css_variables.scss';
 import '@/assets/styles/base/_layout.scss';
 import '@/assets/styles/utils/_transition.scss';
 import '@/assets/styles/base/tailwind.css';

@@ -6,7 +6,7 @@
 	aspect-ratio: 1/1;
 	border: 2px solid var(--color-gray-100);
 	background-color: var(--color-gray-100);
-	cursor: pointer;
+	cursor: pointer !important;
 
 	:global(.icon) {
 		width: 20%;

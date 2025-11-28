@@ -10,17 +10,33 @@ export interface FirebaseAuthProfile extends LoginInput {
 	photoURL?: string;
 }
 
-export interface UserCollection {
+export interface UsersCollection {
+	id: string;
 	email: string;
 	displayName: string;
 	photoURL?: string;
 	birth: Timestamp;
 	tel: string;
-	friendIds?: string[];
 	role: 'admin' | 'member';
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
-	lastLoginAt?: Timestamp;
+	lastLoginAt: Timestamp;
+	notification: {
+		all: Boolean;
+		message: Boolean;
+		response: Boolean;
+		invite: Boolean;
+		party: Boolean;
+		board: Boolean;
+		vote: Boolean;
+		comment: Boolean;
+		service: Boolean;
+	};
+}
+
+export interface FriendsCollection {
+	id: string;
+	status: 'special' | 'friend' | 'request';
 }
 
 export type RegisterInput = {

@@ -6,17 +6,20 @@ import type { RegisterInput } from '../../../types/auth';
 import { registerJoinInputSchema } from '../../../schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGlobalToastStore } from '../../../components/global/popup/GlobalToast';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { registerAuth } from '../../../services/auth/register';
 import { useState } from 'react';
 import type { BottomSheetState } from '@/components/common/BottomSheet/BottomSheet';
-import 'react-datepicker/dist/react-datepicker.css';
 import { getFormatDate } from '@/utils/date';
 import { DatePickerSheet } from '@/components/global/DatePickerSheet';
+import { useLocalStorage } from '@/hooks/storage';
+import 'react-datepicker/dist/react-datepicker.css';
+import ImagePicker from '@/components/common/ImagePicker';
 
 export default function RegisterJoin() {
 	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
+	const callbackStorage = useLocalStorage('callbackURL');
+
 	const [datePickerState, setDatePickerState] = useState<{
 		value: Date;
 		state: BottomSheetState;
@@ -43,15 +46,14 @@ export default function RegisterJoin() {
 			});
 
 		if (result?.success) {
-			const callbackUrl = searchParams.get('callbackUrl') ?? '/';
-			navigate(callbackUrl);
+			navigate(callbackStorage.get() ?? '/');
 		}
 	};
 
 	return (
 		<>
 			<Helmet>
-				<title>파티 스케줄러 : 가입정보 입력</title>
+				<title>가입정보 입력</title>
 			</Helmet>
 			<main className="register-join-page">
 				<form
@@ -80,10 +82,11 @@ export default function RegisterJoin() {
 							error={errors.displayName?.message}
 							{...register('displayName', { required: true })}
 						/>
+						<ImagePicker maxCount={1} />
 						<TextField
 							className="mt-18"
+							type="date"
 							label="생년월일"
-							readOnly
 							error={errors.birth?.message}
 							{...register('birth', { required: true })}
 							fill

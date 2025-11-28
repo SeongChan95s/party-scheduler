@@ -1,0 +1,13 @@
+:root {
+	--layout-min-width: #{$layout-min-width};
+	--layout-max-width: #{$layout-max-width};
+	--inner: #{$inner};
+
+	--section-layout-sm: #{$section-layout-sm};
+	--section-layout-md: #{$section-layout-md};
+	--section-layout-lg: #{$section-layout-lg};
+
+	--header-layout-sm: #{$header-layout-sm};
+	--header-layout-md: #{$header-layout-md};
+	--header-layout-lg: #{$header-layout-lg};
+}

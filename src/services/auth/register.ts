@@ -1,10 +1,9 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { HTTPError } from '../../utils/HTTPError';
-import type { RegisterInput } from '../../types/auth';
+import type { RegisterInput, UsersCollection } from '../../types/auth';
 import {
 	collection,
 	doc,
-	getDoc,
 	getDocs,
 	limit,
 	query,
@@ -13,6 +12,8 @@ import {
 	where
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase/config';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getFileFormat } from '@/utils/getFileFormat';
 
 /**
  * 회원가입 정보입력 API
@@ -21,6 +22,8 @@ export const registerAuth = async ({
 	email,
 	password,
 	displayName,
+	photoFiles,
+	photoMetadata,
 	birth,
 	tel
 }: RegisterInput) => {
@@ -38,18 +41,38 @@ export const registerAuth = async ({
 
 		const auth = getAuth();
 		const result = await createUserWithEmailAndPassword(auth, email, password);
+
+		const photoFile = photoFiles?.[0];
+		let photoURL: string | undefined;
+
+		if (photoFile) {
+			const photoFormat = getFileFormat(photoFile.name);
+			photoURL = `/auth/${new Date().getTime()}.${photoFormat}`;
+			const storage = getStorage();
+			const storageRef = ref(storage, photoURL);
+			await uploadBytes(storageRef, photoFile);
+		}
+
 		await updateProfile(result.user, {
-			displayName
+			displayName,
+			...(photoURL && { photoURL })
 		});
-		await setDoc(doc(db, 'users', result.user.uid), {
+
+		const now = Timestamp.fromDate(new Date());
+		const userData: UsersCollection = {
 			email,
 			displayName,
 			birth: Timestamp.fromDate(new Date(birth)),
 			tel,
 			role: 'member',
-			createdAt: Timestamp.fromDate(new Date()),
-			updatedAt: Timestamp.fromDate(new Date())
-		});
+			createdAt: now,
+			updatedAt: now,
+			lastLoginAt: now
+		};
+
+		console.log(userData);
+
+		await setDoc(doc(db, 'users', result.user.uid), userData);
 
 		return {
 			success: true,
@@ -58,7 +81,7 @@ export const registerAuth = async ({
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error);
-			throw new HTTPError(`${error.name} ${error.message}`);
+			throw error;
 		}
 	}
 };

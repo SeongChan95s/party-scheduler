@@ -1,4 +1,4 @@
-import type { ImagePickerItem } from './ImagePicker';
+import type { ImagePickerMetadata } from './ImagePicker';
 import { getFileFormat } from '../../../utils/getFileFormat';
 
 /**
@@ -6,7 +6,7 @@ import { getFileFormat } from '../../../utils/getFileFormat';
  */
 export const convertImagePickerItems = (
 	urls?: string[]
-): ImagePickerItem[] | undefined => {
+): ImagePickerMetadata[] | undefined => {
 	return urls?.map(key => ({
 		key,
 		file: null,
@@ -28,8 +28,8 @@ export const parseImagePickerFormData = (
 	formData: FormData,
 	name: string
 ): ImagePickerParsedData[] => {
-	const dataStr = formData.get(name) as string;
-	const files = formData.getAll(`${name}_files`) as (string | File)[];
+	const dataStr = formData.get(`${name}_metadata`) as string;
+	const files = formData.getAll(`${name}`) as (string | File)[];
 	const fileList = files.filter((item): item is File => item instanceof File);
 
 	if (!dataStr) return [];
@@ -69,10 +69,10 @@ export const parseImagePickerFormData = (
  */
 export const processFiles = (
 	files: FileList,
-	existingImages: ImagePickerItem[],
+	existingImages: ImagePickerMetadata[],
 	acceptExts: string[],
 	maxSizeMB: number
-): ImagePickerItem[] => {
+): ImagePickerMetadata[] => {
 	const arr = Array.from(files);
 
 	// 유효성 검사

@@ -1,5 +1,6 @@
 import z from 'zod';
 import { regDate, regDisplayName, regPassword, regPhone } from '../constants/regex';
+import type { ImagePickerMetadata } from '@/components/common/ImagePicker/ImagePicker';
 
 export const loginInputSchema = z.object({
 	email: z.email('이메일 형식이 아닙니다'),
@@ -14,7 +15,8 @@ export const registerJoinInputSchema = z.object({
 		.min(2, '2자 이상')
 		.max(20, '20자 이하')
 		.regex(regDisplayName, '한글, 영문, 숫자, 언더스코어만 사용 가능합니다.'),
-	photoURL: z.string().optional(),
+	photoFiles: z.array(z.file()).optional(),
+	photoMetadata: z.custom<ImagePickerMetadata[]>().optional(),
 	birth: z.string().regex(regDate, '날짜를 선택해주세요.'),
 	tel: z.string().regex(regPhone, '휴대폰 번호 형식이 아닙니다.')
 });

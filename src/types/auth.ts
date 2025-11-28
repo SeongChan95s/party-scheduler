@@ -1,3 +1,4 @@
+import type { ImagePickerMetadata } from '@/components/common/ImagePicker/ImagePicker';
 import type { Timestamp } from 'firebase/firestore';
 
 export interface LoginInput {
@@ -7,21 +8,18 @@ export interface LoginInput {
 
 export interface FirebaseAuthProfile extends LoginInput {
 	displayName: string;
+	phoneNumber: string;
 	photoURL?: string;
 }
 
 export interface UsersCollection {
-	id: string;
 	email: string;
 	displayName: string;
 	photoURL?: string;
 	birth: Timestamp;
 	tel: string;
 	role: 'admin' | 'member';
-	createdAt: Timestamp;
-	updatedAt: Timestamp;
-	lastLoginAt: Timestamp;
-	notification: {
+	notification?: {
 		all: Boolean;
 		message: Boolean;
 		response: Boolean;
@@ -32,6 +30,9 @@ export interface UsersCollection {
 		comment: Boolean;
 		service: Boolean;
 	};
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+	lastLoginAt: Timestamp;
 }
 
 export interface FriendsCollection {
@@ -43,7 +44,8 @@ export type RegisterInput = {
 	email: string;
 	password: string;
 	displayName: string;
-	photoURL?: string;
+	photoFiles?: File[];
+	photoMetadata?: ImagePickerMetadata[];
 	birth: string;
 	tel: string;
 };

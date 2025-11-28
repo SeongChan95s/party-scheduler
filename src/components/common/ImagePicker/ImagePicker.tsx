@@ -54,32 +54,31 @@ function ImageUploadInput({ disabled = false, onAddFile }: ImageUploadInputProps
 	);
 }
 
-export interface ImagePickerBase {
+export interface MetadataBase {
 	key: string;
 	file: File | null;
 	blob: string;
 	state: 'initial' | 'upload' | 'delete';
 }
 
-export type ImagePickerItem =
-	| (ImagePickerBase & { state: 'initial' | 'delete'; file: null })
-	| (ImagePickerBase & { state: 'upload'; file: File });
+export type ImagePickerMetadata =
+	| (MetadataBase & { state: 'initial' | 'delete'; file: null })
+	| (MetadataBase & { state: 'upload'; file: File });
 
 interface ImagePickerProps {
 	className?: string;
 	name?: string;
-	value?: ImagePickerItem[];
-	baseKey?: string;
-	defaultValue?: ImagePickerItem[];
+	value?: ImagePickerMetadata[];
+	defaultValue?: ImagePickerMetadata[];
 	maxCount?: number;
 	maxSizeMB?: number;
 	acceptExts?: string[];
 	swiper?: boolean;
 	dragdrop?: boolean;
 	form?: string;
-	onInitial?: (value: ImagePickerItem[]) => void;
+	onInitial?: (value: ImagePickerMetadata[]) => void;
 	onChange?: (files: File[]) => void;
-	onStateChange?: (value: ImagePickerItem[]) => void;
+	onMetadataChange?: (value: ImagePickerMetadata[]) => void;
 }
 
 /**
@@ -99,7 +98,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 		dragdrop = true,
 		form,
 		onInitial,
-		onStateChange,
+		onMetadataChange,
 		onChange
 	},
 	ref
@@ -107,13 +106,13 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [uncontrolledValue, setUncontrolledValue] =
-		useState<ImagePickerItem[]>(defaultValue);
+		useState<ImagePickerMetadata[]>(defaultValue);
 	const isControlled = controlledValue != undefined;
 	const value = isControlled ? controlledValue : uncontrolledValue;
 
-	const setValue = (value: ImagePickerItem[]) => {
+	const setValue = (value: ImagePickerMetadata[]) => {
 		if (!isControlled) setUncontrolledValue(value);
-		onStateChange?.(value);
+		onMetadataChange?.(value);
 
 		const uploadFiles = value
 			.filter(img => img.state === 'upload' && img.file)
@@ -151,7 +150,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 			const [moved] = arr.splice(from, 1);
 			arr.splice(to, 0, moved);
 
-			const result: ImagePickerItem[] = [];
+			const result: ImagePickerMetadata[] = [];
 			let reorderIdx = 0;
 			for (let i = 0; i < value.length; i++) {
 				if (value[i].state === 'delete') {
@@ -169,7 +168,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 		opacity: dragIdx === i ? 0.5 : 1
 	});
 
-	const updateFileInput = (currentImages?: ImagePickerItem[]) => {
+	const updateFileInput = (currentImages?: ImagePickerMetadata[]) => {
 		if (!fileInputRef.current) return;
 
 		const imagesToUse = currentImages || value;
@@ -197,7 +196,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 
 	const handleDelete = (idx: number) => {
 		const img = value[idx];
-		let newImages: ImagePickerItem[];
+		let newImages: ImagePickerMetadata[];
 
 		if (img.state === 'initial') {
 			newImages = value.map((v, i) =>
@@ -279,7 +278,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 
 			<input
 				type="hidden"
-				name={`${name}`}
+				name={`${name}_metadata`}
 				value={JSON.stringify(
 					value.map(img => ({
 						key: img.key,
@@ -291,7 +290,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(function Imag
 			/>
 			<input
 				type="file"
-				name={`${name}_files`}
+				name={`${name}`}
 				style={{ display: 'none' }}
 				multiple
 				ref={setFileInputRef}

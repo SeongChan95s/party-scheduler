@@ -1,7 +1,7 @@
 import { TextField } from '../../../components/common/TextField';
 import { Helmet } from 'react-helmet-async';
 import { ButtonBar } from '../../../components/global/AppBar';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import type { RegisterInput } from '../../../types/auth';
 import { registerJoinInputSchema } from '../../../schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -82,7 +82,12 @@ export default function RegisterJoin() {
 							error={errors.displayName?.message}
 							{...register('displayName', { required: true })}
 						/>
-						<ImagePicker maxCount={1} />
+						<ImagePicker
+							maxCount={1}
+							onChange={file => setValue('photoFiles', file)}
+							onMetadataChange={data => setValue('photoMetadata', data)}
+						/>
+
 						<TextField
 							className="mt-18"
 							type="date"

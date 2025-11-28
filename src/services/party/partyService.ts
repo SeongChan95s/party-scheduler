@@ -25,7 +25,7 @@ export const createParty = async (input: CreatePartyInput): Promise<string> => {
 		name: input.name,
 		description: input.description,
 		creatorId: input.creatorId,
-		participantIds: [input.creatorId], // 생성자를 첫 참가자로 추가
+		memberIds: [input.creatorId], // 생성자를 첫 참가자로 추가
 		status: 'active',
 		availablePeriod: input.availablePeriod,
 		createdAt: now,
@@ -44,7 +44,7 @@ export const getParty = async (partyId: string): Promise<Party | null> => {
 export const getPartiesByUser = async (userId: string): Promise<Party[]> => {
 	return queryCollection<Party>(
 		COLLECTION_NAME,
-		where('participantIds', 'array-contains', userId)
+		where('memberIds', 'array-contains', userId)
 	);
 };
 
@@ -60,12 +60,12 @@ export const addParticipant = async (partyId: string, userId: string): Promise<v
 		throw new Error('파티를 찾을 수 없습니다.');
 	}
 
-	if (party.participantIds.includes(userId)) {
+	if (party.memberIds.includes(userId)) {
 		throw new Error('이미 참가 중인 파티입니다.');
 	}
 
 	await updateDocument(COLLECTION_NAME, partyId, {
-		participantIds: [...party.participantIds, userId],
+		memberIds: [...party.memberIds, userId],
 		updatedAt: Timestamp.now()
 	});
 };
@@ -85,7 +85,7 @@ export const removeParticipant = async (
 	}
 
 	await updateDocument(COLLECTION_NAME, partyId, {
-		participantIds: party.participantIds.filter((id: string) => id !== userId),
+		memberIds: party.memberIds.filter((id: string) => id !== userId),
 		updatedAt: Timestamp.now()
 	});
 };
@@ -116,7 +116,7 @@ export const confirmPartySlot = async (
 // 파티 정보 수정
 export const updateParty = async (
 	partyId: string,
-	data: Partial<Pick<Party, 'title' | 'description' | 'availablePeriod'>>
+	data: Partial<Pick<Party, 'name' | 'description' | 'availablePeriod'>>
 ): Promise<void> => {
 	await updateDocument(COLLECTION_NAME, partyId, {
 		...data,

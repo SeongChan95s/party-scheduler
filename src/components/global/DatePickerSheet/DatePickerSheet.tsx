@@ -39,7 +39,7 @@ type OnChangeType =
 	  };
 
 const renderMonthContent = (
-	month: number,
+	_month: number,
 	shortMonth: string,
 	longMonth: string,
 	day: Date
@@ -56,7 +56,7 @@ export default function DatePickerSheet({
 	onStateChange,
 	...rest
 }: DatePickerSheetProps & OnChangeType) {
-	const [view, setView] = useState<'calendar' | 'monthYear'>('calendar');
+	const [view] = useState<'calendar' | 'monthYear'>('calendar');
 
 	return (
 		<BottomSheet

@@ -1,7 +1,7 @@
 import { TextField } from '../../../components/common/TextField';
 import { Helmet } from 'react-helmet-async';
 import { ButtonBar } from '../../../components/global/AppBar';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import type { RegisterInput } from '../../../types/auth';
 import { registerJoinInputSchema } from '../../../schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';

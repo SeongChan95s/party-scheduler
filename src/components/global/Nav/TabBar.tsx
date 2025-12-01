@@ -1,14 +1,12 @@
 import {
-	IconFeedFilled,
-	IconFeedOutlined,
-	IconHeartFilled,
-	IconHeartOutlined,
 	IconHomeFilled,
 	IconHomeOutlined,
 	IconPersonFilled,
 	IconPersonOutlined,
-	IconSearchFilled,
-	IconSearchOutlined
+	IconStarFilled,
+	IconStarOutlined,
+	IconTalkFilled,
+	IconTalkOutlined
 } from '../../common/Icon';
 
 import AppBar from '../../common/AppBar/AppBar';
@@ -20,23 +18,7 @@ export default function TabBar() {
 
 	const TabBarProps = [
 		{
-			label: 'explorer',
-			href: '/explorer',
-			icons: {
-				normal: <IconSearchOutlined size="fill" />,
-				activated: <IconSearchFilled size="fill" />
-			}
-		},
-		{
-			label: 'about',
-			href: '/about',
-			icons: {
-				normal: <IconFeedOutlined size="fill" />,
-				activated: <IconFeedFilled size="fill" />
-			}
-		},
-		{
-			label: 'home',
+			label: '홈',
 			href: '/',
 			exact: true,
 			icons: {
@@ -45,15 +27,23 @@ export default function TabBar() {
 			}
 		},
 		{
-			label: 'detail',
-			href: '/detail/1',
+			label: '파티',
+			href: '/party',
 			icons: {
-				normal: <IconHeartOutlined size="fill" />,
-				activated: <IconHeartFilled size="fill" />
+				normal: <IconStarOutlined size="fill" />,
+				activated: <IconStarFilled size="fill" />
 			}
 		},
 		{
-			label: 'My',
+			label: '채팅',
+			href: '/chat',
+			icons: {
+				normal: <IconTalkOutlined size="fill" />,
+				activated: <IconTalkFilled size="fill" />
+			}
+		},
+		{
+			label: '마이',
 			href: '/my',
 			icons: {
 				normal: <IconPersonOutlined size="fill" />,

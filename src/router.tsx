@@ -1,105 +1,95 @@
-import Home from './pages/main/Home';
-import About from './pages/main/About';
+import HomePage from './pages/main/HomePage';
+import PartyPage from './pages/main/PartyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GuideLayout from './layouts/GuideLayout';
 import MainLayout from './layouts/MainLayout';
-import Wrapper from './Wrapper';
 import ComponentGuidePage from './pages/guide/common/ComponentGuidePage';
 import PopupGuidePage from './pages/guide/common/PopupGuidePage';
 import GlobalPopupGuidePage from './pages/guide/global/GlobalPopupGuidePage';
 import SheetGuidePage from './pages/guide/common/SheetGuidePage';
-import Detail from './pages/detail/Detail';
 import SubLayout from './layouts/SubLayout';
-import Training from './pages/main/Training';
-import Login from './pages/auth/Login';
-import RegisterJoin from './pages/auth/register/Join';
-import RegisterAgree from './pages/auth/register/Agree';
-import My from './pages/main/My';
-import { useUserStateChanged } from './hooks/auth/useUserStateChanged';
-import SelectSchedule from './pages/party/SelectSchedule';
+import JoinPage from './pages/auth/register/JoinPage';
+import AgreePage from './pages/auth/register/AgreePage';
+import MyPage from './pages/main/MyPage';
+import LoginPage from './pages/auth/LoginPage';
+import { AuthMiddleware } from './middleware/AuthMiddleware';
+import ChatPage from './pages/main/ChatPage';
 
 const router = createBrowserRouter([
 	{
-		element: <Wrapper />,
+		element: <MainLayout />,
 		children: [
 			{
-				element: <MainLayout />,
-				children: [
-					{
-						path: '/',
-						element: <Home />
-					},
-					{
-						path: '/about',
-						element: <About />
-					},
-					{
-						path: '/my',
-						element: <My />
-					}
-				]
+				path: '/',
+				element: <HomePage />
 			},
 			{
-				element: <SubLayout />,
-				children: [
-					{
-						path: '/training',
-						element: <Training />
-					},
-					{
-						path: '/detail/:id',
-						element: <Detail />
-					},
-					{
-						path: '/auth/login',
-						element: <Login />
-					},
-					{
-						path: '/auth/register/agree',
-						element: <RegisterAgree />
-					},
-					{
-						path: '/auth/register/join',
-						element: <RegisterJoin />
-					},
-					{
-						path: '/party/select_schedule',
-						element: <SelectSchedule />
-					}
-				]
+				path: '/party',
+				element: <PartyPage />
 			},
 			{
-				element: <GuideLayout />,
-				children: [
-					{
-						path: '/guide/common/component',
-						element: <ComponentGuidePage />
-					},
-					{
-						path: '/guide/common/popup',
-						element: <PopupGuidePage />
-					},
-					{
-						path: '/guide/common/sheet',
-						element: <SheetGuidePage />
-					},
-					{
-						path: '/guide/global/popup',
-						element: <GlobalPopupGuidePage />
-					}
-				]
+				path: '/chat',
+				element: <ChatPage />
 			},
 			{
-				path: '*',
-				element: <NotFoundPage />
+				path: '/my',
+				element: <MyPage />
 			}
 		]
+	},
+	{
+		element: <SubLayout />,
+		path: '/auth',
+		middleware: [AuthMiddleware],
+		children: [
+			{
+				path: 'login',
+				element: <LoginPage />
+			},
+			{
+				path: 'register',
+				children: [
+					{
+						path: 'agree',
+						element: <AgreePage />
+					},
+					{
+						path: 'join',
+						element: <JoinPage />
+					}
+				]
+			}
+		]
+	},
+	{
+		element: <GuideLayout />,
+		path: '/guide',
+		children: [
+			{
+				path: 'common/component',
+				element: <ComponentGuidePage />
+			},
+			{
+				path: 'common/popup',
+				element: <PopupGuidePage />
+			},
+			{
+				path: 'common/sheet',
+				element: <SheetGuidePage />
+			},
+			{
+				path: 'global/popup',
+				element: <GlobalPopupGuidePage />
+			}
+		]
+	},
+	{
+		path: '*',
+		element: <NotFoundPage />
 	}
 ]);
 
 export default function Router() {
-	useUserStateChanged();
-
 	return <RouterProvider router={router} />;
 }

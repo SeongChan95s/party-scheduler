@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Outlet } from 'react-router-dom';
 import { create } from 'zustand';
 import GlobalToast from './components/global/popup/GlobalToast';
 import GlobalDialog from './components/global/popup/GlobalDialog';
+import { useUserStateChanged } from './hooks/auth/useUserStateChanged';
 
 interface useLayoutStore {
 	layoutWidth: number;
@@ -16,9 +16,10 @@ export const useLayoutStore = create<useLayoutStore>()(set => ({
 	}
 }));
 
-export default function Wrapper() {
+export default function Wrapper({ children }: { children: React.ReactNode }) {
 	const layoutRef = useRef<HTMLDivElement>(null);
 	const setLayoutWidth = useLayoutStore(state => state.setLayoutWidth);
+	useUserStateChanged();
 
 	useEffect(() => {
 		const handleLayoutWidth = () => {
@@ -36,7 +37,7 @@ export default function Wrapper() {
 
 	return (
 		<div className="wrapper" ref={layoutRef}>
-			<Outlet />
+			{children}
 			<GlobalDialog />
 			<GlobalToast />
 		</div>

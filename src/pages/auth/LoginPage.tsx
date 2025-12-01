@@ -10,7 +10,7 @@ import { loginAuth } from '../../services/auth/login';
 import { useGlobalToastStore } from '../../components/global/popup/GlobalToast';
 import { useLocalStorage } from '@/hooks/storage';
 
-export default function Login() {
+export default function LoginPage() {
 	const navigate = useNavigate();
 	const callbackStorage = useLocalStorage<string>('callbackURL');
 

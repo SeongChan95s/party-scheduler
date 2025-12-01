@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonBar } from '../../../components/global/AppBar';
 
-export default function RegisterAgree() {
+export default function AgreePage() {
 	const [checkedState, setCheckedState] = useState([false, false]);
 	const navigate = useNavigate();
 

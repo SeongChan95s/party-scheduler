@@ -4,7 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useUserState } from '../../hooks/auth/useUserStateChanged';
 import { useLogin } from '@/hooks/auth/useLogin';
 
-export default function My() {
+export default function MyPage() {
 	const login = useLogin();
 
 	const user = useUserState(state => state.user);
@@ -17,7 +17,7 @@ export default function My() {
 	return (
 		<>
 			<Helmet>
-				<title>파티 스케줄러 - MY</title>
+				<title>파티 스케줄러 - 마이</title>
 			</Helmet>
 			<div className="my-page">
 				<div>{user?.displayName} 님 로그인을 환영합니다.</div>

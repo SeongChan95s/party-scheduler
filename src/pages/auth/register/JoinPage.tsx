@@ -16,7 +16,7 @@ import { useLocalStorage } from '@/hooks/storage';
 import 'react-datepicker/dist/react-datepicker.css';
 import ImagePicker from '@/components/common/ImagePicker';
 
-export default function RegisterJoin() {
+export default function JoinPage() {
 	const navigate = useNavigate();
 	const callbackStorage = useLocalStorage('callbackURL');
 

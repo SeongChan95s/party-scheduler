@@ -9,62 +9,58 @@ import type {
 import type { EventResizeDoneArg } from '@fullcalendar/interaction';
 import { Timestamp } from 'firebase/firestore';
 import type { User } from 'firebase/auth';
-import { useGlobalToastStore } from '../global/popup/GlobalToast';
+import { useGlobalToastStore } from '../global/Popup/GlobalToast';
 import { timeSlotToDate } from '@/services/party';
-import type {
-	CalendarEvent,
-	TimeSlotStamp,
-	AvailabilityWithUserName
-} from '@/types/party';
+import type { CalendarEvent, TimeSlotStamp, TimeSlotsWithUserName } from '@/types/party';
 import { getOverlapColor, hasTimeConflict, USER_COLORS } from './SelectCalendar.utils';
 import styles from './SelectCalendar.module.scss';
 
 interface UseCalendarEventsParams {
-	availabilities: AvailabilityWithUserName[] | undefined;
+	timeSlots: TimeSlotsWithUserName[] | undefined;
 	overlappingSlots: Array<{ slot: TimeSlotStamp; count: number; userNames: string[] }>;
 	user: User | null;
 }
 
 /**
- * 가용 시간을 캘린더 이벤트로 변환하는 hook
+ * 시간 슬롯을 캘린더 이벤트로 변환하는 hook
  */
 export const useCalendarEvents = ({
-	availabilities,
+	timeSlots,
 	overlappingSlots,
 	user
 }: UseCalendarEventsParams) => {
 	const userColorMap = useMemo(() => {
 		const map = new Map<string, string>();
-		if (availabilities) {
-			availabilities.forEach((availability, index) => {
-				map.set(availability.userId, USER_COLORS[index % USER_COLORS.length]);
+		if (timeSlots) {
+			timeSlots.forEach((timeSlot, index) => {
+				map.set(timeSlot.id, USER_COLORS[index % USER_COLORS.length]);
 			});
 		}
 		return map;
-	}, [availabilities]);
+	}, [timeSlots]);
 
 	/**
-	 * 가용 시간대 slots의 TimeStamp를 Date로 변환,
+	 * 시간 슬롯의 TimeStamp를 Date로 변환,
 	 * 내 이벤트인지 데이터 부여,
 	 * 겹치는 시간대 별도 이벤트로 추가
 	 */
 	const calendarEvents = useMemo((): CalendarEvent[] => {
-		if (!availabilities) return [];
+		if (!timeSlots) return [];
 
 		const events: CalendarEvent[] = [];
 
-		availabilities.forEach(availability => {
-			availability.slots.forEach((slot, slotIndex) => {
+		timeSlots.forEach(timeSlot => {
+			timeSlot.slots.forEach((slot, slotIndex) => {
 				const { start, end } = timeSlotToDate(slot);
-				const isMyEvent = availability.userId === user?.uid;
+				const isMyEvent = timeSlot.id === user?.uid;
 
 				events.push({
-					id: `${availability.userId}-${slotIndex}`,
-					title: availability.userName,
+					id: `${timeSlot.id}-${slotIndex}`,
+					title: timeSlot.userName,
 					start,
 					end,
-					userId: availability.userId,
-					userName: availability.userName,
+					userId: timeSlot.id,
+					userName: timeSlot.userName,
 					isMyEvent
 				});
 			});
@@ -85,9 +81,9 @@ export const useCalendarEvents = ({
 		});
 
 		return events;
-	}, [availabilities, overlappingSlots, user?.uid]);
+	}, [timeSlots, overlappingSlots, user?.uid]);
 
-	const totalParticipants = availabilities?.length || 0;
+	const totalParticipants = timeSlots?.length || 0;
 
 	/**
 	 *  FullCalendar 이벤트 타입의 데이터로 변환
@@ -149,17 +145,19 @@ export const useCalendarEvents = ({
 interface UseCalendarHandlersParams {
 	user: User | null;
 	currentView: string;
-	availabilities: AvailabilityWithUserName[] | undefined;
+	timeSlots: TimeSlotsWithUserName[] | undefined;
 	partyId: string;
-	saveAvailability: (
+	planId: string;
+	saveTimeSlots: (
 		data: {
 			partyId: string;
+			planId: string;
 			userId: string;
 			slots: TimeSlotStamp[];
 		},
 		options?: {
 			onSuccess?: () => void;
-			onError?: () => void;
+			onError?: (error: unknown) => void;
 		}
 	) => void;
 	calendarRef: React.RefObject<any>;
@@ -171,9 +169,10 @@ interface UseCalendarHandlersParams {
 export const useCalendarHandlers = ({
 	user,
 	currentView,
-	availabilities,
+	timeSlots,
 	partyId,
-	saveAvailability,
+	planId,
+	saveTimeSlots,
 	calendarRef
 }: UseCalendarHandlersParams) => {
 	const mouseDownTime = useRef<number>(0);
@@ -188,7 +187,7 @@ export const useCalendarHandlers = ({
 			const clickDuration = Date.now() - mouseDownTime.current;
 
 			if (!user) {
-				useGlobalToastStore.getState().push({ message: '로그인이 필요합니다.' });
+				useGlobalToastStore.getState().loginPush();
 				return;
 			}
 
@@ -201,9 +200,9 @@ export const useCalendarHandlers = ({
 				return;
 			}
 
-			// 사용자의 가용 시간이 기존 가용 시간과 겹치는지 확인
-			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			const existingSlots: TimeSlotStamp[] = myAvailability?.slots || [];
+			// 사용자의 시간 슬롯이 기존 슬롯과 겹치는지 확인
+			const myTimeSlot = timeSlots?.find(ts => ts.id === user.uid);
+			const existingSlots: TimeSlotStamp[] = myTimeSlot?.slots || [];
 			if (hasTimeConflict(selectInfo.start, selectInfo.end, existingSlots)) {
 				useGlobalToastStore
 					.getState()
@@ -219,9 +218,10 @@ export const useCalendarHandlers = ({
 
 			const updatedSlots = [...existingSlots, newSlot];
 
-			saveAvailability(
+			saveTimeSlots(
 				{
 					partyId,
+					planId,
 					userId: user.uid,
 					slots: updatedSlots
 				},
@@ -231,13 +231,18 @@ export const useCalendarHandlers = ({
 							.getState()
 							.push({ message: '가용 시간이 추가되었습니다.' });
 					},
-					onError: () => {
-						useGlobalToastStore.getState().push({ message: '저장에 실패했습니다.' });
+					onError: (error: unknown) => {
+						console.error('TimeSlots 저장 실패:', error);
+						const errorMessage =
+							error instanceof Error ? error.message : '알 수 없는 오류';
+						useGlobalToastStore.getState().push({
+							message: `저장에 실패했습니다: ${errorMessage}`
+						});
 					}
 				}
 			);
 		},
-		[user, currentView, availabilities, partyId, saveAvailability, calendarRef]
+		[user, currentView, timeSlots, partyId, planId, saveTimeSlots, calendarRef]
 	);
 
 	// 이벤트 클릭 (삭제 기능)
@@ -258,15 +263,16 @@ export const useCalendarHandlers = ({
 			const confirmed = window.confirm('이 가용 시간을 삭제하시겠습니까?');
 			if (!confirmed) return;
 
-			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			if (!myAvailability) return;
+			const myTimeSlot = timeSlots?.find(ts => ts.id === user.uid);
+			if (!myTimeSlot) return;
 
 			const slotIndex = parseInt(clickInfo.event.id.split('-')[1], 10);
-			const updatedSlots = myAvailability.slots.filter((_, index) => index !== slotIndex);
+			const updatedSlots = myTimeSlot.slots.filter((_, index) => index !== slotIndex);
 
-			saveAvailability(
+			saveTimeSlots(
 				{
 					partyId,
+					planId,
 					userId: user.uid,
 					slots: updatedSlots
 				},
@@ -279,7 +285,7 @@ export const useCalendarHandlers = ({
 				}
 			);
 		},
-		[user, availabilities, partyId, saveAvailability]
+		[user, timeSlots, partyId, planId, saveTimeSlots]
 	);
 
 	// 이벤트 이동 (내 이벤트만 가능)
@@ -303,9 +309,9 @@ export const useCalendarHandlers = ({
 				return;
 			}
 
-			// 현재 사용자의 가용 시간 업데이트
-			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			if (!myAvailability) {
+			// 현재 사용자의 시간 슬롯 업데이트
+			const myTimeSlot = timeSlots?.find(ts => ts.id === user.uid);
+			if (!myTimeSlot) {
 				dropInfo.revert();
 				return;
 			}
@@ -313,8 +319,8 @@ export const useCalendarHandlers = ({
 			// 이벤트 ID에서 슬롯 인덱스 추출
 			const slotIndex = parseInt(dropInfo.event.id.split('-')[1], 10);
 
-			// 다른 가용 시간과 겹치는지 확인 (자기 자신 제외)
-			if (hasTimeConflict(newStart, newEnd, myAvailability.slots, slotIndex)) {
+			// 다른 시간 슬롯과 겹치는지 확인 (자기 자신 제외)
+			if (hasTimeConflict(newStart, newEnd, myTimeSlot.slots, slotIndex)) {
 				useGlobalToastStore
 					.getState()
 					.push({ message: '해당 시간에 이미 가용 시간이 있습니다.' });
@@ -322,7 +328,7 @@ export const useCalendarHandlers = ({
 				return;
 			}
 
-			const updatedSlots = myAvailability.slots.map((slot, index) => {
+			const updatedSlots = myTimeSlot.slots.map((slot, index) => {
 				if (index === slotIndex) {
 					return {
 						start: Timestamp.fromDate(newStart),
@@ -332,13 +338,14 @@ export const useCalendarHandlers = ({
 				return slot;
 			});
 
-			saveAvailability({
+			saveTimeSlots({
 				partyId,
+				planId,
 				userId: user.uid,
 				slots: updatedSlots
 			});
 		},
-		[user, availabilities, partyId, saveAvailability]
+		[user, timeSlots, partyId, planId, saveTimeSlots]
 	);
 
 	// 이벤트 리사이즈 (내 이벤트만 가능)
@@ -359,16 +366,16 @@ export const useCalendarHandlers = ({
 				return;
 			}
 
-			const myAvailability = availabilities?.find(a => a.userId === user.uid);
-			if (!myAvailability) {
+			const myTimeSlot = timeSlots?.find(ts => ts.id === user.uid);
+			if (!myTimeSlot) {
 				resizeInfo.revert();
 				return;
 			}
 
 			const slotIndex = parseInt(resizeInfo.event.id.split('-')[1], 10);
 
-			// 다른 가용 시간과 겹치는지 확인 (자기 자신 제외)
-			if (hasTimeConflict(newStart, newEnd, myAvailability.slots, slotIndex)) {
+			// 다른 시간 슬롯과 겹치는지 확인 (자기 자신 제외)
+			if (hasTimeConflict(newStart, newEnd, myTimeSlot.slots, slotIndex)) {
 				useGlobalToastStore
 					.getState()
 					.push({ message: '해당 시간에 이미 가용 시간이 있습니다.' });
@@ -376,7 +383,7 @@ export const useCalendarHandlers = ({
 				return;
 			}
 
-			const updatedSlots = myAvailability.slots.map((slot, index) => {
+			const updatedSlots = myTimeSlot.slots.map((slot, index) => {
 				if (index === slotIndex) {
 					return {
 						start: Timestamp.fromDate(newStart),
@@ -386,13 +393,14 @@ export const useCalendarHandlers = ({
 				return slot;
 			});
 
-			saveAvailability({
+			saveTimeSlots({
 				partyId,
+				planId,
 				userId: user.uid,
 				slots: updatedSlots
 			});
 		},
-		[user, availabilities, partyId, saveAvailability]
+		[user, timeSlots, partyId, planId, saveTimeSlots]
 	);
 
 	// 뷰/날짜 변경 추적

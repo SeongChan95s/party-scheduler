@@ -1,4 +1,4 @@
-import type { Timestamp } from 'firebase/firestore';
+import type { GeoPoint, Timestamp } from 'firebase/firestore';
 
 // 시간 슬롯 타입
 export interface TimeSlotStamp {
@@ -9,7 +9,9 @@ export interface TimeSlotStamp {
 // 파티 상태
 export type PartyStatus = 'active' | 'confirmed' | 'cancelled';
 
-// 파티/약속 타입
+/**
+ * @deprecated 새 코드에서는 PartiesCollection + PlansCollection 사용
+ */
 export interface Party {
 	id: string;
 	name: string;
@@ -32,7 +34,9 @@ export type CreatePartyInput = Pick<
 	'name' | 'description' | 'creatorId' | 'availablePeriod'
 >;
 
-// 가용 시간대 타입 (Firestore에 저장되는 데이터)
+/**
+ * @deprecated 새 코드에서는 TimeSlotsCollection 사용
+ */
 export interface Availability {
 	id: string;
 	partyId: string;
@@ -79,4 +83,98 @@ export interface OverlapResult {
 export interface TimeSlotDate {
 	start: Date;
 	end: Date;
+}
+
+// ============================================
+// 새로운 구조 (Parties > Plans > TimeSlots)
+// ============================================
+
+// Parties 컬렉션 (최상위)
+export interface PartiesCollection {
+	id: string;
+	title: string;
+	body: string;
+	photoURL: string;
+	inviteCode: string;
+	entries: {
+		privacy: boolean;
+		approval: boolean;
+		password?: string;
+	};
+	managerIds: string;
+	creatorId: string;
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+	notificationCheckedIds: string[];
+	fixedPostId: string;
+}
+
+// Firestore에 저장할 때는 id를 제외
+export type PartiesInput = Omit<PartiesCollection, 'id'>;
+
+// Parties 생성 시 필요한 입력
+export type CreatePartiesInput = Pick<
+	PartiesCollection,
+	'title' | 'body' | 'managerIds' | 'creatorId'
+>;
+
+// Plans 서브컬렉션
+export interface PlansCollection {
+	id: string;
+	title: string;
+	body: string;
+	category: string;
+	schedule?: { start: Timestamp; end: Timestamp };
+	availability?: { start: Timestamp; end: Timestamp };
+	location?: {
+		name: string;
+		address: string;
+		geopoint: GeoPoint;
+	};
+	status: 'active' | 'ready';
+	participantIds: string[];
+	creatorId: string;
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+}
+
+// Firestore에 저장할 때는 id를 제외
+export type PlansInput = Omit<PlansCollection, 'id'>;
+
+// Plan 생성 시 필요한 입력
+export type CreatePlansInput = Pick<
+	PlansCollection,
+	'title' | 'body' | 'category' | 'creatorId' | 'status'
+>;
+
+// Members 서브컬렉션
+export interface MembersCollection {
+	id: string; // userId
+	status: 'invite' | 'waiting-approval';
+	updatedAt: Timestamp;
+	inviterId?: string;
+}
+
+// TimeSlots 서브컬렉션
+export interface TimeSlotsCollection {
+	id: string; // userId
+	slots: TimeSlotStamp[];
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+}
+
+// Firestore에 저장할 때는 id를 제외
+export type TimeSlotsInput = Omit<TimeSlotsCollection, 'id'>;
+
+// TimeSlots 저장 시 필요한 입력
+export type SaveTimeSlotsInput = {
+	partyId: string;
+	planId: string;
+	userId: string;
+	slots: TimeSlotStamp[];
+};
+
+// userName이 포함된 TimeSlotsCollection (클라이언트 사이드용)
+export interface TimeSlotsWithUserName extends TimeSlotsCollection {
+	userName: string;
 }

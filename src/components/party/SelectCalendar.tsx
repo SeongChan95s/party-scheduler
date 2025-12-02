@@ -5,7 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import type { DayCellContentArg } from '@fullcalendar/core';
 import { useMemo, useRef } from 'react';
 import { useUserState } from '@/hooks/auth/useUserStateChanged';
-import { usePartyAvailabilities, useAvailabilityMutations } from '@/hooks/party';
+import { useTimeSlotsByPlan, useTimeSlotsMutations } from '@/hooks/party';
 import { Skeleton } from '../common/Skeleton';
 import {
 	useCalendarEvents,
@@ -21,21 +21,22 @@ import styles from './SelectCalendar.module.scss';
 
 interface MyCalendarProps {
 	partyId: string;
+	planId: string;
 }
 
-export default function SelectCalendar({ partyId }: MyCalendarProps) {
+export default function SelectCalendar({ partyId, planId }: MyCalendarProps) {
 	const user = useUserState(state => state.user);
 	const calendarRef = useRef<FullCalendar>(null);
 	const { currentView, setCurrentView } = useCurrentView();
 
-	const { availabilities, isLoading, overlappingSlots } = usePartyAvailabilities(partyId);
+	const { timeSlots, isLoading, overlappingSlots } = useTimeSlotsByPlan(partyId, planId);
 
-	// 가용 시간 저장/삭제
-	const { save: saveAvailability } = useAvailabilityMutations(partyId);
+	// 시간 슬롯 저장/삭제
+	const { save: saveTimeSlots } = useTimeSlotsMutations(partyId, planId);
 
 	// 캘린더 이벤트 변환
 	const { fullCalendarEvents, totalParticipants } = useCalendarEvents({
-		availabilities,
+		timeSlots,
 		overlappingSlots,
 		user
 	});
@@ -50,9 +51,10 @@ export default function SelectCalendar({ partyId }: MyCalendarProps) {
 	} = useCalendarHandlers({
 		user,
 		currentView,
-		availabilities,
+		timeSlots,
 		partyId,
-		saveAvailability,
+		planId,
+		saveTimeSlots,
 		calendarRef
 	});
 
@@ -129,17 +131,15 @@ export default function SelectCalendar({ partyId }: MyCalendarProps) {
 					/>
 					<span>겹치는 시간대 (2명~{totalParticipants}명)</span>
 				</div>
-				{availabilities?.map((availability, index) => (
-					<div key={availability.userId} className={styles.legendItem}>
+				{timeSlots?.map((timeSlot, index) => (
+					<div key={timeSlot.id} className={styles.legendItem}>
 						<span
 							className={styles.legendColor}
 							style={{
 								backgroundColor: USER_COLORS[index % USER_COLORS.length]
 							}}
 						/>
-						<span>
-							{availability.userId === user?.uid ? '나' : availability.userName}
-						</span>
+						<span>{timeSlot.id === user?.uid ? '나' : timeSlot.userName}</span>
 					</div>
 				))}
 			</div>
@@ -152,7 +152,7 @@ export default function SelectCalendar({ partyId }: MyCalendarProps) {
 					headerToolbar={{
 						left: 'prev,next today',
 						center: 'title',
-						right: 'dayGridMonth,timeGridWeek, timeGridDay'
+						right: 'dayGridMonth,timeGridWeek,timeGridDay'
 					}}
 					locale="ko"
 					height="100%"

@@ -1,92 +1,93 @@
 import { Timestamp } from 'firebase/firestore';
 import {
-	addDocument,
-	updateDocument,
-	deleteDocument,
-	queryCollection,
-	where
+	getSubCollection,
+	getSubDocument,
+	setSubDocument,
+	deleteSubDocument
 } from '../firebase/firestore';
 import type {
-	Availability,
-	AvailabilityInput,
-	AvailabilityWithUserName,
-	SaveAvailabilityInput,
+	TimeSlotsCollection,
+	SaveTimeSlotsInput,
+	TimeSlotsWithUserName,
 	TimeSlotStamp,
-	OverlapResult,
-	TimeSlotDate
+	TimeSlotDate,
+	OverlapResult
 } from '@/types/party';
 
-const COLLECTION_NAME = 'availabilities';
+const PARENT_COLLECTION = 'parties';
+const PLANS_SUB_COLLECTION = 'plans';
+const TIMESLOTS_SUB_COLLECTION = 'timeSlots';
 
 /**
- *  가용 시간 저장 (새로 생성 또는 업데이트)
+ * TimeSlots 저장 (userId를 문서 ID로 사용)
  */
-export const saveAvailability = async (input: SaveAvailabilityInput): Promise<string> => {
+export const saveTimeSlots = async (input: SaveTimeSlotsInput): Promise<void> => {
 	const now = Timestamp.now();
-	const existing = await getAvailabilityByUserAndParty(input.userId, input.partyId);
 
-	if (existing) {
-		await updateDocument(COLLECTION_NAME, existing.id, {
-			slots: input.slots,
-			updatedAt: now
-		});
-		return existing.id;
-	}
-
-	const availabilityData: AvailabilityInput = {
-		partyId: input.partyId,
-		userId: input.userId,
+	const timeSlotsData = {
 		slots: input.slots,
 		createdAt: now,
 		updatedAt: now
 	};
 
-	return addDocument(COLLECTION_NAME, availabilityData);
-};
-
-/**
- *  특정 사용자의 특정 파티 가용 시간 조회
- */
-export const getAvailabilityByUserAndParty = async (
-	userId: string,
-	partyId: string
-): Promise<Availability | null> => {
-	const results = await queryCollection<Availability>(
-		COLLECTION_NAME,
-		where('userId', '==', userId),
-		where('partyId', '==', partyId)
+	// parties/{partyId}/plans/{planId}/timeSlots/{userId}
+	await setSubDocument(
+		PARENT_COLLECTION,
+		input.partyId,
+		`${PLANS_SUB_COLLECTION}/${input.planId}/${TIMESLOTS_SUB_COLLECTION}`,
+		input.userId,
+		timeSlotsData
 	);
-
-	return results.length > 0 ? results[0] : null;
 };
 
 /**
- * 특정 파티의 가용 가능한 모든 시간 조회
+ * 특정 사용자의 TimeSlots 조회
  */
-export const getAvailabilitiesByParty = async (
-	partyId: string
-): Promise<Availability[]> => {
-	return queryCollection<Availability>(COLLECTION_NAME, where('partyId', '==', partyId));
-};
-
-// 가용 시간 삭제
-export const deleteAvailability = async (availabilityId: string): Promise<void> => {
-	await deleteDocument(COLLECTION_NAME, availabilityId);
-};
-
-// 사용자의 특정 파티 가용 시간 삭제
-export const deleteAvailabilityByUserAndParty = async (
-	userId: string,
-	partyId: string
-): Promise<void> => {
-	const availability = await getAvailabilityByUserAndParty(userId, partyId);
-	if (availability) {
-		await deleteDocument(COLLECTION_NAME, availability.id);
-	}
+export const getTimeSlotsByUser = async (
+	partyId: string,
+	planId: string,
+	userId: string
+): Promise<TimeSlotsCollection | null> => {
+	return getSubDocument<TimeSlotsCollection>(
+		PARENT_COLLECTION,
+		partyId,
+		`${PLANS_SUB_COLLECTION}/${planId}/${TIMESLOTS_SUB_COLLECTION}`,
+		userId
+	);
 };
 
 /**
- *  TimeSlot을 Date로 변환
+ * Plan의 모든 TimeSlots 조회
+ */
+export const getTimeSlotsByPlan = async (
+	partyId: string,
+	planId: string
+): Promise<TimeSlotsCollection[]> => {
+	return getSubCollection<TimeSlotsCollection>(
+		PARENT_COLLECTION,
+		partyId,
+		`${PLANS_SUB_COLLECTION}/${planId}/${TIMESLOTS_SUB_COLLECTION}`
+	);
+};
+
+/**
+ * TimeSlots 삭제
+ */
+export const deleteTimeSlots = async (
+	partyId: string,
+	planId: string,
+	userId: string
+): Promise<void> => {
+	await deleteSubDocument(
+		PARENT_COLLECTION,
+		partyId,
+		`${PLANS_SUB_COLLECTION}/${planId}/${TIMESLOTS_SUB_COLLECTION}`,
+		userId
+	);
+};
+
+/**
+ * TimeSlot을 Date로 변환
  */
 export const timeSlotToDate = (slot: TimeSlotStamp): TimeSlotDate => ({
 	start: slot.start.toDate(),
@@ -106,10 +107,10 @@ export const dateToTimeSlot = (slot: TimeSlotDate): TimeSlotStamp => ({
  * @param `minOverlapCount` 최소 겹치는 횟수
  */
 export const calculateOverlappingSlots = (
-	availabilities: AvailabilityWithUserName[],
+	timeSlots: TimeSlotsWithUserName[],
 	minOverlapCount: number = 2
 ): OverlapResult[] => {
-	if (availabilities.length < minOverlapCount) {
+	if (timeSlots.length < minOverlapCount) {
 		return [];
 	}
 
@@ -119,12 +120,12 @@ export const calculateOverlappingSlots = (
 		userName: string;
 	}> = [];
 
-	availabilities.forEach(availability => {
-		availability.slots.forEach(slot => {
+	timeSlots.forEach(timeSlot => {
+		timeSlot.slots.forEach(slot => {
 			allSlots.push({
 				slot: timeSlotToDate(slot),
-				userId: availability.userId,
-				userName: availability.userName
+				userId: timeSlot.id,
+				userName: timeSlot.userName
 			});
 		});
 	});
@@ -254,7 +255,7 @@ const mergeOverlaps = (overlaps: OverlapResult[]): OverlapResult[] => {
 
 // 전원이 가능한 시간대만 필터링
 export const getFullOverlapSlots = (
-	availabilities: AvailabilityWithUserName[]
+	timeSlots: TimeSlotsWithUserName[]
 ): OverlapResult[] => {
-	return calculateOverlappingSlots(availabilities, availabilities.length);
+	return calculateOverlappingSlots(timeSlots, timeSlots.length);
 };

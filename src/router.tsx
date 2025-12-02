@@ -15,6 +15,7 @@ import MyPage from './pages/main/MyPage';
 import LoginPage from './pages/auth/LoginPage';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
 import ChatPage from './pages/main/ChatPage';
+import SelectSchedulePage from './pages/party/SelectSchedule';
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +60,16 @@ const router = createBrowserRouter([
 						element: <JoinPage />
 					}
 				]
+			}
+		]
+	},
+	{
+		element: <SubLayout />,
+		path: '/party',
+		children: [
+			{
+				path: 'select-schedule',
+				element: <SelectSchedulePage />
 			}
 		]
 	},

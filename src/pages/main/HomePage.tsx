@@ -14,7 +14,7 @@ export default function HomePage() {
 						<h2 className="text-headline-1">홈 페이지</h2>
 					</div>
 					<Link to="/guide/common/component">가이드</Link>
-					<Link to="/party/select_schedule">캘린더</Link>
+					<Link to="/party/select-schedule">캘린더</Link>
 				</main>
 			</div>
 		</>

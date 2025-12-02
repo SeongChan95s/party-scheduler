@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginInputSchema } from '../../schemas/auth';
 import type { LoginInput } from '../../types/auth';
 import { loginAuth } from '../../services/auth/login';
-import { useGlobalToastStore } from '../../components/global/popup/GlobalToast';
+import { useGlobalToastStore } from '../../components/global/Popup/GlobalToast';
 import { useLocalStorage } from '@/hooks/storage';
 
 export default function LoginPage() {

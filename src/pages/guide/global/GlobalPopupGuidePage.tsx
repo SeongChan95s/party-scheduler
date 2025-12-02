@@ -1,8 +1,8 @@
 import { Button } from '../../../components/common/Button';
 import { IconAlertFilled } from '../../../components/common/Icon';
 import { TextButton } from '../../../components/common/TextButton';
-import { useGlobalDialog } from '../../../components/global/popup/GlobalDialog';
-import { useGlobalToastStore } from '../../../components/global/popup/GlobalToast';
+import { useGlobalDialog } from '../../../components/global/Popup/GlobalDialog';
+import { useGlobalToastStore } from '../../../components/global/Popup/GlobalToast';
 
 export default function GlobalPopupGuidePage() {
 	return (

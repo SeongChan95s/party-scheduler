@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import type { RegisterInput } from '../../../types/auth';
 import { registerJoinInputSchema } from '../../../schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGlobalToastStore } from '../../../components/global/popup/GlobalToast';
+import { useGlobalToastStore } from '../../../components/global/Popup/GlobalToast';
 import { useNavigate } from 'react-router-dom';
 import { registerAuth } from '../../../services/auth/register';
 import { useState } from 'react';

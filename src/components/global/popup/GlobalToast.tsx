@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Toast } from '../../common/Toast';
+import { IconAlertFilled } from '@/components/common/Icon';
 
 interface ToastItem {
 	id: string;
@@ -12,11 +13,12 @@ interface ToastItem {
 interface UseGlobalToastStore {
 	queue: ToastItem[];
 	push: (value: Pick<ToastItem, 'icon' | 'message' | 'button'>) => void;
+	loginPush: () => void;
 	setVisible: (id: string, visible: boolean) => void;
 	remove: (id: string) => void;
 }
 
-export const useGlobalToastStore = create<UseGlobalToastStore>()(set => ({
+export const useGlobalToastStore = create<UseGlobalToastStore>()((set, get) => ({
 	queue: [],
 	push: value => {
 		const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -38,6 +40,23 @@ export const useGlobalToastStore = create<UseGlobalToastStore>()(set => ({
 			}));
 		});
 	},
+
+	loginPush: () =>
+		get().push({
+			icon: <IconAlertFilled />,
+			message: '로그인이 필요합니다.',
+			button: (
+				<button
+					className="text-label-2"
+					onClick={() => {
+						localStorage.setItem('callbackURL', location.pathname);
+						location.href = '/auth/login';
+					}}>
+					로그인
+				</button>
+			)
+		}),
+
 	setVisible: (id, visible) => {
 		set(store => ({
 			queue: store.queue.map(item => (item.id === id ? { ...item, visible } : item))

@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isPartyMember(partyId) {
+      return exists(/databases/$(database)/documents/parties/$(partyId)/members/$(request.auth.uid));
+    }
+
+    function isPartyManager(partyId) {
+      let party = get(/databases/$(database)/documents/parties/$(partyId)).data;
+      return (
+        request.auth.uid in party.managerIds || 
+        request.auth.uid == party.creatorId
+      );
+    }
+
+    match /{all=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if isAdmin();
+    }
+
+    match /parties/{partyId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update: if isPartyManager();
+      allow delete: if request.auth.uid == resource.data.creatorId;
+
+      match /plans/{planId} {
+        allow read: if true;
+        allow write: if isPartyManager(partyId);
+
+        match /timeSlots/{docs} {
+          allow read: if isPartyMember();
+          allow write: if request.auth.uid == resource.data.id;
+        }
+      }
+      
+      match /members/{memberId} {
+        allow read: if true;
+        allow write: if isPartyManager(partyId);
+      }
+
+      match /polls/{pollId} {
+        allow read: if true;
+        allow create: if isPartyMember(partyId);
+        allow delete: if request.auth.uid == resource.data.creatorId;
+      }
+    }
+  }
+}

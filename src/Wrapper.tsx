@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
-import GlobalToast from './components/global/popup/GlobalToast';
-import GlobalDialog from './components/global/popup/GlobalDialog';
+import GlobalToast from './components/global/Popup/GlobalToast';
+import GlobalDialog from './components/global/Popup/GlobalDialog';
 import { useUserStateChanged } from './hooks/auth/useUserStateChanged';
 
 interface useLayoutStore {

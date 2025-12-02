@@ -1,5 +1,5 @@
 import { IconAlertFilled } from '@/components/common/Icon';
-import { useGlobalToastStore } from '@/components/global/popup/GlobalToast';
+import { useGlobalToastStore } from '@/components/global/Popup/GlobalToast';
 import { getAsyncUser } from '@/utils/auth/getAsyncUser';
 import { redirect } from 'react-router-dom';
 

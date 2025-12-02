@@ -57,7 +57,7 @@ export const registerAuth = async ({
 		});
 
 		const now = Timestamp.fromDate(new Date());
-		const userData: UsersCollection = {
+		const userData: Omit<UsersCollection, 'id'> = {
 			email,
 			displayName,
 			birth: Timestamp.fromDate(new Date(birth)),

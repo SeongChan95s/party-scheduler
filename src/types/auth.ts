@@ -13,6 +13,7 @@ export interface FirebaseAuthProfile extends LoginInput {
 }
 
 export interface UsersCollection {
+	id: string;
 	email: string;
 	displayName: string;
 	photoURL?: string;

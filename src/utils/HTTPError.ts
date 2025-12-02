@@ -1,4 +1,4 @@
-import { useGlobalToastStore } from '../components/global/popup/GlobalToast';
+import { useGlobalToastStore } from '../components/global/Popup/GlobalToast';
 
 export class HTTPError extends Error {
 	status: number | undefined;

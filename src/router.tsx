@@ -16,6 +16,9 @@ import LoginPage from './pages/auth/LoginPage';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
 import ChatPage from './pages/main/ChatPage';
 import SelectSchedulePage from './pages/party/SelectSchedule';
+import KakaoRedirectPage from './pages/auth/oauth/KakaoRedirectPage';
+import ProfileCompletePage from './pages/auth/ProfileCompletePage';
+import NaverRedirectPage from './pages/auth/oauth/NaverRedirectPage';
 
 const router = createBrowserRouter([
 	{
@@ -42,24 +45,44 @@ const router = createBrowserRouter([
 	{
 		element: <SubLayout />,
 		path: '/auth',
-		middleware: [AuthMiddleware],
 		children: [
 			{
 				path: 'login',
-				element: <LoginPage />
+				element: <LoginPage />,
+				middleware: [AuthMiddleware]
 			},
 			{
 				path: 'register',
 				children: [
 					{
 						path: 'agree',
-						element: <AgreePage />
+						element: <AgreePage />,
+						middleware: [AuthMiddleware]
 					},
 					{
 						path: 'join',
-						element: <JoinPage />
+						element: <JoinPage />,
+						middleware: [AuthMiddleware]
 					}
 				]
+			},
+			{
+				path: 'oauth',
+				middleware: [AuthMiddleware],
+				children: [
+					{
+						path: 'kakao/callback',
+						element: <KakaoRedirectPage />
+					},
+					{
+						path: 'naver/callback',
+						element: <NaverRedirectPage />
+					}
+				]
+			},
+			{
+				path: 'profile-complete',
+				element: <ProfileCompletePage />
 			}
 		]
 	},

@@ -20,3 +20,16 @@ export const registerJoinInputSchema = z.object({
 	birth: z.string().regex(regDate, '날짜를 선택해주세요.'),
 	tel: z.string().regex(regPhone, '휴대폰 번호 형식이 아닙니다.')
 });
+
+export const registerProfileSchema = z.object({
+	email: z.email('이메일 형식이 아닙니다'),
+	displayName: z
+		.string()
+		.min(2, '2자 이상')
+		.max(20, '20자 이하')
+		.regex(regDisplayName, '한글, 영문, 숫자, 언더스코어만 사용 가능합니다.'),
+	photoFiles: z.array(z.file()).optional(),
+	photoMetadata: z.custom<ImagePickerMetadata[]>().optional(),
+	birth: z.string().regex(regDate, '날짜를 선택해주세요.'),
+	tel: z.string().regex(regPhone, '휴대폰 번호 형식이 아닙니다.')
+});

@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginInputSchema } from '../../schemas/auth';
 import type { LoginInput } from '../../types/auth';
-import { loginAuth } from '../../services/auth/login';
+import { loginWithEmail } from '../../services/auth/loginWithEmail';
 import { useGlobalToastStore } from '../../components/global/Popup/GlobalToast';
 import { useLocalStorage } from '@/hooks/storage';
+import { loginWithKakao, loginWithNaver } from '@/services/auth/oauth';
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function LoginPage() {
 	});
 
 	const onSubmit = async (data: LoginInput) => {
-		const result = await loginAuth(data.email, data.password);
+		const result = await loginWithEmail(data.email, data.password);
 		if (result) {
 			useGlobalToastStore.getState().push({
 				message: result.message
@@ -45,6 +46,8 @@ export default function LoginPage() {
 					className="flex-1 flex flex-col justify-center items-center"
 					onSubmit={handleSubmit(onSubmit)}>
 					<div>
+						<Button onClick={async () => await loginWithKakao()}>카카오 로그인</Button>
+						<Button onClick={async () => await loginWithNaver()}>네이버 로그인</Button>
 						<ul>
 							<li>
 								<TextField

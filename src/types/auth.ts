@@ -50,3 +50,27 @@ export type RegisterInput = {
 	birth: string;
 	tel: string;
 };
+
+export type RegisteProfileSchema = {
+	email: string;
+	displayName: string;
+	photoFiles?: File[];
+	photoMetadata?: ImagePickerMetadata[];
+	birth: string;
+	tel: string;
+};
+
+export type SocialProvider = 'kakao' | 'naver';
+
+export interface SocialLoginInput {
+	provider: SocialProvider;
+	accessToken: string;
+}
+
+export interface SocialUserInfo {
+	id: string;
+	email?: string;
+	displayName?: string;
+	photoURL?: string;
+	provider: SocialProvider;
+}

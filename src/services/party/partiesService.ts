@@ -31,7 +31,7 @@ export const createParties = async (input: CreatePartiesInput): Promise<string> 
 			privacy: false,
 			approval: false
 		},
-		adminId: input.adminId,
+		managerIds: input.managerIds,
 		creatorId: input.creatorId,
 		createdAt: now,
 		updatedAt: now,

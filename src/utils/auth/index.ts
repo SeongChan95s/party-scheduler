@@ -1,0 +1,1 @@
+export { handleFirebaseAuthErrorMessage } from './handleFirebaseErrorMessage';

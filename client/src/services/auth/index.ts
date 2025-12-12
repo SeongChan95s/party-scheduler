@@ -1,0 +1,1 @@
+export { setRequiredUserDataToDB } from './oauth';

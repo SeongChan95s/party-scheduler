@@ -133,28 +133,58 @@ party-scheduler/
 
 ## 시작하기
 
-### 요구사항
+이 프로젝트는 클라이언트(React)와 서버(Express)로 구성되어 있습니다. 원활한 실행을 위해 두 환경 모두 설정해야 합니다.
 
-- Node.js v22.12.0
+### 사전 요구사항
+
+- Node.js v22.12.0 이상
 - npm
+- Firebase 프로젝트 (Firestore, Authentication 사용)
 
-### 설치 및 실행
+### 1단계: 환경 변수 설정
 
+프로젝트 루트의 각 폴더에 `.env` 파일을 생성해야 합니다.
+`client/.env` 및 `server/.env` (없다면 생성 필요)를 참고하여 각 키에 맞는 값을 채워넣으세요.
+
+### 2단계: 설치 및 실행
+
+터미널을 2개 열어서 클라이언트와 서버를 각각 실행합니다.
+
+**터미널 1: 서버 (Backend)**
 ```bash
-# 의존성 설치
-npm install --legacy-peer
-
-# 개발 서버 실행 (http://localhost:3000)
+cd server
+npm install
 npm run dev
+```
+> 서버가 `http://localhost:8080` 에서 실행됩니다.
 
-# 프로덕션 빌드
+**터미널 2: 클라이언트 (Frontend)**
+```bash
+cd client
+npm install --legacy-peer
+npm run dev
+```
+> 클라이언트가 `http://localhost:3000` 에서 실행됩니다.
+
+### 3단계: 배포 (Deployment)
+
+이 프로젝트는 **Frontend(Firebase Hosting)**와 **Backend(Cloud Run)**가 분리되어 배포되지만, Rewrite 설정을 통해 **단일 도메인**으로 동작합니다.
+
+**서버 배포 (Cloud Run)**
+```bash
+# server 폴더에서 실행
+npm run deploy
+```
+> `.env` 파일을 기반으로 환경 변수가 자동 설정되어 배포됩니다.
+
+**클라이언트 배포 (Firebase Hosting)**
+```bash
+# client 폴더에서
+# 주의: .env.production 파일의 VITE_SERVER_URL은 비워두어야 합니다.
 npm run build
 
-# 프로덕션 미리보기
-npm run preview
-
-# 린팅
-npm run lint
+# 프로젝트 루트에서
+firebase deploy
 ```
 
 ---

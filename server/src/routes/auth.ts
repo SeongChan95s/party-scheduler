@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import axios from 'axios';
 import admin from 'firebase-admin';
 
 const router = Router();
@@ -29,24 +30,21 @@ router.post('/naver', async (req: Request, res: Response) => {
 		}
 
 		// 1. 토큰 교환
-		const params = new URLSearchParams({
+		const tokenResponse = await axios.post('https://nid.naver.com/oauth2.0/token', {
 			grant_type: 'authorization_code',
 			client_id: clientId,
 			client_secret: clientSecret,
 			code,
 			redirect_uri: redirectUri
-		});
-
-		const tokenResponse = await fetch('https://nid.naver.com/oauth2.0/token', {
-			method: 'POST',
+		}, {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: params.toString()
+			validateStatus: () => true
 		});
 
-		if (!tokenResponse.ok) {
-			const errorText = await tokenResponse.text();
+		if (tokenResponse.status >= 400) {
+			const errorText = typeof tokenResponse.data === 'string' ? tokenResponse.data : JSON.stringify(tokenResponse.data);
 			console.error('네이버 토큰 교환 실패:', errorText);
 			res.status(tokenResponse.status).json({
 				error: `네이버 토큰 교환 실패: ${tokenResponse.status}`
@@ -54,17 +52,18 @@ router.post('/naver', async (req: Request, res: Response) => {
 			return;
 		}
 
-		const tokenData = await tokenResponse.json();
+		const tokenData = tokenResponse.data;
 
 		// 2. 사용자 정보 조회
-		const userInfoResponse = await fetch('https://openapi.naver.com/v1/nid/me', {
+		const userInfoResponse = await axios.get('https://openapi.naver.com/v1/nid/me', {
 			headers: {
 				Authorization: `Bearer ${tokenData.access_token}`
-			}
+			},
+			validateStatus: () => true
 		});
 
-		if (!userInfoResponse.ok) {
-			const errorText = await userInfoResponse.text();
+		if (userInfoResponse.status >= 400) {
+			const errorText = typeof userInfoResponse.data === 'string' ? userInfoResponse.data : JSON.stringify(userInfoResponse.data);
 			console.error('네이버 사용자 정보 조회 실패:', errorText);
 			res.status(userInfoResponse.status).json({
 				error: `네이버 사용자 정보 조회 실패: ${userInfoResponse.status}`
@@ -72,7 +71,7 @@ router.post('/naver', async (req: Request, res: Response) => {
 			return;
 		}
 
-		const userInfoData = await userInfoResponse.json();
+		const userInfoData = userInfoResponse.data;
 		const userInfo = userInfoData.response as NaverUserInfo;
 
 		// 3. Firebase Custom Token 생성
@@ -128,16 +127,6 @@ interface KakaoTokenRequest {
 }
 
 
-interface KakaoUserInfo {
-	id: number;
-	kakao_account: {
-		profile: {
-			nickname: string;
-			profile_image_url: string;
-		};
-	};
-}
-
 router.post('/kakao', async (req: Request, res: Response) => {
 	try {
 		const { code, clientId, clientSecret, redirectUri } = req.body as KakaoTokenRequest;
@@ -147,31 +136,28 @@ router.post('/kakao', async (req: Request, res: Response) => {
 			return;
 		}
 
-		const params = new URLSearchParams({
+		const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token', {
 			grant_type: 'authorization_code',
 			client_id: clientId,
 			client_secret: clientSecret,
 			code,
 			redirect_uri: redirectUri
-		});
-
-		const tokenResponse = await fetch('https://kauth.kakao.com/oauth/token', {
-			method: 'POST',
+		}, {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 			},
-			body: params.toString()
+			validateStatus: () => true
 		});
 
-		if (!tokenResponse.ok) {
-			const errorText = await tokenResponse.text();
+		if (tokenResponse.status >= 400) {
+			const errorText = typeof tokenResponse.data === 'string' ? tokenResponse.data : JSON.stringify(tokenResponse.data);
 			res.status(tokenResponse.status).json({
 				error: `카카오 토큰 교환 실패: ${tokenResponse.status} ${errorText}`
 			});
 			return;
 		}
 
-		const tokenData = await tokenResponse.json();
+		const tokenData = tokenResponse.data;
 
 		res.json({ success: true, data: tokenData });
 	} catch (error) {

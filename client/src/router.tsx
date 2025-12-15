@@ -44,30 +44,27 @@ const router = createBrowserRouter([
 	{
 		element: <SubLayout />,
 		path: '/auth',
+		middleware: [AuthMiddleware],
 		children: [
 			{
 				path: 'login',
-				element: <LoginPage />,
-				middleware: [AuthMiddleware]
+				element: <LoginPage />
 			},
 			{
 				path: 'register',
 				children: [
 					{
 						path: 'agree',
-						element: <AgreePage />,
-						middleware: [AuthMiddleware]
+						element: <AgreePage />
 					},
 					{
 						path: 'join',
-						element: <JoinPage />,
-						middleware: [AuthMiddleware]
+						element: <JoinPage />
 					}
 				]
 			},
 			{
 				path: 'oauth',
-				middleware: [AuthMiddleware],
 				children: [
 					{
 						path: 'kakao/callback',

@@ -61,5 +61,5 @@ export default function KakaoRedirectPage() {
 		signInKakaoAuth();
 	}, []);
 
-	return <></>;
+	return <div>로그인중입니다...</div>;
 }

@@ -77,6 +77,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'oauth',
+				element: <CenterLayout />,
 				children: [
 					{
 						path: 'kakao/callback',

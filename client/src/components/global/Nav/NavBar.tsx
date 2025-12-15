@@ -64,7 +64,8 @@ const pathMap: PathMap[] = [
 	},
 	{
 		path: '/auth',
-		props: { title: true, back: true }
+		props: { title: true, back: true },
+		exact: false
 	}
 ];
 

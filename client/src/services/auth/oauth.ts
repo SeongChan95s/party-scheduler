@@ -1,5 +1,4 @@
 import { useGlobalToastStore } from '@/components/global/Popup/GlobalToast';
-import { app } from '@/lib/firebase/config';
 import { handleFirebaseAuthErrorMessage } from '@/utils/auth';
 import { FirebaseError } from 'firebase/app';
 import {
@@ -21,7 +20,7 @@ export const loginWithNaver = async (): Promise<void> => {
 export const loginWithGoogle = async () => {
 	try {
 		const provider = new GoogleAuthProvider();
-		const auth = getAuth(app);
+		const auth = getAuth();
 
 		const userCredential = await signInWithPopup(auth, provider);
 		await setRegisteredUserDataToDB(userCredential, 'google');
@@ -46,7 +45,7 @@ export const loginWithGoogle = async () => {
 export const loginWithTwitter = async () => {
 	try {
 		const provider = new TwitterAuthProvider();
-		const auth = getAuth(app);
+		const auth = getAuth();
 
 		const userCredential = await signInWithPopup(auth, provider);
 		await setRegisteredUserDataToDB(userCredential, 'twitter');

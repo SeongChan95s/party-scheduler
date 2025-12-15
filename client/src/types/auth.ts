@@ -23,8 +23,9 @@ export interface UserNotificationSet {
 	service: Boolean;
 }
 
-export interface RequiredUserDB {
+export interface UsersCollection {
 	uid: string;
+	email?: string;
 	displayName: string;
 	tag: string;
 	photoURL: string | null;
@@ -36,25 +37,17 @@ export interface RequiredUserDB {
 	createdAt: Timestamp;
 }
 
-export interface EmailCredentialUser extends RequiredUserDB {
-	email: string;
-	displayName: string;
-	photoURL: string | null;
-}
-
 export interface FriendsCollection {
 	id: string;
 	status: 'special' | 'friend' | 'request';
 }
 
-export type RegisterInput = {
+export type RegisterEmailCredentialInput = {
 	email: string;
 	password: string;
 	displayName: string;
 	photoFiles?: File[];
 	photoMetadata?: ImagePickerMetadata[];
-	birth: string;
-	tel: string;
 };
 
 export type RegisteProfileSchema = {

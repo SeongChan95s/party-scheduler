@@ -12,12 +12,14 @@ import SubLayout from './layouts/SubLayout';
 import JoinPage from './pages/auth/register/JoinPage';
 import AgreePage from './pages/auth/register/AgreePage';
 import MyPage from './pages/main/MyPage';
-import LoginPage from './pages/auth/LoginPage';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
 import ChatPage from './pages/main/ChatPage';
 import SelectSchedulePage from './pages/party/SelectSchedule';
 import KakaoRedirectPage from './pages/auth/oauth/KakaoRedirectPage';
 import NaverRedirectPage from './pages/auth/oauth/NaverRedirectPage';
+import LoginPage from './pages/auth/login/LoginPage';
+import EmailLoginPage from './pages/auth/login/EmailLoginPage';
+import CenterLayout from './layouts/CenterLayout';
 
 const router = createBrowserRouter([
 	{
@@ -42,16 +44,26 @@ const router = createBrowserRouter([
 		]
 	},
 	{
-		element: <SubLayout />,
 		path: '/auth',
 		middleware: [AuthMiddleware],
 		children: [
 			{
 				path: 'login',
-				element: <LoginPage />
+				element: <CenterLayout />,
+				children: [
+					{
+						path: '',
+						element: <LoginPage />
+					},
+					{
+						path: 'email',
+						element: <EmailLoginPage />
+					}
+				]
 			},
 			{
 				path: 'register',
+				element: <SubLayout />,
 				children: [
 					{
 						path: 'agree',

@@ -1,18 +1,28 @@
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import type { RegisterInput, UsersCollection } from '../../types/auth';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	updateProfile,
+	getAdditionalUserInfo,
+	type UserCredential
+} from 'firebase/auth';
+import type { RegisterEmailCredentialInput } from '../../types/auth';
 import {
 	collection,
 	doc,
+	getDoc,
 	getDocs,
 	limit,
 	query,
 	setDoc,
-	Timestamp,
+	updateDoc,
 	where
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase/config';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import { getFileFormat } from '@/utils/getFileFormat';
+import { HTTPError } from '@/utils/HTTPError';
+import { requiredUserDBschema } from '@/schemas/auth';
+import { omit } from 'lodash';
 
 /**
  * 회원가입 정보입력 API
@@ -21,10 +31,8 @@ export const registerAuth = async ({
 	email,
 	password,
 	displayName,
-	photoFiles,
-	birth,
-	tel
-}: RegisterInput) => {
+	photoFiles
+}: RegisterEmailCredentialInput) => {
 	try {
 		const querySnapshot = await getDocs(
 			query(collection(db, 'users'), where('email', '==', email), limit(1))
@@ -45,7 +53,7 @@ export const registerAuth = async ({
 
 		if (photoFile) {
 			const photoFormat = getFileFormat(photoFile.name);
-			photoURL = `/auth/${new Date().getTime()}.${photoFormat}`;
+			photoURL = `/auth/profile/${new Date().getTime()}.${photoFormat}`;
 			const storage = getStorage();
 			const storageRef = ref(storage, photoURL);
 			await uploadBytes(storageRef, photoFile);
@@ -56,19 +64,7 @@ export const registerAuth = async ({
 			...(photoURL && { photoURL })
 		});
 
-		const now = Timestamp.fromDate(new Date());
-		const userData: Omit<UsersCollection, 'id'> = {
-			email,
-			displayName,
-			birth: Timestamp.fromDate(new Date(birth)),
-			tel,
-			role: 'member',
-			createdAt: now,
-			updatedAt: now,
-			lastLoginAt: now
-		};
-
-		await setDoc(doc(db, 'users', result.user.uid), userData);
+		await setRegisteredUserDataToDB(result, 'email');
 
 		return {
 			success: true,
@@ -79,5 +75,66 @@ export const registerAuth = async ({
 			console.error(error);
 			throw error;
 		}
+	}
+};
+
+/**
+ * 로그인 및 가입 시, 유저의 필수 데이터를 DB에 저장/업데이트하는 함수
+ */
+export const setRegisteredUserDataToDB = async (
+	userCredential: UserCredential,
+	provider: string
+) => {
+	const { isNewUser } = getAdditionalUserInfo(userCredential) || {};
+	const userDoc = doc(db, 'users', userCredential.user.uid);
+	const userSnapshot = await getDoc(userDoc);
+
+	// 가입 시
+	if (isNewUser || !userSnapshot.exists()) {
+		let tag = '';
+		let isUnique = false;
+
+		while (!isUnique) {
+			tag = Math.floor(Math.random() * 10000)
+				.toString()
+				.padStart(4, '0');
+			const q = query(
+				collection(db, 'users'),
+				where('displayName', '==', userCredential.user.displayName),
+				where('tag', '==', tag),
+				limit(1)
+			);
+			const querySnapshot = await getDocs(q);
+			if (querySnapshot.empty) {
+				isUnique = true;
+			}
+		}
+
+		const validation = requiredUserDBschema.safeParse({
+			...userCredential.user,
+			tag,
+			provider
+		});
+		if (validation.error) {
+			throw new HTTPError(
+				`유효성 검사 실패.: ${validation.error.issues[0].message}`,
+				400
+			);
+		}
+		const data = omit(validation.data, 'uid');
+		await setDoc(userDoc, data);
+	} else {
+		// 기존 회원
+		const user = { uid: userSnapshot.id, ...userSnapshot.data() };
+		const validation = requiredUserDBschema.safeParse({
+			...user
+		});
+		if (validation.error) {
+			throw new HTTPError(
+				`유효성 검사 실패.: ${validation.error.issues[0].message}`,
+				400
+			);
+		}
+		await updateDoc(userDoc, omit(validation.data, 'uid'));
 	}
 };

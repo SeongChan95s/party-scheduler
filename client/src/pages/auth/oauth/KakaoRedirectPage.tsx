@@ -6,7 +6,7 @@ import { FirebaseError } from 'firebase/app';
 import { getAuth, OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setRequiredUserDataToDB } from '@/services/auth';
+import { setRegisteredUserDataToDB } from '@/services/auth';
 
 export default function KakaoRedirectPage() {
 	const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function KakaoRedirectPage() {
 				idToken: tokenData.id_token
 			});
 			const userCredential = await signInWithCredential(getAuth(), credential);
-			await setRequiredUserDataToDB(userCredential, 'kakao');
+			await setRegisteredUserDataToDB(userCredential, 'kakao');
 
 			const callbackURL = localStorage.getItem('callbackURL') ?? '/';
 			navigate(callbackURL, { replace: true });

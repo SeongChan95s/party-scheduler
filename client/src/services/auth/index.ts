@@ -1,1 +1,1 @@
-export { setRequiredUserDataToDB } from './oauth';
+export { setRegisteredUserDataToDB } from './register';

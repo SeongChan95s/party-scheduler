@@ -1,17 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../../components/common/Button';
-import { TextField } from '../../components/common/TextField';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginInputSchema } from '../../schemas/auth';
-import type { LoginInput } from '../../types/auth';
-import { loginWithEmail } from '../../services/auth/loginWithEmail';
-import { useGlobalToastStore } from '../../components/global/Popup/GlobalToast';
 import { useLocalStorage } from '@/hooks/storage';
-import { loginWithKakao, loginWithNaver } from '@/services/auth/oauth';
+import { Button } from '@/components/common/Button';
+import type { LoginInput } from '@/types/auth';
+import { useGlobalToastStore } from '@/components/global/Popup/GlobalToast';
+import { TextField } from '@/components/common/TextField';
+import { loginInputSchema } from '@/schemas/auth';
+import { loginWithEmail } from '@/services/auth/loginWithEmail';
 
-export default function LoginPage() {
+export default function EmailLoginPage() {
 	const navigate = useNavigate();
 	const callbackStorage = useLocalStorage<string>('callbackURL');
 
@@ -39,15 +38,13 @@ export default function LoginPage() {
 	return (
 		<>
 			<Helmet>
-				<title>로그인</title>
+				<title>로그인 - 이메일</title>
 			</Helmet>
 			<main className="login-page">
 				<form
 					className="flex-1 flex flex-col justify-center items-center"
 					onSubmit={handleSubmit(onSubmit)}>
 					<div>
-						<Button onClick={async () => await loginWithKakao()}>카카오 로그인</Button>
-						<Button onClick={async () => await loginWithNaver()}>네이버 로그인</Button>
 						<ul>
 							<li>
 								<TextField
@@ -73,13 +70,8 @@ export default function LoginPage() {
 								로그인
 							</Button>
 							<div className="flex gap-14 justify-between mt-15 text-label-2 text-gray-500">
-								<div className="flex items-center">
-									<Link to="#none">아이디</Link>
-									<span>&nbsp;/&nbsp;</span>
-									<Link to="#none">비밀번호</Link>
-									<span>&nbsp;찾기</span>
-								</div>
 								<Link to="/auth/register/agree">회원가입</Link>
+								<Link to="#none">비밀번호 찾기</Link>
 							</div>
 						</div>
 					</div>

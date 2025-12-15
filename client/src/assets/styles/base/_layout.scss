@@ -12,18 +12,6 @@ body {
 	@include layout-width;
 }
 
-main {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-}
-
-[class$='page'] {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-}
-
 .inner {
 	padding-right: var(--inner);
 	padding-left: var(--inner);

@@ -6,7 +6,7 @@ import { FirebaseError } from 'firebase/app';
 import { getAuth, signInWithCustomToken, updateProfile } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setRequiredUserDataToDB } from '@/services/auth';
+import { setRegisteredUserDataToDB } from '@/services/auth';
 
 export default function NaverRedirectPage() {
 	const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function NaverRedirectPage() {
 				});
 			}
 
-			await setRequiredUserDataToDB(authResult, 'naver');
+			await setRegisteredUserDataToDB(authResult, 'naver');
 
 			const callbackURL = localStorage.getItem('callbackURL') ?? '/';
 			navigate(callbackURL, { replace: true });

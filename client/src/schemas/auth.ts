@@ -1,11 +1,5 @@
 import z from 'zod';
-import {
-	regDate,
-	regDisplayName,
-	regNumber,
-	regPassword,
-	regPhone
-} from '../constants/regex';
+import { regDisplayName, regNumber, regPassword } from '../constants/regex';
 import type { ImagePickerMetadata } from '@/components/common/ImagePicker/ImagePicker';
 import { Timestamp } from 'firebase/firestore';
 
@@ -27,9 +21,7 @@ export const registerJoinInputSchema = z.object({
 	password,
 	displayName,
 	photoFiles: z.array(z.file()).optional(),
-	photoMetadata: z.custom<ImagePickerMetadata[]>().optional(),
-	birth: z.string().regex(regDate, '날짜를 선택해주세요.'),
-	tel: z.string().regex(regPhone, '휴대폰 번호 형식이 아닙니다.')
+	photoMetadata: z.custom<ImagePickerMetadata[]>().optional()
 });
 
 export const requiredUserDBschema = z.object({

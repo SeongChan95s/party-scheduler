@@ -15,8 +15,9 @@ import { Button } from '@/components/common/Button';
 import { useEffect, useRef } from 'react';
 import { handleFirebaseAuthErrorMessage } from '@/utils/auth';
 import { auth } from '@/lib/firebase/config';
-import { fetchSignInMethodsForEmail, getAdditionalUserInfo } from 'firebase/auth';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { Spinner } from '@/components/common/Spinner';
 
 export default function JoinPage() {
 	const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function JoinPage() {
 
 	const {
 		register,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		handleSubmit,
 		trigger,
 		getValues,
@@ -166,7 +167,7 @@ export default function JoinPage() {
 												{...register('displayName', { required: true })}
 											/>
 											<Button className="mt-24" type="submit" color="primary" fill>
-												회원가입
+												{isSubmitting ? <Spinner size="xs" /> : '회원가입'}
 											</Button>
 										</li>
 									)}

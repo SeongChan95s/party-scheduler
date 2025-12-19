@@ -1,4 +1,3 @@
-import type { ImagePickerMetadata } from '@/components/common/ImagePicker/ImagePicker';
 import type { Timestamp } from 'firebase/firestore';
 
 export interface LoginInput {

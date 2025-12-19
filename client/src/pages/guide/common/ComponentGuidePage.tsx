@@ -380,6 +380,7 @@ export default function ComponentGuidePage() {
 							<h4>Spinner</h4>
 							<div className="article-content">
 								<div className="flex items-end gap-8">
+									<Spinner size="xxs" />
 									<Spinner size="xs" />
 									<Spinner size="sm" />
 									<Spinner size="md" />

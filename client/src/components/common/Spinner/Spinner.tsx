@@ -2,7 +2,7 @@ import styles from './Spinner.module.scss';
 
 interface SpinnerProps {
 	className?: string;
-	size?: 'xs' | 'sm' | 'md' | 'lg';
+	size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 }
 
 export default function Spinner({ className = '', size = 'md' }: SpinnerProps) {

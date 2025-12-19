@@ -6,7 +6,7 @@
 		"dev": "nodemon",
 		"build": "tsc",
 		"start": "node dist/index.js",
-		"deploy": "gcloud run deploy moyo-server --source . --region asia-northeast3 --allow-unauthenticated"
+		"deploy": "gcloud run deploy moyo-server --source . --region asia-northeast3 --allow-unauthenticated --env-vars-file env.yaml"
 	},
 	"dependencies": {
 		"axios": "^1.13.2",

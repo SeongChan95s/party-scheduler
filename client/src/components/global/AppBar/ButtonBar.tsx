@@ -20,7 +20,7 @@ export default function ButtonBar({
 	return (
 		<AppBar className={`h-48 `} containerClassName="">
 			<Button
-				className="w-full h-full"
+				className={`w-full h-full ${className}`}
 				disabled={disabled}
 				color="primary"
 				type={type}

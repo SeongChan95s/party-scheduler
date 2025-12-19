@@ -5,37 +5,18 @@ import { useForm } from 'react-hook-form';
 import type { RegisterEmailCredentialInput } from '../../types/auth';
 import { registerJoinInputSchema } from '../../schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGlobalToastStore } from '../../components/global/Popup/GlobalToast';
-import { useNavigate } from 'react-router-dom';
-import { registerAuth } from '../../services/auth/register';
-import { useLocalStorage } from '@/hooks/storage';
-import 'react-datepicker/dist/react-datepicker.css';
-import ImagePicker from '@/components/common/ImagePicker';
 
 export default function SetProfile() {
-	const navigate = useNavigate();
-	const callbackStorage = useLocalStorage('callbackURL');
-
 	const {
 		register,
 		formState: { errors },
-		setValue,
 		handleSubmit
 	} = useForm<RegisterEmailCredentialInput>({
 		resolver: zodResolver(registerJoinInputSchema)
 	});
 
-	const onSubmit = async (data: RegisterEmailCredentialInput) => {
-		const result = await registerAuth(data);
-
-		if (result)
-			useGlobalToastStore.getState().push({
-				message: result.message
-			});
-
-		if (result?.success) {
-			navigate(callbackStorage.get() ?? '/');
-		}
+	const onSubmit = async (_data: RegisterEmailCredentialInput) => {
+		// const result = await registerAuth(data);
 	};
 
 	return (
@@ -70,11 +51,11 @@ export default function SetProfile() {
 							error={errors.displayName?.message}
 							{...register('displayName', { required: true })}
 						/>
-						<ImagePicker
+						{/* <ImagePicker
 							maxCount={1}
 							onChange={file => setValue('photoFiles', file)}
 							onMetadataChange={data => setValue('photoMetadata', data)}
-						/>
+						/> */}
 					</div>
 
 					<ButtonBar type="submit">회원가입</ButtonBar>

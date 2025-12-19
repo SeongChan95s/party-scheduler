@@ -10,6 +10,8 @@ import { TextField } from '@/components/common/TextField';
 import { loginInputSchema } from '@/schemas/auth';
 import { loginWithEmail } from '@/services/auth/loginWithEmail';
 import { FirebaseError } from 'firebase/app';
+import { handleFirebaseAuthErrorMessage } from '@/utils/auth';
+import { Spinner } from '@/components/common/Spinner';
 
 export default function EmailLoginPage() {
 	const navigate = useNavigate();
@@ -17,7 +19,7 @@ export default function EmailLoginPage() {
 
 	const {
 		register,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		handleSubmit
 	} = useForm<LoginInput>({
 		resolver: zodResolver(loginInputSchema)
@@ -29,12 +31,13 @@ export default function EmailLoginPage() {
 			useGlobalToastStore.getState().push({
 				message: '로그인에 성공했습니다.'
 			});
+
+			navigate(callbackStorage.get() ?? '/');
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				useGlobalToastStore.getState().push({
-					message: error.message
+					message: handleFirebaseAuthErrorMessage(error)
 				});
-				navigate(callbackStorage.get() ?? '/');
 			}
 			if (error instanceof Error) throw error;
 		}
@@ -73,7 +76,7 @@ export default function EmailLoginPage() {
 
 					<div className="button-wrap mt-24">
 						<Button type="submit" color="primary" fill>
-							로그인
+							{isSubmitting ? <Spinner size="xs" /> : '로그인'}
 						</Button>
 						<div className="flex gap-14 justify-between mt-15 text-label-2 text-gray-500">
 							<Link to="/auth/register/agree">회원가입</Link>

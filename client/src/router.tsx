@@ -1,13 +1,10 @@
+import { lazy } from 'react';
 import HomePage from './pages/main/HomePage';
 import PartyPage from './pages/main/PartyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GuideLayout from './layouts/GuideLayout';
 import MainLayout from './layouts/MainLayout';
-import ComponentGuidePage from './pages/guide/common/ComponentGuidePage';
-import PopupGuidePage from './pages/guide/common/PopupGuidePage';
-import GlobalPopupGuidePage from './pages/guide/global/GlobalPopupGuidePage';
-import SheetGuidePage from './pages/guide/common/SheetGuidePage';
 import SubLayout from './layouts/SubLayout';
 import JoinPage from './pages/auth/register/JoinPage';
 import AgreePage from './pages/auth/register/AgreePage';
@@ -20,6 +17,13 @@ import NaverRedirectPage from './pages/auth/oauth/NaverRedirectPage';
 import LoginPage from './pages/auth/login/LoginPage';
 import EmailLoginPage from './pages/auth/login/EmailLoginPage';
 import CenterLayout from './layouts/CenterLayout';
+
+const ComponentGuidePage = lazy(() => import('./pages/guide/common/ComponentGuidePage'));
+const PopupGuidePage = lazy(() => import('./pages/guide/common/PopupGuidePage'));
+const GlobalPopupGuidePage = lazy(
+	() => import('./pages/guide/global/GlobalPopupGuidePage')
+);
+const SheetGuidePage = lazy(() => import('./pages/guide/common/SheetGuidePage'));
 
 const router = createBrowserRouter([
 	{

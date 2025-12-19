@@ -25,6 +25,8 @@ export const handleFirebaseAuthErrorMessage = (error: FirebaseError): string => 
 			return '비활성화된 계정입니다.';
 		case 'auth/account-exists-with-different-credential':
 			return '이미 다른 로그인 방법으로 등록된 이메일입니다.';
+		case 'auth/email-already-in-use':
+			return '이미 존재하는 이메일 입니다.';
 
 		default:
 			return `로그인 중 오류가 발생했습니다. (${error.code})`;

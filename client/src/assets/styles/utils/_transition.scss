@@ -1,18 +1,18 @@
 /* react-transition-group */
 // fade
 .fade {
-	&Enter {
+	&-enter {
 		opacity: 0;
-		&Active,
-		&Done {
+		&-active,
+		&-done {
 			opacity: 1;
 			transition: opacity 300ms;
 		}
 	}
-	&Exit {
+	&-exit {
 		opacity: 1;
-		&Active,
-		&Done {
+		&-active,
+		&-done {
 			opacity: 0;
 			transition: opacity 300ms;
 		}

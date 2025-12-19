@@ -82,7 +82,7 @@ export default function AgreePage() {
 					<ButtonBar
 						type="button"
 						disabled={!checkedState.every(el => el)}
-						onClick={() => navigate('/auth/register/join')}>
+						onClick={() => navigate('/auth/register/join?step=1')}>
 						다음
 					</ButtonBar>
 				</form>

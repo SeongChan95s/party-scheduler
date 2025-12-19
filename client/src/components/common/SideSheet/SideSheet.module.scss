@@ -1,36 +1,38 @@
-.side-sheet {
-	position: fixed;
-	inset: 0;
-	@include layout-width;
-	display: flex;
-	overflow: clip;
-	z-index: var(--z-sheet);
-	@include overlay;
+@layer components {
+	.side-sheet {
+		position: fixed;
+		inset: 0;
+		@include layout-width;
+		display: flex;
+		overflow: clip;
+		z-index: var(--z-sheet);
+		@include overlay;
 
-	.container {
-		width: 80%;
-		min-width: 260px;
-		max-width: 380px;
-		height: 100%;
-		background: var(--color-surface-01);
-		transition: transform 0.4s ease;
+		.container {
+			width: 80%;
+			min-width: 260px;
+			max-width: 380px;
+			height: 100%;
+			background: var(--color-surface-01);
+			transition: transform 0.4s ease;
+		}
 	}
-}
 
-.left {
-	justify-content: flex-start;
-	.container {
-		transform: translateX(-100%);
+	.left {
+		justify-content: flex-start;
+		.container {
+			transform: translateX(-100%);
+		}
 	}
-}
-.right {
-	justify-content: flex-end;
-	.container {
-		transform: translateX(100%);
+	.right {
+		justify-content: flex-end;
+		.container {
+			transform: translateX(100%);
+		}
 	}
-}
-:global(.enter-done) {
-	.container {
-		transform: translateX(0%);
+	:global(.enter-done) {
+		.container {
+			transform: translateX(0%);
+		}
 	}
 }

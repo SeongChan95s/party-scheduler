@@ -1,22 +1,24 @@
-.overlay {
-	@include layout-width;
-	&[class*='-enter'] {
-		background: transparent;
-		&[class*='-active'],
-		&[class*='-done'] {
+@layer components {
+	.overlay {
+		@include layout-width;
+		&[class*='-enter'] {
+			background: transparent;
+			&[class*='-active'],
+			&[class*='-done'] {
+				background-color: rgba(32, 32, 32, 0.6);
+				backdrop-filter: blur(10px) saturate(2);
+				transition: background 0.4s ease, backdrop-filter 0.4s ease;
+			}
+		}
+		&[class*='-exit'] {
 			background-color: rgba(32, 32, 32, 0.6);
 			backdrop-filter: blur(10px) saturate(2);
-			transition: background 0.4s ease, backdrop-filter 0.4s ease;
-		}
-	}
-	&[class*='-exit'] {
-		background-color: rgba(32, 32, 32, 0.6);
-		backdrop-filter: blur(10px) saturate(2);
-		&[class*='-active'],
-		&[class*='-done'] {
-			background: transparent;
-			backdrop-filter: blur(0px) saturate(1);
-			transition: background 0.4s ease, backdrop-filter 0.4s ease;
+			&[class*='-active'],
+			&[class*='-done'] {
+				background: transparent;
+				backdrop-filter: blur(0px) saturate(1);
+				transition: background 0.4s ease, backdrop-filter 0.4s ease;
+			}
 		}
 	}
 }

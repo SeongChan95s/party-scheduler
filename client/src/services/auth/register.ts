@@ -25,7 +25,7 @@ import { requiredUserDBschema } from '@/schemas/auth';
 import { omit } from 'lodash';
 
 /**
- * 회원가입 정보입력 API
+ * 이메일 회원가입
  */
 export const registerAuth = async ({
 	email,

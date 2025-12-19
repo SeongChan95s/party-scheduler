@@ -1,70 +1,72 @@
-.textField {
-	position: relative;
-	width: fit-content;
+@layer components {
+	.textField {
+		position: relative;
+		width: fit-content;
 
-	input {
-		width: 100%;
-		height: 100%;
-		font-weight: 400;
-		border: none;
-		background-color: transparent;
-
-		&::placeholder {
+		input {
+			width: 100%;
+			height: 100%;
 			font-weight: 400;
-			color: var(--color-gray-300);
+			border: none;
+			background-color: transparent;
+
+			&::placeholder {
+				font-weight: 400;
+				color: var(--color-gray-300);
+			}
+
+			&:disabled {
+				color: var(--color-gray-500);
+			}
 		}
 
-		&:disabled {
-			color: var(--color-gray-500);
+		.error {
+			display: flex;
+			align-items: center;
+			gap: 2px;
+			margin-top: 8px;
+			font-size: 13px;
+			font-weight: 400;
+			line-height: 1;
+			color: var(--color-red-500);
 		}
 	}
 
-	.error {
-		display: flex;
-		align-items: center;
-		gap: 2px;
-		margin-top: 8px;
-		font-size: 13px;
-		font-weight: 400;
-		line-height: 1;
-		color: var(--color-red-500);
-	}
-}
-
-// optional
-.fill {
-	width: 100%;
-}
-
-// size
-.sm {
-	input,
-	input::placeholder {
-		font-size: 14px;
-	}
-	:global(.placeholder-container) {
-		padding: 10px 12px;
-		height: 38px;
-	}
-}
-.md {
-	input,
-	input::placeholder {
-		font-size: 14px;
-	}
-	:global(.placeholder-container) {
-		padding: 10px 12px;
-		height: 42px;
-	}
-}
-.lg {
-	input,
-	input::placeholder {
-		font-size: 15px;
+	// optional
+	.fill {
+		width: 100%;
 	}
 
-	:global(.placeholder-container) {
-		padding: 10px 12px;
-		height: 46px;
+	// size
+	.sm {
+		input,
+		input::placeholder {
+			font-size: 14px;
+		}
+		:global(.placeholder-container) {
+			padding: 10px 12px;
+			height: 38px;
+		}
+	}
+	.md {
+		input,
+		input::placeholder {
+			font-size: 14px;
+		}
+		:global(.placeholder-container) {
+			padding: 10px 12px;
+			height: 42px;
+		}
+	}
+	.lg {
+		input,
+		input::placeholder {
+			font-size: 15px;
+		}
+
+		:global(.placeholder-container) {
+			padding: 10px 12px;
+			height: 46px;
+		}
 	}
 }

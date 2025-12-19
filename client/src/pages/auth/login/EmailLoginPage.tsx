@@ -41,38 +41,33 @@ export default function EmailLoginPage() {
 				<title>로그인 - 이메일</title>
 			</Helmet>
 			<main className="login-page">
-				<form
-					className="flex-1 flex flex-col justify-center items-center"
-					onSubmit={handleSubmit(onSubmit)}>
-					<div>
-						<ul>
-							<li>
-								<TextField
-									variant="dynamic"
-									label="이메일"
-									error={errors.email?.message}
-									{...register('email')}
-								/>
-							</li>
-							<li className="mt-18">
-								<TextField
-									type="password"
-									variant="dynamic"
-									label="패스워드"
-									{...register('password')}
-									error={errors.password?.message}
-								/>
-							</li>
-						</ul>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<ul>
+						<li>
+							<TextField
+								label="이메일"
+								error={errors.email?.message}
+								{...register('email')}
+							/>
+						</li>
+						<li className="mt-18">
+							<TextField
+								type="password"
+								label="패스워드"
+								{...register('password')}
+								error={errors.password?.message}
+								fill
+							/>
+						</li>
+					</ul>
 
-						<div className="button-wrap mt-24">
-							<Button className="w-full!" type="submit" color="primary">
-								로그인
-							</Button>
-							<div className="flex gap-14 justify-between mt-15 text-label-2 text-gray-500">
-								<Link to="/auth/register/agree">회원가입</Link>
-								<Link to="#none">비밀번호 찾기</Link>
-							</div>
+					<div className="button-wrap mt-24">
+						<Button type="submit" color="primary">
+							로그인
+						</Button>
+						<div className="flex gap-14 justify-between mt-15 text-label-2 text-gray-500">
+							<Link to="/auth/register/agree">회원가입</Link>
+							<Link to="#none">비밀번호 찾기</Link>
 						</div>
 					</div>
 				</form>

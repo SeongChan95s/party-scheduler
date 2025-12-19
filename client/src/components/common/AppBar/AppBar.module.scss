@@ -1,34 +1,36 @@
-.app-bar {
-	position: relative;
-	box-sizing: content-box;
-	z-index: var(--z-app-bar);
+@layer components {
+	.app-bar {
+		position: relative;
+		box-sizing: content-box;
+		z-index: var(--z-app-bar);
 
-	&:global(.top) {
-		padding-top: ios-safe-area(top);
-
-		.container {
-			top: 0;
+		&:global(.top) {
 			padding-top: ios-safe-area(top);
-		}
-	}
-	&:global(.bottom) {
-		padding-bottom: ios-safe-area(bottom);
 
-		.container {
-			bottom: 0;
+			.container {
+				top: 0;
+				padding-top: ios-safe-area(top);
+			}
+		}
+		&:global(.bottom) {
 			padding-bottom: ios-safe-area(bottom);
+
+			.container {
+				bottom: 0;
+				padding-bottom: ios-safe-area(bottom);
+			}
 		}
 	}
-}
 
-.container {
-	@include layout-width;
-	position: fixed;
-	left: 0;
-	right: 0;
-	height: inherit;
-	padding-left: ios-safe-area(left);
-	padding-right: ios-safe-area(right);
-	box-sizing: content-box;
-	background: var(--color-surface-01);
+	.container {
+		@include layout-width;
+		position: fixed;
+		left: 0;
+		right: 0;
+		height: inherit;
+		padding-left: ios-safe-area(left);
+		padding-right: ios-safe-area(right);
+		box-sizing: content-box;
+		background: var(--color-surface-01);
+	}
 }

@@ -1,27 +1,29 @@
-.divider {
-	.line {
-		display: block;
-		height: 100%;
+@layer components {
+	.divider {
+		.line {
+			display: block;
+			height: 100%;
+		}
 	}
-}
 
-// direction
-.horizontal {
-	width: 100%;
-}
+	// direction
+	.horizontal {
+		width: 100%;
+	}
 
-// color
-.light .line {
-	background-color: var(--color-gray-200);
-}
-.dark .line {
-	background-color: var(--color-gray-400);
-}
+	// color
+	.light .line {
+		background-color: var(--color-gray-200);
+	}
+	.dark .line {
+		background-color: var(--color-gray-400);
+	}
 
-// variant {
-.line {
-	height: 1px;
-}
-.depth {
-	height: 8px;
+	// variant {
+	.line {
+		height: 1px;
+	}
+	.depth {
+		height: 8px;
+	}
 }

@@ -1,25 +1,27 @@
-.button {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: fit-content;
-	white-space: nowrap;
-}
+@layer components {
+	.button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: fit-content;
+		white-space: nowrap;
+	}
 
-// color
-.normal {
-	--button-color-01: var(--white-color-normal);
-	--button-color-02: var(--black-color-normal);
-}
-.primary {
-	--button-color-01: var(--primary-color-dim);
-	--button-color-02: var(--primary-color-normal);
-}
+	// color
+	.normal {
+		--button-color-01: var(--white-color-normal);
+		--button-color-02: var(--black-color-normal);
+	}
+	.primary {
+		--button-color-01: var(--primary-color-dim);
+		--button-color-02: var(--primary-color-normal);
+	}
 
-// option
-.disabled {
-	border: 1px solid var(--gray-color-dark);
-	color: var(--color-surface-01);
-	background: var(--gray-color-dark);
-	pointer-events: none;
+	// option
+	.disabled {
+		border: 1px solid var(--gray-color-dark);
+		color: var(--color-surface-01);
+		background: var(--gray-color-dark);
+		pointer-events: none;
+	}
 }

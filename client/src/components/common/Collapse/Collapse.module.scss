@@ -1,17 +1,21 @@
-.collapse {
-	position: relative;
-	display: -webkit-box;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: unset;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: var(--line);
-	word-break: initial;
-	cursor: pointer;
-	// --display: none;
+@layer components {
+	.collapse {
+		position: relative;
+		display: -webkit-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: unset;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: var(--line);
+		line-clamp: var(--line);
+		word-break: initial;
+		cursor: pointer;
+		// --display: none;
 
-	&:global(.wrap) {
-		word-break: keep-all;
-		-webkit-line-clamp: unset;
+		&:global(.wrap) {
+			word-break: keep-all;
+			-webkit-line-clamp: unset;
+			line-clamp: unset;
+		}
 	}
 }

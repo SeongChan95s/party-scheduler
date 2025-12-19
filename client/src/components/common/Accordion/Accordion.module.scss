@@ -1,18 +1,20 @@
-.accordion {
-	&:global(.opened) {
-		.arrow {
-			transform: rotate(270deg);
+@layer components {
+	.accordion {
+		&:global(.opened) {
+			.arrow {
+				transform: rotate(270deg);
+			}
 		}
 	}
-}
 
-.header {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-}
-.body {
-	overflow: hidden;
-	transition: max-height 0.35s ease;
-	max-height: var(--max-height);
+	.header {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+	.body {
+		overflow: hidden;
+		transition: max-height 0.35s ease;
+		max-height: var(--max-height);
+	}
 }

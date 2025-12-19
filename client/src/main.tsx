@@ -1,15 +1,15 @@
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { registerSW } from 'virtual:pwa-register';
-import Router from './router';
-import ReactQueryProvider from './providers/ReactQueryProvider';
 import './lib/firebase/config';
+import '@/assets/styles/base/tailwind.css';
 import '@/assets/styles/base/_reset.scss';
 import '@/assets/styles/base/_typography.scss';
 import '@/assets/styles/base/_css_variables.scss';
 import '@/assets/styles/base/_layout.scss';
 import '@/assets/styles/utils/_transition.scss';
-import '@/assets/styles/base/tailwind.css';
+import Router from './router';
+import ReactQueryProvider from './providers/ReactQueryProvider';
 import Wrapper from './Wrapper';
 
 // Service Worker 등록

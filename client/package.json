@@ -22,7 +22,7 @@
 		"axios": "^1.13.2",
 		"firebase": "^12.5.0",
 		"lodash": "^4.17.21",
-		"react": "^19.2.0",
+		"react": "^19.2.3",
 		"react-datepicker": "^8.9.0",
 		"react-dom": "^19.2.0",
 		"react-helmet-async": "^2.0.5",

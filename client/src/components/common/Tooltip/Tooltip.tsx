@@ -18,7 +18,7 @@ export default function Tooltip({ children, icon = <IconAlertFilled /> }: Toolti
 	const { isPending, x, y } = useKeepInLayout({
 		targetRef: containerRef,
 		isVisible: isVisible,
-		offset: 14
+		offset: 0
 	});
 	const directionY = y >= 0 ? 'bottom' : 'top';
 

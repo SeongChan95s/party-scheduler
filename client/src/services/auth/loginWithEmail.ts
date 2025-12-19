@@ -21,7 +21,5 @@ export const loginWithEmail = async (email: string, password: string) => {
 			console.error(error);
 			throw new HTTPError(`${error.name} ${error.message}`);
 		}
-
-		throw new HTTPError('알 수 없는 오류가 발생했습니다.', 400);
 	}
 };

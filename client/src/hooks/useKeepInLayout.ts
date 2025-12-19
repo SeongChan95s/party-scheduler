@@ -8,7 +8,9 @@ interface useRenderOffset {
 	offset?: number;
 }
 
-// global-layout 바깥으로 나간 수치 값을 반환하는 훅
+/**
+ * 대상 요소가 노출될 때, 뷰포트 및 레이아웃 안에 위치하도록 보정 값을 반환
+ */
 export default function useKeepInLayout({
 	targetRef,
 	isVisible,

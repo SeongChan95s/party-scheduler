@@ -3,10 +3,9 @@ import { IconButton } from '../IconButton';
 import { useRef, useState, useEffect, forwardRef } from 'react';
 import { IconIncrease } from '../Icon';
 import { classNames } from '../../../utils/classNames';
-import 'swiper/swiper-bundle.css';
-import styles from './ImagePicker.module.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { processFiles } from './ImagePicker.utils';
+import styles from './ImagePicker.module.scss';
 
 const acceptExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 

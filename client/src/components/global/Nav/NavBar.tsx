@@ -165,13 +165,19 @@ export default function NavBar() {
 						)}
 					</div>
 
-					<div className={styles.quickMenu}>
-						{navBarProps.home && <IconButton size="lg" icon={<IconHomeFilled />} />}
-						{navBarProps.notify && <IconButton size="lg" icon={<IconNotifyOutlined />} />}
-						{navBarProps.darkMode && (
-							<IconButton size="lg" icon={<IconNotifyOutlined />} />
-						)}
-					</div>
+					{navBarProps.darkMode ||
+						navBarProps.notify ||
+						(navBarProps.home && (
+							<div className={styles.quickMenu}>
+								{navBarProps.home && <IconButton size="lg" icon={<IconHomeFilled />} />}
+								{navBarProps.notify && (
+									<IconButton size="lg" icon={<IconNotifyOutlined />} />
+								)}
+								{navBarProps.darkMode && (
+									<IconButton size="lg" icon={<IconNotifyOutlined />} />
+								)}
+							</div>
+						))}
 				</nav>
 			</div>
 		</header>

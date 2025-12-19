@@ -60,6 +60,11 @@
 			}
 		}
 
+		&:not(:has(+ .quick-menu)) .title-box {
+			text-align: center;
+			text-indent: -2.375rem;
+		}
+
 		@keyframes marquee {
 			0% {
 				transform: translateX(0);

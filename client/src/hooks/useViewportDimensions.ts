@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * 뷰포트 사이즈를 반환
+ */
 export default function useViewportDimensions() {
 	const [viewportDimensions, setViewportDimensions] = useState({ width: 0, height: 0 });
 

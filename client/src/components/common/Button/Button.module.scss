@@ -86,8 +86,8 @@
 		--color-button-03: var(--color-primary-800);
 
 		&:global(.disabled) {
-			--color-button-01: var(--color-primary-100);
-			--color-button-02: var(--color-primary-400);
+			--color-button-01: var(--color-primary-200);
+			--color-button-02: var(--color-primary-200);
 			--color-button-03: var(--color-primary-400);
 		}
 	}

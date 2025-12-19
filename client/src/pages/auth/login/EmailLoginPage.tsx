@@ -38,22 +38,27 @@ export default function EmailLoginPage() {
 	return (
 		<>
 			<Helmet>
-				<title>로그인 - 이메일</title>
+				<title>이메일 로그인</title>
 			</Helmet>
-			<main className="login-page">
+			<main className="login-page mt-25 inner">
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<ul>
 						<li>
 							<TextField
 								label="이메일"
+								placeholder="이메일을 입력해 주세요."
+								size="lg"
 								error={errors.email?.message}
 								{...register('email')}
+								fill
 							/>
 						</li>
 						<li className="mt-18">
 							<TextField
 								type="password"
-								label="패스워드"
+								label="비밀번호"
+								placeholder="영문 숫자 조합 8자리 이상"
+								size="lg"
 								{...register('password')}
 								error={errors.password?.message}
 								fill
@@ -62,7 +67,7 @@ export default function EmailLoginPage() {
 					</ul>
 
 					<div className="button-wrap mt-24">
-						<Button type="submit" color="primary">
+						<Button type="submit" color="primary" fill>
 							로그인
 						</Button>
 						<div className="flex gap-14 justify-between mt-15 text-label-2 text-gray-500">

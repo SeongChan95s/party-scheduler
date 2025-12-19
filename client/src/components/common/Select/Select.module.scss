@@ -97,10 +97,6 @@
 	// size
 	.select {
 		&.sm {
-			:global(.placeholder-container) {
-				padding: 10px 12px;
-				height: 38px;
-			}
 			:global(.icon) {
 				width: 14px;
 				height: 14px;
@@ -118,10 +114,6 @@
 		}
 
 		&.md {
-			:global(.placeholder-container) {
-				padding: 10px 12px;
-				height: 42px;
-			}
 			:global(.icon) {
 				width: 15px;
 				height: 15px;
@@ -139,10 +131,6 @@
 		}
 
 		&.lg {
-			:global(.placeholder-container) {
-				padding: 10px 12px;
-				height: 46px;
-			}
 			:global(.icon) {
 				width: 15px;
 				height: 15px;

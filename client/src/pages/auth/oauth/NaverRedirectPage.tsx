@@ -38,7 +38,7 @@ export default function NaverRedirectPage() {
 				});
 			}
 
-			await setRegisteredUserDataToDB(authResult, 'naver');
+			await setRegisteredUserDataToDB(authResult.user, 'naver');
 
 			const callbackURL = localStorage.getItem('callbackURL') ?? '/';
 			navigate(callbackURL, { replace: true });

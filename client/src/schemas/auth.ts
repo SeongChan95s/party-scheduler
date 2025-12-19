@@ -1,6 +1,5 @@
 import z from 'zod';
 import { regDisplayName, regNumber, regPassword } from '../constants/regex';
-import type { ImagePickerMetadata } from '@/components/common/ImagePicker/ImagePicker';
 import { Timestamp } from 'firebase/firestore';
 
 const email = z.email('이메일 형식이 아닙니다');
@@ -16,13 +15,17 @@ export const loginInputSchema = z.object({
 	password
 });
 
-export const registerJoinInputSchema = z.object({
-	email,
-	password,
-	displayName,
-	photoFiles: z.array(z.file()).optional(),
-	photoMetadata: z.custom<ImagePickerMetadata[]>().optional()
-});
+export const registerJoinInputSchema = z
+	.object({
+		email,
+		password,
+		passwordConfirm: password,
+		displayName
+	})
+	.refine(data => data.password == data.passwordConfirm, {
+		path: ['passwordConfirm'],
+		message: '비밀번호가 일치하지 않습니다.'
+	});
 
 export const requiredUserDBschema = z.object({
 	uid: z.string(),

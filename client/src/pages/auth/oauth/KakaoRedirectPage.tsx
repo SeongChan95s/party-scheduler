@@ -33,7 +33,7 @@ export default function KakaoRedirectPage() {
 				idToken: tokenData.id_token
 			});
 			const userCredential = await signInWithCredential(getAuth(), credential);
-			await setRegisteredUserDataToDB(userCredential, 'kakao');
+			await setRegisteredUserDataToDB(userCredential.user, 'kakao');
 
 			const callbackURL = localStorage.getItem('callbackURL') ?? '/';
 			navigate(callbackURL, { replace: true });

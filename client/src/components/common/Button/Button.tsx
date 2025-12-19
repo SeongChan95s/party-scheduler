@@ -39,7 +39,7 @@ export default function Button({
 		styles[color],
 		styles[shape],
 		fill && styles.fill,
-		disabled && 'disabled',
+		disabled && styles.disabled,
 		'button',
 		classNameProp
 	);

@@ -45,18 +45,15 @@ export interface FriendsCollection {
 export type RegisterEmailCredentialInput = {
 	email: string;
 	password: string;
+	passwordConfirm: string;
 	displayName: string;
-	photoFiles?: File[];
-	photoMetadata?: ImagePickerMetadata[];
 };
 
-export type RegisteProfileSchema = {
+export type SetProfileInput = {
 	email: string;
+	password?: string;
 	displayName: string;
-	photoFiles?: File[];
-	photoMetadata?: ImagePickerMetadata[];
-	birth: string;
-	tel: string;
+	photoFile?: File;
 };
 
 export type SocialProvider = 'kakao' | 'naver';

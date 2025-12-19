@@ -23,7 +23,7 @@ export default function AgreePage() {
 	return (
 		<>
 			<Helmet>
-				<title>회원가입 - 약관동의</title>
+				<title>약관동의</title>
 			</Helmet>
 			<main className="register-agree-page">
 				<form>

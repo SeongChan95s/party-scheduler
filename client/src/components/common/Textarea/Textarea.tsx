@@ -66,25 +66,24 @@ export default function Textarea({
 		<div className={className}>
 			<div className={styles.container}>
 				<Placeholder
+					as="textarea"
 					label={label}
 					enter={isEntered}
 					focus={isFocused}
 					variant={variant}
 					error={!!error}
-					disabled={disabled}>
-					<textarea
-						id={id}
-						name={name}
-						cols={cols}
-						rows={rows}
-						maxLength={maxLength}
-						value={value}
-						placeholder={placeholder}
-						disabled={disabled}
-						onChange={handleChange}
-						onFocus={() => setIsFocused(true)}
-						onBlur={() => setIsFocused(false)}></textarea>
-				</Placeholder>
+					disabled={disabled}
+					id={id}
+					name={name}
+					cols={cols}
+					rows={rows}
+					maxLength={maxLength}
+					value={value}
+					placeholder={placeholder}
+					onChange={handleChange}
+					onFocus={() => setIsFocused(true)}
+					onBlur={() => setIsFocused(false)}
+				/>
 			</div>
 			<div className={styles.state}>
 				{error && (

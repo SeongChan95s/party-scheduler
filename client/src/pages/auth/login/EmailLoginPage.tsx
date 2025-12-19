@@ -9,6 +9,7 @@ import { useGlobalToastStore } from '@/components/global/Popup/GlobalToast';
 import { TextField } from '@/components/common/TextField';
 import { loginInputSchema } from '@/schemas/auth';
 import { loginWithEmail } from '@/services/auth/loginWithEmail';
+import { FirebaseError } from 'firebase/app';
 
 export default function EmailLoginPage() {
 	const navigate = useNavigate();
@@ -23,15 +24,19 @@ export default function EmailLoginPage() {
 	});
 
 	const onSubmit = async (data: LoginInput) => {
-		const result = await loginWithEmail(data.email, data.password);
-		if (result) {
+		try {
+			await loginWithEmail(data.email, data.password);
 			useGlobalToastStore.getState().push({
-				message: result.message
+				message: '로그인에 성공했습니다.'
 			});
-		}
-
-		if (result?.success) {
-			navigate(callbackStorage.get() ?? '/');
+		} catch (error) {
+			if (error instanceof FirebaseError) {
+				useGlobalToastStore.getState().push({
+					message: error.message
+				});
+				navigate(callbackStorage.get() ?? '/');
+			}
+			if (error instanceof Error) throw error;
 		}
 	};
 

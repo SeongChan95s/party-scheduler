@@ -43,30 +43,17 @@
 		input::placeholder {
 			font-size: 14px;
 		}
-		:global(.placeholder-container) {
-			padding: 10px 12px;
-			height: 38px;
-		}
 	}
 	.md {
 		input,
 		input::placeholder {
 			font-size: 14px;
 		}
-		:global(.placeholder-container) {
-			padding: 10px 12px;
-			height: 42px;
-		}
 	}
 	.lg {
 		input,
 		input::placeholder {
 			font-size: 15px;
-		}
-
-		:global(.placeholder-container) {
-			padding: 16px 18px;
-			height: 46px;
 		}
 	}
 }

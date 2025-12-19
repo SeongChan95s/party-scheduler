@@ -64,7 +64,9 @@ export default function SelectMain({
 		onChange?.(value);
 	};
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		if (enableTextField) {
 			setValue(e.target.value);
 			setIsFocused(true);
@@ -115,20 +117,17 @@ export default function SelectMain({
 					focus={isFocused}
 					disabled={disabled}
 					enter={isEntered}
-					onClick={handleInputFocus}>
-					<input
-						name={name}
-						ref={inputRef}
-						id={id}
-						value={value == '' && !enableTextField ? '' : value}
-						onChange={handleInputChange}
-						disabled={disabled}
-						readOnly={!enableTextField}
-						placeholder={placeholder}
-						autoFocus={enableTextField}
-					/>
-					<IconArrowTrim className={iconClassName} size="sm" />
-				</Placeholder>
+					onClick={handleInputFocus}
+					element={<IconArrowTrim className={iconClassName} size="sm" />}
+					name={name}
+					ref={inputRef as any}
+					id={id}
+					value={value == '' && !enableTextField ? '' : value}
+					onChange={handleInputChange}
+					readOnly={!enableTextField}
+					placeholder={placeholder}
+					autoFocus={enableTextField}
+				/>
 				<SelectContainer>{children}</SelectContainer>
 			</div>
 		</SelectProvider>

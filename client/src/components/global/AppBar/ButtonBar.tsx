@@ -1,3 +1,4 @@
+import { Button } from '@/components/common/Button';
 import { AppBar } from '../../common/AppBar';
 
 interface ButtonBarProps {
@@ -17,17 +18,16 @@ export default function ButtonBar({
 	children
 }: ButtonBarProps) {
 	return (
-		<AppBar
-			className={`h-48 ${disabled ? 'disabled' : ''} group ${className}`}
-			containerClassName="">
-			<button
-				className="w-full h-full text-label-1 text-white bg-primary-500 group-[.disabled]:bg-primary-300"
+		<AppBar className={`h-48 `} containerClassName="">
+			<Button
+				className="w-full h-full"
 				disabled={disabled}
+				color="primary"
 				type={type}
 				form={form}
 				onClick={onClick}>
 				{children}
-			</button>
+			</Button>
 		</AppBar>
 	);
 }

@@ -23,7 +23,7 @@ export const loginWithGoogle = async () => {
 		const auth = getAuth();
 
 		const userCredential = await signInWithPopup(auth, provider);
-		await setRegisteredUserDataToDB(userCredential, 'google');
+		await setRegisteredUserDataToDB(userCredential.user, 'google');
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			const message = handleFirebaseAuthErrorMessage(error);
@@ -48,7 +48,7 @@ export const loginWithTwitter = async () => {
 		const auth = getAuth();
 
 		const userCredential = await signInWithPopup(auth, provider);
-		await setRegisteredUserDataToDB(userCredential, 'twitter');
+		await setRegisteredUserDataToDB(userCredential.user, 'twitter');
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			const message = handleFirebaseAuthErrorMessage(error);

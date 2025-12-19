@@ -99,31 +99,29 @@ const TextField = forwardRef<HTMLInputElement, InputProps>(function Input(
 		<div className={className}>
 			<Placeholder
 				className={styles.placeholder}
+				size={size}
 				label={label}
 				variant={variant}
 				enter={isEntered}
 				focus={isFocused}
 				disabled={disabled}
 				error={!!error}
-				element={element}>
-				<input
-					ref={handleRef}
-					type={type}
-					id={id}
-					name={name}
-					placeholder={placeholder}
-					value={value}
-					maxLength={maxLength}
-					disabled={disabled}
-					defaultValue={defaultValue}
-					onChange={changeHandler}
-					onFocus={handleFocus}
-					onBlur={handleBlur}
-					readOnly={readOnly}
-					required={required}
-					form={form}
-				/>
-			</Placeholder>
+				element={element}
+				ref={handleRef as any}
+				type={type}
+				id={id}
+				name={name}
+				placeholder={placeholder}
+				value={value}
+				maxLength={maxLength}
+				defaultValue={defaultValue}
+				onChange={changeHandler}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
+				readOnly={readOnly}
+				required={required}
+				form={form}
+			/>
 			{children}
 			{error && (
 				<div className={styles.error}>

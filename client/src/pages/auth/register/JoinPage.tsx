@@ -10,7 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { registerAuth } from '../../../services/auth/register';
 import { useLocalStorage } from '@/hooks/storage';
 import 'react-datepicker/dist/react-datepicker.css';
-import ImagePicker from '@/components/common/ImagePicker';
+import { HTTPError } from '@/utils/HTTPError';
+import { FirebaseError } from 'firebase/app';
+import { ZodError } from 'zod';
+import { Button } from '@/components/common/Button';
 
 export default function JoinPage() {
 	const navigate = useNavigate();
@@ -19,65 +22,89 @@ export default function JoinPage() {
 	const {
 		register,
 		formState: { errors },
-		setValue,
 		handleSubmit
 	} = useForm<RegisterEmailCredentialInput>({
 		resolver: zodResolver(registerJoinInputSchema)
 	});
 
+	console.log('errors', errors);
+
 	const onSubmit = async (data: RegisterEmailCredentialInput) => {
-		const result = await registerAuth(data);
-
-		if (result)
+		try {
+			await registerAuth(data);
 			useGlobalToastStore.getState().push({
-				message: result.message
+				message: '회원가입에 성공했습니다.'
 			});
-
-		if (result?.success) {
-			navigate(callbackStorage.get() ?? '/');
+			navigate(callbackStorage.get() ?? '/', { replace: true });
+		} catch (error) {
+			if (
+				error instanceof FirebaseError ||
+				error instanceof HTTPError ||
+				error instanceof ZodError
+			)
+				return useGlobalToastStore.getState().push({
+					message: error.message
+				});
+			if (error instanceof Error) throw error;
 		}
 	};
 
 	return (
 		<>
 			<Helmet>
-				<title>회원가입 - 가입정보 입력</title>
+				<title>가입정보 입력</title>
 			</Helmet>
 			<main className="register-join-page flex-1">
 				<form
 					className="flex-1 flex flex-col justify-center items-center"
 					name="registerJoin"
 					onSubmit={handleSubmit(onSubmit)}>
-					<div className="p-24 border border-gray-200 rounded-xl">
-						<TextField
-							label="이메일"
-							error={errors.email?.message}
-							fill
-							{...register('email', { required: true })}
-						/>
-						<TextField
-							className="mt-18"
-							type="password"
-							label="비밀번호"
-							fill
-							error={errors.password?.message}
-							{...register('password', { required: true })}
-						/>
-						<TextField
-							className="mt-18"
-							label="닉네임"
-							fill
-							error={errors.displayName?.message}
-							{...register('displayName', { required: true })}
-						/>
-						<ImagePicker
-							maxCount={1}
-							onChange={file => setValue('photoFiles', file)}
-							onMetadataChange={data => setValue('photoMetadata', data)}
-						/>
-					</div>
-
-					<ButtonBar type="submit">회원가입</ButtonBar>
+					<ul>
+						<li>
+							<TextField
+								label="이메일"
+								error={errors.email?.message}
+								fill
+								{...register('email', { required: true })}
+							/>
+							<Button color="primary" fill>
+								다음
+							</Button>
+						</li>
+						<li>
+							<TextField
+								className="mt-18"
+								type="password"
+								label="비밀번호"
+								fill
+								error={errors.password?.message}
+								{...register('password', { required: true })}
+							/>
+							<TextField
+								className="mt-18"
+								type="password"
+								label="비밀번호 확인"
+								fill
+								error={errors.passwordConfirm?.message}
+								{...register('passwordConfirm', { required: true })}
+							/>
+							<Button color="primary" fill>
+								다음
+							</Button>
+						</li>
+						<li>
+							<TextField
+								className="mt-18"
+								label="닉네임"
+								fill
+								error={errors.displayName?.message}
+								{...register('displayName', { required: true })}
+							/>
+							<Button type="submit" color="primary" fill>
+								회원가입
+							</Button>
+						</li>
+					</ul>
 				</form>
 			</main>
 		</>

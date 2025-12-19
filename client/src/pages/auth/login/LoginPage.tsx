@@ -14,7 +14,7 @@ export default function LoginPage() {
 	return (
 		<>
 			<Helmet>
-				<title>모요(Moyo) - 로그인</title>
+				<title>로그인</title>
 			</Helmet>
 			<main className="login-page flex-1 flex justify-center items-center">
 				<div className="login-container flex flex-col gap-12">

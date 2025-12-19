@@ -2,8 +2,7 @@ import {
 	getAuth,
 	createUserWithEmailAndPassword,
 	updateProfile,
-	getAdditionalUserInfo,
-	type UserCredential
+	type User
 } from 'firebase/auth';
 import type { RegisterEmailCredentialInput } from '../../types/auth';
 import {
@@ -18,79 +17,47 @@ import {
 	where
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase/config';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
-import { getFileFormat } from '@/utils/getFileFormat';
 import { HTTPError } from '@/utils/HTTPError';
 import { requiredUserDBschema } from '@/schemas/auth';
 import { omit } from 'lodash';
 
 /**
- * 이메일 회원가입
+ * 이메일 회원가입 정보입력
  */
 export const registerAuth = async ({
 	email,
 	password,
-	displayName,
-	photoFiles
+	displayName
 }: RegisterEmailCredentialInput) => {
-	try {
-		const querySnapshot = await getDocs(
-			query(collection(db, 'users'), where('email', '==', email), limit(1))
-		);
-		const results = querySnapshot.docs.map(doc => ({
-			id: doc.id,
-			...doc.data()
-		}));
+	const querySnapshot = await getDocs(
+		query(collection(db, 'users'), where('email', '==', email), limit(1))
+	);
+	const results = querySnapshot.docs.map(doc => ({
+		id: doc.id,
+		...doc.data()
+	}));
+	if (results.length >= 1)
+		throw new HTTPError('동일한 이메일을 가진 계정이 존재합니다.', 400);
 
-		if (results.length >= 1)
-			return { success: false, message: '이메일과 동일한 계정이 존재합니다.' };
+	const auth = getAuth();
+	const result = await createUserWithEmailAndPassword(auth, email, password);
 
-		const auth = getAuth();
-		const result = await createUserWithEmailAndPassword(auth, email, password);
+	await updateProfile(result.user, {
+		displayName
+	});
 
-		const photoFile = photoFiles?.[0];
-		let photoURL: string | undefined;
-
-		if (photoFile) {
-			const photoFormat = getFileFormat(photoFile.name);
-			photoURL = `/auth/profile/${new Date().getTime()}.${photoFormat}`;
-			const storage = getStorage();
-			const storageRef = ref(storage, photoURL);
-			await uploadBytes(storageRef, photoFile);
-		}
-
-		await updateProfile(result.user, {
-			displayName,
-			...(photoURL && { photoURL })
-		});
-
-		await setRegisteredUserDataToDB(result, 'email');
-
-		return {
-			success: true,
-			message: '회원가입에 성공했습니다.'
-		};
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error);
-			throw error;
-		}
-	}
+	await setRegisteredUserDataToDB(result.user, 'email');
 };
 
 /**
  * 로그인 및 가입 시, 유저의 필수 데이터를 DB에 저장/업데이트하는 함수
  */
-export const setRegisteredUserDataToDB = async (
-	userCredential: UserCredential,
-	provider: string
-) => {
-	const { isNewUser } = getAdditionalUserInfo(userCredential) || {};
-	const userDoc = doc(db, 'users', userCredential.user.uid);
+export const setRegisteredUserDataToDB = async (user: User, provider: string) => {
+	const userDoc = doc(db, 'users', user.uid);
 	const userSnapshot = await getDoc(userDoc);
 
 	// 가입 시
-	if (isNewUser || !userSnapshot.exists()) {
+	if (!userSnapshot.exists()) {
 		let tag = '';
 		let isUnique = false;
 
@@ -100,7 +67,7 @@ export const setRegisteredUserDataToDB = async (
 				.padStart(4, '0');
 			const q = query(
 				collection(db, 'users'),
-				where('displayName', '==', userCredential.user.displayName),
+				where('displayName', '==', user.displayName),
 				where('tag', '==', tag),
 				limit(1)
 			);
@@ -110,31 +77,20 @@ export const setRegisteredUserDataToDB = async (
 			}
 		}
 
-		const validation = requiredUserDBschema.safeParse({
-			...userCredential.user,
+		const data = requiredUserDBschema.parse({
+			...user,
 			tag,
 			provider
 		});
-		if (validation.error) {
-			throw new HTTPError(
-				`유효성 검사 실패.: ${validation.error.issues[0].message}`,
-				400
-			);
-		}
-		const data = omit(validation.data, 'uid');
-		await setDoc(userDoc, data);
+
+		await setDoc(userDoc, omit(data, 'uid'));
 	} else {
 		// 기존 회원
 		const user = { uid: userSnapshot.id, ...userSnapshot.data() };
-		const validation = requiredUserDBschema.safeParse({
+		const data = requiredUserDBschema.parse({
 			...user
 		});
-		if (validation.error) {
-			throw new HTTPError(
-				`유효성 검사 실패.: ${validation.error.issues[0].message}`,
-				400
-			);
-		}
-		await updateDoc(userDoc, omit(validation.data, 'uid'));
+
+		await updateDoc(userDoc, omit(data, 'uid'));
 	}
 };
